@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FC ONLINE 팀컬러 검색 결과</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* 전체 페이지의 배경색 */
+            padding: 20px; /* 콘텐츠 주변의 여백 */
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #ffffff; /* 컨테이너의 배경색 */
+            padding: 20px; /* 컨테이너 내부 여백 */
+            border-radius: 8px; /* 컨테이너의 모서리를 둥글게 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 부드러운 드롭 쉐도우 효과 */
+            display: flex; /* 플렉스박스 레이아웃 사용 */
+            flex-direction: column; /* 세로 방향으로 요소들을 배치 */
+            align-items: center; /* 가운데 정렬 */
+        }
+        h1 {
+            color: #333333; /* 제목의 텍스트 색상 */
+            text-align: center; /* 제목 가운데 정렬 */
+            display: flex; /* 플렉스박스 레이아웃 사용 */
+            align-items: center; /* 수직 가운데 정렬 */
+            margin-bottom: 20px; /* 제목과 상위 유저 정보 사이 간격 */
+        }
+        h1 img {
+            margin-right: 10px; /* 이미지와 텍스트 사이 여백 */
+            max-width: 50px; /* 이미지 최대 너비 제한 */
+            border-radius: 50%; /* 이미지를 둥글게 처리하여 원 형태로 보이게 함 */
+        }
+        h2 {
+            color: #333333; /* 제목의 텍스트 색상 */
+            text-align: left; /* 포메이션 순위 왼쪽 정렬 */
+            margin-top: 20px; /* 상위 유저 정보와 포메이션 순위 사이 간격 */
+            width: 100%; /* 전체 너비 */
+        }
+        ul {
+            list-style-type: none; /* 순서 리스트의 기본 스타일 제거 */
+            padding-left: 0; /* 왼쪽 여백 제거 */
+            text-align: left; /* 텍스트 왼쪽 정렬 */
+            margin-top: 10px; /* 항목 위 여백 */
+            width: 100%; /* 전체 너비 */
+        }
+        ul li {
+            margin-bottom: 5px; /* 각 항목 사이의 간격 설정 */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* 테이블 위 여백 */
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2; /* 테이블 헤더 배경색 */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9; /* 짝수 행 배경색 설정 */
+        }
+        tbody tr:hover {
+            background-color: #e6f7ff; /* 마우스 오버 배경색 설정 */
+        }
+        .flag {
+            text-align: center; /* 국기 이미지 가운데 정렬 */
+            margin-bottom: 20px; /* 국기와 테이블 사이 간격 */
+        }
+        .formation-list {
+            text-align: left; /* 포메이션 리스트 왼쪽 정렬 */
+            margin-top: 10px; /* 포메이션 리스트 위 여백 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <img src="static/team_color/{{ team_name }}.png" alt="{{ team_name }} 이미지">
+            {{ team_name }}의 상위 유저 정보
+        </h1>
+        
+        <div class="flag">
+            <img src="static/flags/{{ team_name|lower }}.png" alt="{{ team_name }} 국기">
+        </div>
+
+        <h2>{{ team_name }} 상위 유저들의 포메이션 순위</h2>
+        <ul class="formation-list">
+            {% for i, (formation, count) in enumerate(most_common_formations) %}
+                <li>{{ i+1 }}위 {{ formation }}: {{ count }}명</li>
+            {% endfor %}
+            {% if total_other_formations > 0 %}
+                <li>그 외: {{ total_other_formations }}명</li>
+            {% endif %}
+        </ul>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>닉네임</th>
+                    <th>순위</th>
+                    <th>포메이션</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in user_profiles %}
+                <tr>
+                    <td>{{ profile['nickname'] }}</td>
+                    <td>{{ profile['rank'] }}</td>
+                    <td>{{ profile['formation'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
