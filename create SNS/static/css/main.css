@@ -1,0 +1,193 @@
+/* 전체 배경색 및 기본 스타일 설정 */
+body {
+    background-color: #e1eff2;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid black;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.nav-menu {
+    position: absolute;
+    left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    margin: 0 15px;
+    line-height: 30px;
+    transition: background-color 0.3s;
+}
+
+.nav-menu a:hover {
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    padding: 5px 10px;
+}
+
+/* 검색창 스타일 */
+.search-box {
+    height: 30px;
+    width: 300px;
+    background-color: white;
+    border-radius: 40px;
+    padding: 5px 10px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+}
+
+.search-txt {
+    border: none;
+    background: none;
+    outline: none;
+    color: #797979;
+    font-size: 16px;
+    line-height: 30px;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.search-btn {
+    color: black;
+    width: 40px;
+    height: 100%;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* 전체 컨테이너 스타일 */
+.container {
+    max-width: 600px;
+    margin: 80px auto 20px;
+    padding: 20px;
+}
+
+/* 게시물 작성 폼 스타일 */
+#postForm {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+#postForm h2 {
+    margin-bottom: 15px;
+}
+
+#postForm input[type="text"],
+#postForm textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#postForm input[type="file"] {
+    margin-bottom: 10px;
+}
+
+#postForm button[type="submit"] {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#postForm button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* 미리보기 이미지 크기 */
+#imagePreviewContainer img {
+    max-width: 100%; /* 크기를 더 크게 조정 */
+    height: auto;
+    margin: 5px;
+}
+
+/* 슬라이드 기능을 위한 스타일링 */
+.slider-container {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    height: 300px; /* 슬라이더 높이 조정 */
+}
+
+.slides-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    display: none;
+    flex: 0 0 100%;
+    justify-content: center; /* 이미지를 중앙에 배치 */
+    align-items: center; /* 이미지를 중앙에 배치 */
+}
+
+.slide img {
+    width: 100%;
+    height: 100%; /* 이미지 높이 조정 */
+    object-fit: contain; /* 이미지 비율 유지 */
+}
+
+.left-arrow, .right-arrow {
+    position: absolute;
+    top: 50%;
+    width: 40px; /* 화살표 크기 조정 */
+    height: 40px; /* 화살표 크기 조정 */
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    line-height: 40px;
+    font-size: 25px; /* 화살표 폰트 크기 조정 */
+    cursor: pointer;
+    border-radius: 50%;
+    user-select: none;
+    transform: translateY(-50%);
+}
+
+.left-arrow {
+    left: 10px;
+}
+
+.right-arrow {
+    right: 10px;
+}
+

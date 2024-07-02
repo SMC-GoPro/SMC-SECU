@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>daero</title>
+    <link rel="stylesheet" href="/static/css/main.css"> <!-- 외부 CSS 파일 링크 -->
+    <script src="https://kit.fontawesome.com/a4cd34328d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header class="navbar">
+        <nav class="nav-content">
+            <div class="nav-menu">
+                <a href="#">로그아웃</a>
+                <a href="#">메시지</a>
+                <a href="#" id="createPostLink">만들기</a> <!-- id 추가 -->
+                <a href="#">문의하기</a>
+            </div>
+            <form class="search-box" action="" method="get">
+                <input class="search-txt" type="text" name="" placeholder="아이디를 검색하세요.">
+                <button class="search-btn" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- 게시물 작성 폼 -->
+        <div id="postForm" style="display: none;">
+            <h2>게시물 작성하기</h2>
+            <form id="createForm">
+                <input type="text" id="postTitle" placeholder="제목">
+                <textarea id="postContent" placeholder="내용"></textarea>
+                <input type="file" id="imageUpload" accept="image/png" multiple> <!-- 파일 업로드 input 수정 -->
+                <div id="imagePreviewContainer"></div> <!-- 이미지 미리보기 컨테이너 -->
+                <button type="submit">작성 완료</button>
+            </form>
+        </div>
+
+        <!-- 게시물 목록 -->
+        <div id="postList">
+            <!-- 여기에 동적으로 추가될 게시물들이 나열될 예정 -->
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script> <!-- 외부 JavaScript 파일 링크 -->
+</body>
+</html>

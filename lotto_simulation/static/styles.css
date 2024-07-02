@@ -1,0 +1,122 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 600px;
+    width: 100%;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"] {
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input[type="submit"], .button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+input[type="submit"]:hover, .button:hover {
+    background-color: #0056b3;
+}
+
+ul, ol {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 5px 0;
+    text-align: left;
+}
+
+a.button {
+    display: inline-block;
+}
+
+.number-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.number-button-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.number-button {
+    width: 40px;
+    height: 40px;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 50%;
+    cursor: pointer;
+    text-align: center;
+    line-height: 40px;
+    font-size: 1em;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.number-button:hover {
+    background-color: #adb5bd;
+    transform: scale(1.05);
+}
+
+.number-button.selected {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.number-display {
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+}

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>말 경마 게임</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .track {
+      width: 1000px;
+      height: 200px;
+      position: relative;
+      background-color: #f0f0f0;
+      overflow: hidden; /* 넘치는 부분 숨기기 */
+      margin-bottom: 20px; /* 아래 여백 추가 */
+    }
+
+    .horse {
+      width: 20px; /* 말의 너비 설정 */
+      height: 20px; /* 말의 높이 설정 */
+      position: absolute;
+      font-size: 20px; /* 글자 크기 설정 */
+      text-align: center;
+      line-height: 20px; /* 글자 수직 정렬 */
+      color: red; /* 말의 색상 설정 */
+    }
+
+    .result {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .finish-line {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 15px;
+      height: 100%;
+      background-image: url("/static/finish.png"); /* 로컬 이미지 파일 경로 */
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body>
+  <h1>말 경마 게임</h1>
+  <div class="track" id="track">
+    <!-- 말들은 JavaScript에서 생성됩니다. -->
+    <div class="finish-line"></div>
+  </div>
+  <button id="startButton">시작</button>
+
+  <div id="betting">
+    <h2>배팅</h2>
+    <label for="horseNumber">말 번호 선택:</label>
+    <select id="horseNumber">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      
+    </select>
+    <label for="betAmount">배팅 금액:</label>
+    <input type="number" id="betAmount" min="1" step="1">
+    <button id="placeBetButton">배팅하기</button>
+    <button id="allInButton">All In</button> <!-- All In 버튼 추가 -->
+    <p id="betResult"></p>
+  </div>
+
+  <p id="money">보유 금액: 10000원</p>
+
+  <div class="result" id="raceResult"></div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var track = document.getElementById('track');
+    var startButton = document.getElementById('startButton');
+    var placeBetButton = document.getElementById('placeBetButton');
+    var allInButton = document.getElementById('allInButton'); // All In 버튼 추가
+    var horseNumberSelect = document.getElementById('horseNumber');
+    var betAmountInput = document.getElementById('betAmount');
+    var betResultParagraph = document.getElementById('betResult');
+    var moneyParagraph = document.getElementById('money');
+    var raceResultDiv = document.getElementById('raceResult');
+
+    var initialMoney = 10000; // 초기 보유 금액
+    var currentMoney = initialMoney; // 현재 보유 금액
+    var horseCount = 5; // 말의 수 (고정)
+    var horses = []; // 말 객체 배열
+    var trackLength = 1000; // 트랙의 길이
+    var betPlaced = false; // 배팅 여부 확인
+    var betHorseNumber = null; // 배팅한 말 번호
+    var betAmount = 0; // 배팅 금액
+
+    moneyParagraph.textContent = '보유 금액: ' + currentMoney + '원';
+
+    // 시작 버튼 클릭 이벤트 핸들러
+    startButton.addEventListener('click', function() {
+      startRace();
+      if (betPlaced) {
+        disableBetting();
+      }
+    });
+
+    // 배팅 버튼 클릭 이벤트 핸들러
+    placeBetButton.addEventListener('click', function() {
+      placeBet();
+      if (betPlaced){
+        disableBetting();
+      }
+    });
+
+    // All In 버튼 클릭 이벤트 핸들러
+    allInButton.addEventListener('click', function() {
+      allIn();
+    });
+
+    // 배팅 관련 요소들 비활성화 함수
+    function disableBetting() {
+      horseNumberSelect.disabled = true;
+      betAmountInput.disabled = true;
+      placeBetButton.disabled = true;
+      allInButton.disabled = true; // All In 버튼 비활성화
+    }
+
+    // 배팅 관련 요소들 활성화 함수
+    function enableBetting() {
+      horseNumberSelect.disabled = false;
+      betAmountInput.disabled = false;
+      placeBetButton.disabled = false;
+      allInButton.disabled = false; // All In 버튼 활성화
+    }
+
+    // 경주 시작 함수
+    function startRace() {
+      if (!betPlaced) {
+        alert('경주를 시작하기 전에 배팅을 해주세요.');
+        return;
+      }
+
+      startButton.disabled = true; // 시작 버튼 비활성화
+
+      // 말 객체 생성 및 초기화
+      for (var i = 0; i < horseCount; i++) {
+        var horse = document.createElement('div');
+        horse.className = 'horse';
+        horse.style.left = '0px'; // 초기 위치
+        horse.style.bottom = (i * 40 + 20) + 'px'; // 말의 경로 설정
+        horse.setAttribute('id', 'horse-' + (i + 1));
+        horse.textContent = i+1; // 말 모양을 '>'로 설정
+        track.appendChild(horse);
+
+        // 말의 초기 상태 설정
+        horses.push({
+          element: horse,
+          speed: Math.random() * 1.5 + 0.5, // 말의 속도 설정 (0.5에서 2까지의 랜덤 값)
+          position: 0 // 말의 현재 위치
+        });
+      }
+
+      // 말들이 경주를 뛰도록 호출
+      requestAnimationFrame(runRace);
+
+      // 일정 시간마다 말의 속도를 랜덤하게 변경
+      setInterval(updateSpeeds, 500);
+    }
+
+    // 배팅 처리 함수
+    function placeBet() {
+      betHorseNumber = parseInt(horseNumberSelect.value);
+      betAmount = parseInt(betAmountInput.value);
+      if (isNaN(betAmount) || betAmount < 100) {
+        alert('배팅 금액은 100원 이상이어야 합니다.');
+        return false;
+      }
+
+      if (betAmount > currentMoney) {
+        alert('보유 금액보다 높은 금액을 배팅할 수 없습니다.');
+        return false;
+      }
+
+      // 배팅 금액을 체크하고, 배팅 결과를 보여줍니다.
+      var betResult = '배팅을 완료했습니다.';
+      betResultParagraph.textContent = betResult;
+      updateMoney(-betAmount)
+
+      // 배팅 정보를 저장
+      betPlaced = true;
+      // 배팅 금액 입력 초기화
+      betAmountInput.value = '';
+      // TODO: 서버에 배팅 정보를 전송하여 처리하는 부분을 추가해야 합니다.
+    }
+
+    // All In 처리 함수
+    function allIn() {
+      betHorseNumber = parseInt(horseNumberSelect.value); // 선택한 말 번호 가져오기
+      betAmount = currentMoney; // 현재 보유 금액을 배팅 금액으로 설정
+
+      if (betAmount <= 0) {
+        alert('배팅할 금액이 없습니다.');
+        return;
+      }
+
+      // 배팅 결과를 보여줍니다.
+      var betResult = 'All In으로 배팅을 완료했습니다.';
+      betResultParagraph.textContent = betResult;
+      updateMoney(-betAmount)
+
+      // 배팅 정보를 저장
+      betPlaced = true;
+
+      // TODO: 서버에 배팅 정보를 전송하여 처리하는 부분을 추가해야 합니다.
+
+      // All In 후 배팅 관련 요소 비활성화
+      disableBetting();
+    }
+
+    // 경주를 진행하는 함수
+    function runRace() {
+      var allFinished = false;
+
+      horses.forEach(function(horse) {
+        // 말의 현재 위치 업데이트
+        horse.position += horse.speed;
+
+        // 말의 위치 업데이트
+        horse.element.style.left = horse.position + 'px';
+
+        // 우승 조건 체크
+        if (horse.position >= trackLength && !allFinished) {
+          allFinished = true;
+          finishRace(horse);
+        }
+      });
+
+      // 모든 말이 경주를 완료하지 않았으면 다음 프레임에서 다시 호출
+      if (!allFinished) {
+        requestAnimationFrame(runRace);
+      }
+    }
+
+    // 말의 속도를 랜덤하게 변경하는 함수
+    function updateSpeeds() {
+      horses.forEach(function(horse) {
+        horse.speed = Math.random() * 1.5 + 0.5; // 말의 속도를 랜덤하게 변경 (0.5에서 2까지의 랜덤 값)
+      });
+    }
+
+    // 경주 종료 함수
+    function finishRace(winner) {
+      var betResult = calculateBetResult(winner);
+      var resultMessage = '우승자는 ' + winner.element.id.split('-')[1] + '번 말입니다!\n' + betResult.message;
+      alert(resultMessage);
+      updateMoney(betResult.result);
+      raceResultDiv.textContent = resultMessage;
+      enableBetting(); // 경주 종료 후 배팅 관련 요소 활성화
+      resetRace(); // 경주 초기화 함수 호출
+    }
+
+    // 배팅 결과 계산 함수
+    function calculateBetResult(winner) {
+      if (winner.element.id === 'horse-' + betHorseNumber) {
+        // 배팅 성공
+        var winnings = betAmount * 2;
+        return {
+          result: winnings,
+          message: '배팅에 성공하여 ' + winnings + '원을 얻었습니다.'
+        };
+      } else {
+        // 배팅 실패
+        return {
+          result: 0,
+          message: '배팅에 실패하여 ' + betAmount + '원을 잃었습니다.'
+        };
+      }
+    }
+
+    // 보유 금액 업데이트 함수
+    function updateMoney(amount) {
+      currentMoney += amount;
+      moneyParagraph.textContent = '보유 금액: ' + currentMoney + '원';
+    }
+
+    // 경주 리셋 함수
+    function resetRace() {
+      // 트랙 초기화
+      while (track.firstChild) {
+        track.removeChild(track.firstChild);
+      }
+      // 말 객체 배열 비우기
+      horses = [];
+
+      // 시작 버튼 활성화
+      startButton.disabled = false;
+
+      // 배팅 초기화
+      betPlaced = false;
+      betHorseNumber = null;
+      betAmount = 0;
+      betResultParagraph.textContent = '';
+
+      // 배팅 관련 요소 활성화
+      enableBetting();
+    }
+  });
+</script>
+</body>
+</html>

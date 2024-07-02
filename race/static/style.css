@@ -1,0 +1,48 @@
+/* static/style.css */
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.track {
+  width: 1000px;
+  height: 200px;
+  border: 1px solid #000;
+  margin: 20px auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.horse {
+  position: absolute;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  background-color: brown;
+  border-radius: 50%;
+  animation: race linear infinite;
+}
+
+/* 5마리 말에 맞게 조정 */
+#horse-1 { bottom: 20px; }
+#horse-2 { bottom: 60px; }
+#horse-3 { bottom: 100px; }
+#horse-4 { bottom: 140px; }
+#horse-5 { bottom: 180px; }
+
+#startButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+@keyframes race {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 980px; /* 5마리 말과 1000px 트랙 너비에 맞게 조정 */
+  }
+}

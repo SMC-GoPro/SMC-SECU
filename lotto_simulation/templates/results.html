@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>시뮬레이션 결과</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>시뮬레이션 결과</h1>
+        <p>당첨 번호: {{ winning_numbers|join(', ') }}</p>
+        <h2>당첨자 목록</h2>
+        <ul>
+            {% for winner in winners %}
+            <li>{{ winner }}: {{ attempts[winner] }}번 시도</li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('index') }}" class="button">다시 시도</a>
+    </div>
+</body>
+</html>
