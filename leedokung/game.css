@@ -1,0 +1,74 @@
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* 스크롤 바 제거 */
+    background-color: rgb(173, 255, 42);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#start {
+    padding: 15px 30px; /* 버튼 크기를 키우기 위한 패딩 */
+    font-size: 20px; /* 버튼 글자 크기 */
+    cursor: pointer;
+    z-index: 1000; /* 버튼이 캐릭터보다 위에 표시되도록 */
+    position: fixed;
+    right: 20px;
+    top: 20px;
+}
+
+#character {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    width: 100px;
+    height: 100px;
+    background-image: url('gun.png');
+    background-size: cover;
+}
+
+#gameOverMessage {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 2px solid black;
+    font-size: 24px;
+    z-index: 1000; /* 캐릭터보다 위에 표시되도록 */
+}
+
+#bo {
+    position: fixed;
+    bottom: 20px; /* 원하는 위치로 조정 가능 */
+    left: 50%; /* 화면 가운데 정렬을 위해 50% 설정 */
+    transform: translateX(-50%); /* 가로 방향으로 -50% 이동하여 가운데 정렬 */
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    font-size: 30px;
+}
+
+.do-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(255, 255, 255); /* 텍스트 색상은 검은색으로 지정되어 있습니다. */
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #fff;
+    z-index: 1001; /* 이미지 위에 표시되도록 설정되어 있습니다. */
+}
+
+button {
+    padding: 15px 30px; /* 버튼 크기를 키우기 위한 패딩 */
+    font-size: 20px; /* 버튼 글자 크기 */
+    cursor: pointer;
+    z-index: 1000;
+}
