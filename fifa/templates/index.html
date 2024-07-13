@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FC ONLINE 팀컬러 검색</title>
+    <style>
+        body {
+            background-image: url('/static/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            padding-top: 50px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/static/logo.jpg" alt="FC ONLINE 로고" class="logo">
+        <h1>FC ONLINE 팀컬러 검색</h1>
+        <form method="post" action="/">
+            <label for="team_name">검색할 팀 이름(팀컬러): </label>
+            <input type="text" id="team_name" name="team_name" required>
+            <button type="submit">검색</button>
+        </form>
+    </div>
+</body>
+</html>
