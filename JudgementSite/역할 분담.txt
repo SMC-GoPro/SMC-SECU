@@ -1,6 +1,3 @@
-
 성민:  backend server   aws: 비싼거
-승호:  ui 
-GUI디자인 : 소은이랑 같이 
-
-
+승호:  ui
+현호, 은진, 준호, 소은: GUI 디자인
