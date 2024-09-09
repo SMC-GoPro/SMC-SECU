@@ -1,6 +1,18 @@
 {% extends "layout.html" %}
 {% block head %}
     {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/index.css') }}">
 {% endblock %}
 {% block content %}
+    <div class="slider">
+        <div class="slides">
+            <div class="slide"><img src="{{ url_for('static',filename='./img/images.jpg') }}" alt="Image 1"></div>
+            <div class="slide"><img src="{{ url_for('static',filename='./img/images.png') }}" alt="Image 2"></div>
+            <div class="slide"><img src="path/to/image3.jpg" alt="Image 3"></div>
+        </div>
+        <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="next" onclick="moveSlide(1)">&#10095;</button>
+    </div>
+
+    <script src="{{ url_for('static',filename='./js/index.js') }}"></script>
 {% endblock %}

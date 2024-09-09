@@ -1,0 +1,62 @@
+/* 슬라이더 스타일 */
+.slider {
+    position: relative;
+    width: 100%;
+    max-height: 600px; /* 원하는 최대 높이 설정 */
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 슬라이더 버튼 스타일 */
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #007BFF, #0056b3); /* 그라디언트 배경 */
+    color: #fff;
+    border: none;
+    border-radius: 50%; /* 둥근 모서리 */
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    transition: background 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+/* 버튼 호버 스타일 */
+.prev:hover, .next:hover {
+    background: linear-gradient(135deg, #0056b3, #007BFF); /* 호버 시 그라디언트 반전 */
+}
+
+/* 버튼 클릭 시 스타일 */
+.prev:active, .next:active {
+    background: linear-gradient(135deg, #004080, #003366); /* 클릭 시 그라디언트 색상 */
+}
