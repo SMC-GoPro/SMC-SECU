@@ -1,0 +1,272 @@
+/* 기본 스타일 */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif; /* Google Fonts의 Poppins 폰트 */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f7f6; /* 부드러운 배경색 */
+}
+
+/* 메뉴바 스타일 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px 30px;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo {
+    font-size: 40px; /* 로고 크기 확대 */
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    font-weight: 600;
+    color: #007BFF;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: 40px; /* 메뉴 간격 */
+}
+
+.navbar-item {
+    position: relative;
+}
+
+.navbar-link {
+    text-decoration: none;
+    color: #333;
+    padding: 12px 18px;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 5px; /* 메뉴 항목 둥글게 설정 */
+}
+
+.navbar-link:hover {
+    color: #ffffff;
+    background-color: #007BFF;
+}
+
+/* 줄과 메뉴 사이의 간격을 앞 메뉴 간격과 동일하게 설정 */
+.navbar-item:not(:last-child) {
+    border-right: 1px solid #e0e0e0;
+    padding-right: 40px; /* 줄과의 간격 (메뉴 간격과 동일) */
+}
+
+/* 드롭다운 스타일 */
+.dropdown-content {
+    opacity: 0; /* 초기 상태에서 투명 */
+    transform: translateY(-10px); /* 드롭다운이 보일 때 약간 위쪽으로 위치 */
+    visibility: hidden; /* 메뉴가 숨겨져 있는 상태 */
+    position: absolute;
+    top: 50px; /* 메뉴 아이템과의 간격 조정 */
+    left: -41px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    width: calc(100% + 40px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    padding: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.dropdown-content.show {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+/* 드롭다운 메뉴 항목 스타일 */
+.dropdown-link {
+    padding: 12px 18px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+    font-size: 16px;
+    text-align: center; /* 왼쪽 정렬 */
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-link:last-child {
+    border-bottom: none;
+}
+
+.dropdown-link:hover {
+    background-color: #f0f0f0;
+}
+
+/* 로그인/로그아웃 버튼 스타일 */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-btn {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.auth-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* 버튼 확대 효과 */
+}
+
+.footer {
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+    color: #555;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    box-sizing: border-box;
+}
+
+/* 모바일 메뉴 스타일 */
+.hamburger {
+    display: none;
+    font-size: 36px;
+    cursor: pointer;
+    color: #007BFF;
+}
+
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100%;
+    width: 280px;
+    background-color: #ffffff;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    z-index: 999;
+    overflow: auto;
+}
+
+.mobile-menu.show {
+    right: 0;
+}
+
+.mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6); /* 진한 회색 */
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 998;
+}
+
+.mobile-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-menu-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.close-btn {
+    font-size: 32px;
+    cursor: pointer;
+    color: #007BFF;
+    margin-bottom: 20px;
+    align-self: flex-end;
+}
+
+.mobile-menu-logo {
+    font-size: 40px;
+    font-weight: 600;
+    color: #007BFF;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.mobile-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-menu-link {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mobile-menu-link:hover {
+    background-color: #e0e0e0;
+    color: #007BFF;
+}
+
+/* 모바일 레이아웃 */
+@media (max-width: 1200px) {
+    .navbar-menu {
+        display: none;
+    }
+    
+    .auth-buttons {
+        display: none;
+    }
+    
+    .hamburger {
+        display: block;
+    }
+    
+    .dropdown-content {
+        display: none;
+    }
+    
+    .footer {
+        width: calc(100% - 20px); /* 화면 폭에서 여백 제외 */
+        margin: 0 10px; /* 좌우 여백 추가 */
+    }
+    
+    .navbar-logo {
+        font-size: 36px; /* 로고 크기 확대 */
+    }
+
+}
+
+/* 추가로 더 작은 화면에서의 스타일을 조정할 수 있습니다 */
+@media (max-width: 768px) {
+    .footer {
+        padding: 15px; /* 더 작은 화면에서 패딩 조정 */
+    }
+
+    .navbar-logo {
+        font-size: 28px; /* 로고 크기 확대 */
+    }
+
+    .hamburger {
+        font-size: 28px;
+    }
+
+}

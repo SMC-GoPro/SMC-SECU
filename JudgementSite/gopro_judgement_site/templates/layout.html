@@ -1,11 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/layout.css') }}">
+
+    {% block head %}
+    {% endblock %}
+    
 </head>
 <body>
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}" class="navbar-logo">GoPRO</a>
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <ul class="navbar-menu">
+            <li class="navbar-item"><a href="#" class="navbar-link">홈</a></li>
+            <li class="navbar-item"><a href="#" class="navbar-link">공지사항</a></li>
+            <li class="navbar-item dropdown">
+                <a href="#" class="navbar-link">문제</a>
+                <div class="dropdown-content">
+                    <a href="#" class="dropdown-link">문제</a>
+                    <a href="#" class="dropdown-link">문제집</a>
+                </div>
+            </li>
+            <li class="navbar-item"><a href="#" class="navbar-link">랭킹</a></li>
+            <li class="navbar-item"><a href="#" class="navbar-link">게시판</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <button class="auth-btn login-btn">로그인</button>
+            <button class="auth-btn logout-btn">로그아웃</button>
+        </div>
+    </nav>
     
+
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <span class="close-btn" onclick="toggleMenu()">×</span>
+            <div class="mobile-menu-logo">GoPRO</div>
+            <ul class="mobile-menu-list">
+                <li><a href="#" class="mobile-menu-link">홈</a></li>
+                <li><a href="#" class="mobile-menu-link">공지사항</a></li>
+                <li><a href="#" class="mobile-menu-link">문제</a></li>
+                <li><a href="#" class="mobile-menu-link">문제집</a></li>
+                <li><a href="#" class="mobile-menu-link">랭킹</a></li>
+                <li><a href="#" class="mobile-menu-link">게시판</a></li>
+                <li><a href="#" class="mobile-menu-link">로그인</a></li>
+                <li><a href="#" class="mobile-menu-link">회원가입</a></li>
+            </ul>
+        </div>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="footer">
+        <p>© 2024 GoPro. All rights reserved.</p>
+    </footer>
+    
+    <script src="{{ url_for('static',filename='./js/layout.js') }}"></script>
 </body>
 </html>
