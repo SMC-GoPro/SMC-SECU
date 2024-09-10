@@ -14,7 +14,6 @@
         <button class="next" onclick="moveSlide(1)">&#10095;</button>
     </div>
 
-    <script src="{{ url_for('static',filename='./js/index.js') }}"></script>
     <div class="announcement-section">
         <h2 class="announcement-title">공지사항</h2>
         <div class="announcement-container">
@@ -29,4 +28,6 @@
         </div>
         <a href="#" class="more-announcements-btn">전체 공지사항 보기</a>
     </div>
+
+    <script src="{{ url_for('static',filename='./js/index.js') }}"></script>
 {% endblock %}
