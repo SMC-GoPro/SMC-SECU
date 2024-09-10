@@ -15,4 +15,34 @@
     </div>
 
     <script src="{{ url_for('static',filename='./js/index.js') }}"></script>
+    <div class="announcement-section">
+        <h2 class="announcement-title">공지사항</h2>
+        <div class="announcement-container">
+            <div class="announcement-card">
+                <h3 class="announcement-card-title">새로운 업데이트</h3>
+                <p class="announcement-card-date">2024년 9월 10일</p>
+                <p class="announcement-card-content">
+                    새로운 기능이 추가되었습니다. 이번 업데이트는 사용자 경험을 크게 개선합니다.
+                </p>
+                <a href="#" class="announcement-card-link">더보기</a>
+            </div>
+            <div class="announcement-card">
+                <h3 class="announcement-card-title">서버 점검 예정</h3>
+                <p class="announcement-card-date">2024년 9월 5일</p>
+                <p class="announcement-card-content">
+                    시스템 안정성을 높이기 위해 서버 점검이 예정되어 있습니다. 서비스가 일시 중단될 수 있습니다.
+                </p>
+                <a href="#" class="announcement-card-link">더보기</a>
+            </div>
+            <div class="announcement-card">
+                <h3 class="announcement-card-title">이벤트 소식</h3>
+                <p class="announcement-card-date">2024년 8월 28일</p>
+                <p class="announcement-card-content">
+                    회원들을 위한 특별 이벤트가 열릴 예정입니다. 놓치지 마세요!
+                </p>
+                <a href="#" class="announcement-card-link">더보기</a>
+            </div>
+        </div>
+        <a href="#" class="more-announcements-btn">전체 공지사항 보기</a>
+    </div>
 {% endblock %}

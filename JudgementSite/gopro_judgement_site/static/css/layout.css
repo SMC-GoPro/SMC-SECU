@@ -1,11 +1,11 @@
 /* 기본 스타일 */
 body {
     margin: 0;
-    font-family: 'Poppins', sans-serif; /* Google Fonts의 Poppins 폰트 */
+    font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    background-color: #f4f7f6; /* 부드러운 배경색 */
+    min-height: 100vh; /* 전체 화면 높이 차지 */
+    background-color: #f4f7f6;
 }
 
 /* 메뉴바 스타일 */
@@ -20,6 +20,7 @@ body {
 }
 
 .navbar-logo {
+    display:flex;
     font-size: 40px; /* 로고 크기 확대 */
     text-decoration: none; /* 링크의 밑줄 제거 */
     font-weight: 600;
@@ -125,16 +126,20 @@ body {
     transform: scale(1.05); /* 버튼 확대 효과 */
 }
 
+.main-content {
+    flex: 1; /* 남은 공간을 채우도록 함 */
+    background-color: #f9f9f9;
+}
+
 .footer {
     background-color: #f8f9fa;
     padding: 20px;
     text-align: center;
     border-top: 1px solid #e0e0e0;
     color: #555;
-    position: fixed;
     width: 100%;
-    bottom: 0;
     box-sizing: border-box;
+    position: relative; /* 화면을 따라다니지 않도록 설정 */
 }
 
 /* 모바일 메뉴 스타일 */
@@ -237,7 +242,7 @@ body {
     }
     
     .hamburger {
-        display: block;
+        display: flex;
     }
     
     .dropdown-content {
@@ -248,7 +253,7 @@ body {
         width: calc(100% - 20px); /* 화면 폭에서 여백 제외 */
         margin: 0 10px; /* 좌우 여백 추가 */
     }
-    
+
     .navbar-logo {
         font-size: 36px; /* 로고 크기 확대 */
     }
@@ -260,7 +265,9 @@ body {
     .footer {
         padding: 15px; /* 더 작은 화면에서 패딩 조정 */
     }
-
+    .hamburger {
+        display: flex;
+    }
     .navbar-logo {
         font-size: 28px; /* 로고 크기 확대 */
     }

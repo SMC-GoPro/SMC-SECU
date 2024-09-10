@@ -60,3 +60,124 @@
 .prev:active, .next:active {
     background: linear-gradient(135deg, #004080, #003366); /* 클릭 시 그라디언트 색상 */
 }
+
+/* 공지사항 섹션 스타일 */
+.announcement-section {
+    padding: 50px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.announcement-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* 공지사항 카드 스타일 */
+.announcement-container {
+    display: flex;
+    justify-content: center; /* 카드들을 중앙 정렬 */
+    gap: 10px; /* 카드 간격을 줄임 */
+}
+
+.announcement-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 1;
+    width: 280px; /* 카드의 최대 너비를 살짝 줄임 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.announcement-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.announcement-card-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #007BFF;
+    margin-bottom: 10px;
+}
+
+.announcement-card-date {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+.announcement-card-content {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.announcement-card-link {
+    font-size: 14px;
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.announcement-card-link:hover {
+    text-decoration: underline;
+}
+
+/* 전체 공지사항 버튼 스타일 */
+.more-announcements-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 24px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.more-announcements-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* 공지사항 섹션 미디어 쿼리 */
+@media (max-width: 1000px) {
+    .announcement-container {
+        flex-direction: column; /* 모바일에서는 카드들이 세로로 정렬되도록 설정 */
+        align-items: center; /* 카드들을 중앙 정렬 */
+    }
+
+    .announcement-card {
+        width: 500px;
+        margin-bottom: 20px; /* 카드 간의 간격 추가 */
+    }
+}
+
+@media (max-width: 600px) {
+    .announcement-title {
+        font-size: 24px; /* 제목 크기를 줄여 모바일에 맞게 조정 */
+    }
+
+    .announcement-card-title {
+        font-size: 18px; /* 카드 제목 크기를 조정 */
+    }
+
+    .announcement-card-content {
+        font-size: 14px; /* 내용 글씨 크기 조정 */
+    }
+
+    .more-announcements-btn {
+        padding: 10px 20px; /* 버튼 크기 조정 */
+        font-size: 14px; /* 버튼 텍스트 크기 조정 */
+    }
+
+    .announcement-card {
+        width: 300px;
+    }
+}
