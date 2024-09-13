@@ -146,6 +146,49 @@
     transform: scale(1.05);
 }
 
+.statistics-container {
+    display: flex; /* 가로 정렬을 위해 flexbox 사용 */
+    justify-content: center; /* 가로로 중앙 정렬 */
+    gap: 20px; /* 각 항목 간격 */
+    margin: 50px auto; /* 위아래 여백 추가 및 가운데 정렬 */
+    width: fit-content; /* 컨테이너의 크기를 내부 항목에 맞춤 */
+}
+
+.statistic-item {
+    text-align: center;
+    background-color: black;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    width: 300px; /* 항목의 너비 설정 */
+}
+
+.statistic-item h2 {
+    font-size: 42px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: -10px;
+    margin-top: 0;
+}
+
+.statistic-item p {
+    font-size: 14px;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .statistics-container {
+        flex-direction: column; /* 세로 정렬로 변경 */
+        align-items: center; /* 항목을 중앙 정렬 */
+    }
+
+    .statistic-item {
+        width: 100%; /* 모바일에서는 항목 너비를 100%로 확장 */
+        margin-bottom: 20px;
+    }
+}
+
 /* 공지사항 섹션 미디어 쿼리 */
 @media (max-width: 1000px) {
     .announcement-container {
