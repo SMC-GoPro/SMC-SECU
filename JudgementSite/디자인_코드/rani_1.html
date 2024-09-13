@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #00aaff;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+    }
+
+    .user-icon img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .board {
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        margin-top: 20px;
+    }
+
+    .board h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .board p {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .search-bar {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .search-bar input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .search-bar button {
+        padding: 10px;
+        background-color: #00aaff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .search-bar button img {
+        width: 16px;
+        height: 16px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #00aaff;
+        color: #fff;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .actions button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .modify {
+        background-color: #aaa;
+        color: #fff;
+    }
+
+    .delete {
+        background-color: #888;
+        color: #fff;
+    }
+
+    .new-post {
+        background-color: #333;
+        color: #fff;
+    }
+</style>
+
+<body>
+    <header>
+        <div class="logo">Gopro</div>
+        <nav>
+            <ul>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">문제집</a></li>
+                <li><a href="#">순위</a></li>
+                <li><a href="#">게시판</a></li>
+            </ul>
+        </nav>
+        <div class="user-icon">
+            <img src="user-icon.png" alt="User Icon">
+        </div>
+    </header>
+
+    <main>
+        <section class="board">
+            <h1>게시판</h1>
+            <p>100개의 게시물</p>
+            <div class="search-bar">
+                <input type="text" placeholder="제목 검색">
+                <button><img src="search-icon.png" alt="검색"></button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>댓글수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>Gopro</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>Gopro</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>Gopro</td>
+                        <td>3</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="actions">
+                <button class="modify">수정</button>
+                <button class="delete">삭제</button>
+                <button class="new-post">새 글 작성하기</button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

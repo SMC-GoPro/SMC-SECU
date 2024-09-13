@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문제 풀이</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #00aaff;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+}
+
+.user-icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    height: 70%;
+}
+
+.sidebar {
+    width: 20%;
+    background-color: #4A6A82;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar h3 {
+    margin-bottom: 20px;
+}
+
+.problem-description {
+    color: white;
+}
+
+.problem-area {
+    flex: 1;
+    background-color: #678D9C;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.problem-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3A5060;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+}
+
+.problem-header h2 {
+    margin: 0;
+    flex-grow: 1;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.run-btn, .submit-btn {
+    padding: 10px 20px;
+    background-color: #00aaff;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.code-editor {
+    margin-top: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.code-editor h3 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+#code-input {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    resize: none; /* 고정된 크기로 만듦 */
+}
+
+.language-select {
+    margin-right: 20px;
+}
+
+.language-select label {
+    color: white;
+    font-weight: bold;
+}
+
+.language-select select {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.output-area {
+    background-color: #3A5060;
+    padding: 20px;
+    color: white;
+}
+
+.output-content {
+    margin-top: 10px;
+    background-color: #557D89;
+    padding: 10px;
+    border-radius: 5px;
+    height: 150px;
+    overflow-y: scroll;
+}
+
+</style>
+
+<body>
+    <header>
+        <div class="logo">GoPRO</div>
+        <nav>
+            <ul>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">문제</a></li>
+                <li><a href="#">순위</a></li>
+                <li><a href="#">게시판</a></li>
+            </ul>
+        </nav>
+        <div class="user-icon">
+            <img src="user-icon.png" alt="User Icon">
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="sidebar">
+                <h3>문제 설명</h3>
+                <p class="problem-description">
+                    여기에 문제에 대한 설명을 작성하세요. 문제의 목표, 입력 조건, 출력 조건 등을 구체적으로 설명할 수 있습니다.
+                </p>
+            </div>
+
+            <div class="problem-area">
+                <div class="problem-header">
+                    <h2>문제 제목</h2>
+                    <div class="language-select">
+                        <label for="language">언어 선택:</label>
+                        <select id="language">
+                            <option value="cpp">C / C++</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                        </select>
+                    </div>
+                    <div class="buttons">
+                        <button class="run-btn">실행</button>
+                        <button class="submit-btn">제출</button>
+                    </div>
+                </div>
+                <div class="code-editor">
+                    <textarea id="code-input" rows="10" placeholder="여기에 코드를 입력하세요..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="output-area">
+            <h3>실행 결과</h3>
+            <div class="output-content">
+                <p>실행 결과가 여기에 표시됩니다.</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

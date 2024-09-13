@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문제 리스트</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #00aaff;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+}
+
+.user-icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+main {
+    padding: 20px;
+}
+
+.problem-list h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-bar select, .filter-bar input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.filter-bar button {
+    padding: 10px;
+    background-color: #00aaff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-bar button img {
+    width: 16px;
+    height: 16px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #00aaff;
+    color: #fff;
+}
+
+.level {
+    font-weight: bold;
+}
+
+.lv5 { color: red; }
+.lv4 { color: orange; }
+.lv3 { color: green; }
+.lv2 { color: blue; }
+.lv1 { color: limegreen; }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pagination button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.pagination .active {
+    background-color: #00aaff;
+    color: white;
+}
+
+.pagination .prev, .pagination .next {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+</style>
+
+<body>
+    <header>
+        <div class="logo">GoPRO</div>
+        <nav>
+            <ul>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">문제</a></li>
+                <li><a href="#">순위</a></li>
+                <li><a href="#">게시판</a></li>
+            </ul>
+        </nav>
+        <div class="user-icon">
+            <img src="user-icon.png" alt="User Icon">
+        </div>
+    </header>
+
+    <main>
+        <section class="problem-list">
+            <h1>문제</h1>
+            <div class="filter-bar">
+                <select>
+                    <option>난이도</option>
+                    <option>Lv. 1</option>
+                    <option>Lv. 2</option>
+                    <option>Lv. 3</option>
+                    <option>Lv. 4</option>
+                    <option>Lv. 5</option>
+                </select>
+                <input type="text" placeholder="제목 검색">
+                <button><img src="search-icon.png" alt="검색"></button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>난이도</th>
+                        <th>정답률</th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>abc</td>
+                        <td><span class="level lv5">Lv. 5</span></td>
+                        <td>92%</td>
+                        <td><img src="check-icon.png" alt="완료"></td>
+                    </tr>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>abc</td>
+                        <td><span class="level lv4">Lv. 4</span></td>
+                        <td>92%</td>
+                        <td><img src="check-icon.png" alt="완료"></td>
+                    </tr>
+                    <!-- 추가 행들 -->
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <button class="prev">&laquo;</button>
+                <button class="page active">1</button>
+                <button class="page">2</button>
+                <button class="page">3</button>
+                <button class="page">4</button>
+                <button class="page">5</button>
+                <button class="next">&raquo;</button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

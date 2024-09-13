@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+    }
+    
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #00aaff;
+    }
+    
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+    
+    nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+    }
+    
+    .user-icon img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+    
+    main {
+        padding: 20px;
+    }
+    
+    .post h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .user-id {
+        font-size: 14px;
+        color: #888;
+    }
+    
+    .post-date {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 20px;
+    }
+    
+    .post-content {
+        font-size: 16px;
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        margin-bottom: 40px;
+    }
+    
+    .comments h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    
+    .comment-input {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .comment-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    
+    .comment-input button {
+        padding: 10px 20px;
+        background-color: #00aaff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .comment-list {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 20px;
+    }
+    
+    .comment {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    }
+    
+    .comment:last-child {
+        border-bottom: none;
+    }
+    
+    .comment-id {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    
+    .comment-date {
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 10px;
+    }
+    
+    .comment-text {
+        font-size: 14px;
+    }
+</style>
+
+<body>
+    <header>
+        <div class="logo">Gopro</div>
+        <nav>
+            <ul>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">문제집</a></li>
+                <li><a href="#">순위</a></li>
+                <li><a href="#">게시판</a></li>
+            </ul>
+        </nav>
+        <div class="user-icon">
+            <img src="user-icon.png" alt="User Icon">
+        </div>
+    </header>
+    
+    <main>
+        <section class="post">
+            <h1>제목을 입력하세요</h1>
+            <p class="user-id">아이디1234</p>
+            <p class="post-date">2024.09.07</p>
+            <div class="post-content">질문 내용</div>
+        </section>
+
+        <section class="comments">
+            <h2>2개의 댓글</h2>
+            <div class="comment-input">
+                <input type="text" placeholder="댓글 작성하기">
+                <button>등록</button>
+            </div>
+            <div class="comment-list">
+                <div class="comment">
+                    <p class="comment-id">dkdkdle0099</p>
+                    <p class="comment-date">2024.09.08</p>
+                    <p class="comment-text">댓글 내용1</p>
+                </div>
+                <div class="comment">
+                    <p class="comment-id">아이디8922</p>
+                    <p class="comment-date">2024.09.08</p>
+                    <p class="comment-text">댓글 내용2</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
