@@ -46,5 +46,27 @@
         </div>
     </div>
 
+    <div class="problem-section">
+        <h2 class="problem-title">문제</h2>
+        <div class="problem-container">
+            <div class="problem-item">
+                <img src="{{ url_for('static', filename='img/today-problem.jpg') }}" alt="todayproblem">
+                <a href="#">오늘 올라온 문제 ></a>
+            </div>
+            <div class="problem-item">
+                <img src="{{ url_for('static', filename='img/easy.png') }}" alt="easyproblem">
+                <a href="#">초급 ></a>
+            </div>
+            <div class="problem-item">
+                <img src="{{ url_for('static', filename='img/normal.png') }}" alt="normalproblem">
+                <a href="#">중급 ></a>
+            </div>
+            <div class="problem-item">
+                <img src="{{ url_for('static', filename='img/hard.png') }}" alt="hardproblem">
+                <a href="#">고급 ></a>
+            </div>
+        </div>
+    </div>
+
     <script src="{{ url_for('static',filename='./js/index.js') }}"></script>
 {% endblock %}

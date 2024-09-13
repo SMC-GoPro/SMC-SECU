@@ -177,6 +177,41 @@
     color: white;
 }
 
+.problem-section { margin-bottom: 60px; }
+
+.problem-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.problem-container {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    gap: 20px; /* 문제 간 간격 */
+}
+
+.problem-item {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    align-items: center; /* 가운데 정렬 */
+}
+
+.problem-item img {
+    width: 350px;
+    height: 350px;
+    margin-bottom: 10px; /* 이미지와 링크 간 간격 */
+}
+
+.problem-item a {
+    align-self: flex-start; /* 왼쪽 정렬 */
+    text-decoration: none;
+    font-size: 16px;
+    color: black;
+    margin-top: -5px;
+}
+
 @media (max-width: 600px) {
     .statistics-container {
         flex-direction: column; /* 세로 정렬로 변경 */
