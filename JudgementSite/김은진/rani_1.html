@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #00aaff;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+    }
+
+    .user-icon img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .board {
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        margin-top: 20px;
+        
+    }
+
+    .board h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .board p {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 300px;
+    }
+
+    .search-bar {
+        display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 300px;
+    border: 2px solid #D8D8D8; /* 외부 테두리 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    overflow: hidden; /* 버튼과 입력창 사이의 테두리가 깨지지 않도록 */
+    }
+
+    .search-bar input {
+    flex: 1;
+    padding: 10px;
+    border: none; /* 기본 테두리 제거 */
+    background-color: #FAF7F7;
+    outline: none; /* 포커스 시 파란 테두리 제거 */
+    font-size: 14px; /* 텍스트 크기 조정 */
+    }
+
+    .search-bar button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #FAF7F7; /* 버튼 배경색 */
+    }
+
+    .search-bar button i {
+    color: #999; /* 돋보기 아이콘 색상 */
+    font-size: 16px;
+    }
+
+    .search-bar::after {
+        content: '';
+        width: 100%;
+        height: 1px;
+        background-color: #D8D8D8; /* 원하는 색상으로 변경 가능 */
+        position: absolute;
+        left: 0;
+        bottom: 0;
+    }
+    .search-bar hr {
+        border: none; /* 기본 테두리 제거 */
+        height: 1px; /* 선의 두께 */
+        background-color: #D8D8D8; /* 선의 색상 */
+        width: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+    }
+
+
+
+
+    .search-bar button img {
+        width: 16px;
+        height: 16px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+        
+    }
+
+    table th {
+        background-color: #0091FF;
+        color: #fff;
+        text-align: center;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .actions button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .modify {
+        background-color: #9E9E9E;
+        color: #fff;
+    }
+
+    .delete {
+        background-color: #9E9E9E;
+        color: #fff;
+    }
+
+    .new-post {
+        background-color: #595959;
+        color: #fff;
+    }
+</style>
+
+<body>
+    <header>
+        <div class="logo">Gopro</div>
+        <nav>
+            <ul>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">문제집</a></li>
+                <li><a href="#">순위</a></li>
+                <li><a href="#">게시판</a></li>
+            </ul>
+        </nav>
+        <div class="user-icon">
+            <img src="user-icon.png" alt="User Icon">
+        </div>
+    </header>
+
+    <main>
+        <section class="board">
+            <h1>게시판</h1>
+            <p>100개의 게시물</p>
+            <div class="search-bar">
+                <input type="text" placeholder="제목 검색">
+                <hr>
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="actions">
+                    <button class="modify">수정</button>
+                    <button class="delete">삭제</button>
+                    <button class="new-post">새 글 작성하기</button>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>댓글수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>Gopro</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>Gopro</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>Gopro</td>
+                        <td>3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
