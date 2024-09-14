@@ -29,44 +29,5 @@
         <a href="#" class="more-announcements-btn">전체 공지사항 보기</a>
     </div>
 
-    <div class="statistics-section">
-        <div class="statistics-container">
-            <div class="statistic-item">
-                <h2>1904</h2>
-                <p>전체 문제</p>
-            </div>
-            <div class="statistic-item">
-                <h2>2098</h2>
-                <p>오늘 올라온 문제</p>
-            </div>
-            <div class="statistic-item">
-                <h2>3502</h2>
-                <p>오늘 올라온 문제</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="problem-section">
-        <h2 class="problem-title">문제</h2>
-        <div class="problem-container">
-            <div class="problem-item">
-                <img src="{{ url_for('static', filename='img/today-problem.jpg') }}" alt="todayproblem">
-                <a href="#">오늘 올라온 문제 ></a>
-            </div>
-            <div class="problem-item">
-                <img src="{{ url_for('static', filename='img/easy.png') }}" alt="easyproblem">
-                <a href="#">초급 ></a>
-            </div>
-            <div class="problem-item">
-                <img src="{{ url_for('static', filename='img/normal.png') }}" alt="normalproblem">
-                <a href="#">중급 ></a>
-            </div>
-            <div class="problem-item">
-                <img src="{{ url_for('static', filename='img/hard.png') }}" alt="hardproblem">
-                <a href="#">고급 ></a>
-            </div>
-        </div>
-    </div>
-
     <script src="{{ url_for('static',filename='./js/index.js') }}"></script>
 {% endblock %}
