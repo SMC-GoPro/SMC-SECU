@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="notice.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">Gopro</div>
+        <nav>
+            <ul>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">문제집</a></li>
+                <li><a href="#">순위</a></li>
+                <li><a href="#">게시판</a></li>
+            </ul>
+        </nav>
+        <div class="user-icon">
+            <i class="fa-solid fa-circle-user"></i>
+        </div>
+    </header>
+
+    <main>
+        <section class="board">
+            <h1>게시판</h1>
+            <p>100개의 게시물</p>
+            <div class="search-bar">
+                <input type="text" placeholder="제목 검색">
+                <hr>
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="actions">
+                    <button class="modify">수정</button>
+                    <button class="delete">삭제</button>
+                    <button class="new-post">새 글 작성하기</button>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>댓글수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td >3430 피보나치 수열과 순서쌍</td>
+                        <td>Gopro</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>Gopro</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>3430 피보나치 수열과 순서쌍</td>
+                        <td>Gopro</td>
+                        <td>3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script>
+        let postCount = 0; // 게시물 초기 개수
+    
+        // 게시물 수 업데이트 함수
+        function updatePostCount() {
+            const postCountElement = document.querySelector('.board p');
+            postCountElement.textContent = `${postCount}개의 게시물`;
+        }
+    
+        // 새 글 작성 버튼 클릭 이벤트 핸들러
+        document.querySelector('.new-post').addEventListener('click', function() {
+            // 게시물을 추가하는 동작 (예: 테이블에 새로운 행을 추가)
+            const tbody = document.querySelector('tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>새로운 게시물 제목</td>
+                <td>작성자</td>
+                <td>0</td>
+            `;
+            tbody.appendChild(newRow);
+    
+            // 게시물 수 증가
+            postCount++;
+            updatePostCount();
+        });
+    
+        // 초기 게시물 개수 설정
+        updatePostCount();
+    </script>
+    
+</body>
+</html>
