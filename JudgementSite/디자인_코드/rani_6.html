@@ -64,12 +64,16 @@ main {
 }
 
 .profile {
-    background-color: #fff;
+    background-color: lightgray;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     text-align: center;
+}
+
+.kimall{
+    
 }
 
 .profile-img img {
@@ -97,9 +101,18 @@ button {
     margin-bottom: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #00aaff;
-    color: white;
+    background-color: lightgray;
+    color: black;
     cursor: pointer;
+    font-size: 20px;
+}
+
+button:hover{
+    background-color: gray;
+}
+
+.logout{
+    color: red;
 }
 
 .stats-summary {
@@ -160,11 +173,16 @@ canvas {
     <main>
         <section class="info">
             <div class="profile">
+                <div class="jung"><h3>내 정보</h3>
+                <hr>
+            </div>
+            <div class="kim all">
                 <div class="profile-img">
                     <img src="user-icon.png" alt="프로필 이미지">
                 </div>
                 <div class="profile-name">김철민</div>
                 <div class="profile-date">2024.09.08 가입</div>
+            </div>
                 <button class="edit-info">정보 수정</button>
                 <button class="view-stats">통계</button>
                 <button class="logout">탈퇴</button>
