@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>문제 리스트</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <style>
@@ -57,6 +58,7 @@ main {
 }
 
 .problem-list h1 {
+    margin-top: 130px;
     font-size: 24px;
     margin-bottom: 20px;
 }
@@ -65,6 +67,9 @@ main {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    padding: 40px; /* 이 줄을 아래처럼 변경 */
+    padding-left: 0;  /* 왼쪽 여백 제거 */
+    padding-bottom: 0; /* 아래쪽 여백 제거 */
 }
 
 .filter-bar select, .filter-bar input {
@@ -72,6 +77,64 @@ main {
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 300px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 300px;
+    border: 2px solid #D8D8D8; /* 외부 테두리 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    overflow: hidden; /* 버튼과 입력창 사이의 테두리가 깨지지 않도록 */
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    border: none; /* 기본 테두리 제거 */
+    background-color: #FAF7F7;
+    outline: none; /* 포커스 시 파란 테두리 제거 */
+    font-size: 14px; /* 텍스트 크기 조정 */
+}
+
+.search-bar button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #FAF7F7; /* 버튼 배경색 */
+}
+
+.search-bar button i {
+    color: #999; /* 돋보기 아이콘 색상 */
+    font-size: 16px;
+}
+
+.search-bar::after {
+    content: '';
+    width: 100%;
+    height: 1px;
+    background-color: #D8D8D8; /* 원하는 색상으로 변경 가능 */
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.search-bar hr {
+    border: none; /* 기본 테두리 제거 */
+    height: 1px; /* 선의 두께 */
+    background-color: #D8D8D8; /* 선의 색상 */
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
 }
 
 .filter-bar button {
@@ -167,8 +230,10 @@ table th {
                     <option>Lv. 4</option>
                     <option>Lv. 5</option>
                 </select>
+                <div class="search-bar" >
                 <input type="text" placeholder="제목 검색">
                 <button><img src="search-icon.png" alt="검색"></button>
+            </div>
             </div>
 
             <table>
