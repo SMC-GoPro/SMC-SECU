@@ -1,4 +1,4 @@
- * {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -30,11 +30,6 @@ nav ul {
     gap: 20px;
 }
 
-nav ul li a {
-    text-decoration: none;
-    color: #333;
-    font-size: 18px;
-}
 nav ul li:nth-child(1) {
     margin-right: 40px; /* 공지사항 뒤에 더 넓은 간격 추가 */
 }
@@ -46,6 +41,12 @@ nav ul li:nth-child(3) {
     margin-right: 40px; /* 공지사항 뒤에 더 넓은 간격 추가 */
 }
 
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+}
+
 .user-icon i {
     width: 40px;
     height: 40px;
@@ -54,39 +55,41 @@ nav ul li:nth-child(3) {
     color: #0091FF;
 }
 
-.board {
-    background-color: #fff;
-    padding: 80px;
-    border: 1px solid #ddd;
-    
+main {
+    padding: 20px;
 }
 
-.board h1 {
+.problem-list h1 {
+    margin-top: 130px;
     font-size: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
-.board p {
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center; /* 수직 정렬 */
+    margin-bottom: 20px;
+    padding-left: 0;  
+    padding-bottom: 0; 
+}
+.filter-bar select, .filter-bar input {
+    padding: 10px;
+    border: 2px solid #D8D8D8;
+    border-radius: 5px;
     font-size: 16px;
-    color: #555;
-    margin-bottom: 20px;
+    width: 130px;
 }
 
 .search-bar {
     display: flex;
     align-items: center;
+    border: 2px solid #D8D8D8;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 340px; /* 적절한 너비 설정 */
+    margin-top: 20px;
     margin-bottom: 20px;
-    width: 300px;
-}
-
-.search-bar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    width: 300px;
-    border: 2px solid #D8D8D8; /* 외부 테두리 */
-    border-radius: 5px; /* 모서리 둥글게 */
-    overflow: hidden; /* 버튼과 입력창 사이의 테두리가 깨지지 않도록 */
 }
 
 .search-bar input {
@@ -130,7 +133,14 @@ nav ul li:nth-child(3) {
     bottom: 0;
 }
 
-.search-bar button img {
+.filter-bar button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-bar button img {
     width: 16px;
     height: 16px;
 }
@@ -144,8 +154,8 @@ table {
 table th, table td {
     border: 1px solid #ddd;
     padding: 10px;
+    text-align: left;
     text-align: center;
-    
 }
 
 table th {
@@ -154,38 +164,44 @@ table th {
     text-align: center;
 }
 
-.actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+.level {
     font-weight: bold;
 }
 
-.modify {
-    background-color: #9E9E9E;
-    color: #fff;
+.lv5 { color: #9C35B0; }
+.lv4 { color: #FC5433; }
+.lv3 { color: #FDA332; }
+.lv2 { color: #18A8F1; }
+.lv1 { color: #7FB34C; }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
-.delete {
-    background-color: #9E9E9E;
-    color: #fff;
+.pagination button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
 }
 
-.new-post {
-    background-color: #595959;
-    color: #fff;
+.pagination .active {
+    background-color: #00aaff;
+    color: white;
 }
-.user-icon i{
-    font-size: 40px;
+
+.pagination .prev, .pagination .next {
+    background-color: #ddd;
+    cursor: pointer;
+    border-radius: 20px;
+}
+.pagination .page{
+    border-radius: 20px;
+}
+
+tbody i{
     color: #0091FF;
-    
+    font-size: 25px;
 }
