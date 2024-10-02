@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+    }
+    
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #0091FF;
+    }
+    
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+    
+    nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+    }
+    nav ul li:nth-child(1) {
+        margin-right: 40px;
+    }
+
+    nav ul li:nth-child(2) {
+        margin-right: 40px;
+    }
+    nav ul li:nth-child(3) {
+        margin-right: 40px;
+    }
+    
+    .user-icon i {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 40px;
+        color: #0091FF;
+    }
+    
+    main {
+        padding: 20px;
+    }
+    
+    .post h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .user-id {
+        font-size: 14px;
+        color: #888;
+    }
+
+    .post {
+        position: relative;
+        padding-top: 40px;
+    }
+
+    .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .post-date {
+        font-size: 14px;
+        color: #888;
+    }
+    
+    .post-content {
+        font-size: 16px;
+        background-color: #fff;
+        padding: 20px;
+        height: 160px;
+        border: none;
+    }
+    
+    .comments h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    .message-icon i {
+        font-size: 40px;
+        color: #0091FF;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .comment-input {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        
+    }
+
+    .comment-input input {
+        flex-grow: 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        outline:3px solid #0091FF;
+        border-radius: 15px;
+        width: 380px;
+    
+    }
+
+
+    .comment-input button {
+        padding: 10px 20px;
+        background-color: #0091FF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .comment-list {
+        border: none;
+        padding: 20px;
+        width: 500px;
+    }
+    
+    .comment {
+        border-bottom: none;
+        padding: 10px 0;
+        margin-bottom: 20px; 
+        height: 100px;
+        border-radius: 10px;
+        padding: 5px 10px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 400px;
+        height: 75px;
+
+    }
+    .comment {
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        padding: 25px 10px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 400px;
+        height: 75px;
+}
+
+    .comment-header {
+        position: relative;
+        top: -50px;
+        display: flex;
+        margin-bottom: -40px;
+        align-items: center; /* 아이디와 날짜를 왼쪽에 정렬 */
+        gap: 5px;
+        
+    }
+
+    .comment-id {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .comment-date {
+        font-size: 12px;
+        color: #888;
+
+    }
+
+    .comment-text {
+        margin-top: 22px; /* 텍스트가 header와 겹치지 않도록 여백 추가 */
+        font-size: 14px;
+        color: #333;
+    }
+
+
+    .message-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 35px;
+    }
+    hr{
+        color:#0091FF;
+        border: 1.5px solid #0091FF;
+    }
+</style>
+
+<body>
+    <header>
+        <div class="logo">Gopro</div>
+        <nav>
+            <ul>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">문제집</a></li>
+                <li><a href="#">순위</a></li>
+                <li><a href="#">게시판</a></li>
+            </ul>
+        </nav>
+        <div class="user-icon">
+            <i class="fa-solid fa-circle-user"></i>
+        </div>
+    </header>
+    
+    <main>
+        <section class="post">
+            <h1>제목을 입력하세요</h1>
+            <div class="post-header">
+                <p class="user-id">아이디1234</p>
+                <p class="post-date">2024.09.07</p>
+            </div>
+            <hr>
+            <div class="post-content">질문 내용</div>
+            <hr>
+        </section>
+
+        <section class="comments">
+            <h2>2개의 댓글</h2>
+            <div class="message-container">
+                <div class="message-icon">
+                    <i class="fa-solid fa-comment-dots"></i>
+                </div>
+                <div class="comment-input">
+                    <input type="text" placeholder="댓글 작성하기">
+                    <button>등록</button>
+                </div>
+            </div>
+            <div class="comment">
+                <div class="comment-header">
+                    <span class="comment-id">아이디1234</span>
+                    <span class="comment-date">2024.09.08</span>
+                </div>
+                <p class="comment-text">댓글 내용</p>
+            </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

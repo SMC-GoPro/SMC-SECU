@@ -46,7 +46,7 @@ nav ul li:nth-child(3) {
     margin-right: 40px; /* 공지사항 뒤에 더 넓은 간격 추가 */
 }
 
-.user-icon img {
+.user-icon i {
     width: 40px;
     height: 40px;
     border-radius: 50%;

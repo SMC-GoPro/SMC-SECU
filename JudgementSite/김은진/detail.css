@@ -1,0 +1,205 @@
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+    }
+    
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #0091FF;
+    }
+    
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+    
+    nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+    }
+    nav ul li:nth-child(1) {
+        margin-right: 40px;
+    }
+
+    nav ul li:nth-child(2) {
+        margin-right: 40px;
+    }
+    nav ul li:nth-child(3) {
+        margin-right: 40px;
+    }
+    
+    .user-icon i {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 40px;
+        color: #0091FF;
+    }
+    
+    main {
+        padding: 20px;
+    }
+    
+    .post h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .user-id {
+        font-size: 14px;
+        color: #888;
+    }
+
+    .post {
+        position: relative;
+        padding-top: 40px;
+    }
+
+    .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .post-date {
+        font-size: 14px;
+        color: #888;
+    }
+    
+    .post-content {
+        font-size: 16px;
+        background-color: #fff;
+        padding: 20px;
+        height: 160px;
+        border: none;
+    }
+    
+    .comments h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    .message-icon i {
+        font-size: 40px;
+        color: #0091FF;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .comment-input {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        
+    }
+
+    .comment-input input {
+        flex-grow: 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        outline:3px solid #0091FF;
+        border-radius: 15px;
+        width: 380px;
+    
+    }
+
+
+    .comment-input button {
+        padding: 10px 20px;
+        background-color: #0091FF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .comment-list {
+        border: none;
+        padding: 20px;
+        width: 500px;
+    }
+    
+    .comment {
+        border-bottom: none;
+        padding: 10px 0;
+        margin-bottom: 20px; 
+        height: 100px;
+        border-radius: 10px;
+        padding: 5px 10px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 400px;
+        height: 75px;
+
+    }
+    .comment {
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        padding: 25px 10px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 400px;
+        height: 75px;
+    }
+
+    .comment-header {
+        position: relative;
+        top: -50px;
+        display: flex;
+        margin-bottom: -40px;
+        align-items: center; /* 아이디와 날짜를 왼쪽에 정렬 */
+        gap: 5px;
+        
+    }
+
+    .comment-id {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .comment-date {
+        font-size: 12px;
+        color: #888;
+
+    }
+
+    .comment-text {
+        margin-top: 22px; /* 텍스트가 header와 겹치지 않도록 여백 추가 */
+        font-size: 14px;
+        color: #333;
+    }
+
+
+    .message-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 35px;
+    }
+    hr{
+        color:#0091FF;
+        border: 1.5px solid #0091FF;
+    }
