@@ -143,6 +143,11 @@ main {
 .filter-bar button img {
     width: 16px;
     height: 16px;
+    
+}
+
+select{
+    background-color: #FAF7F7;
 }
 
 table {
