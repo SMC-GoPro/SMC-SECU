@@ -6,28 +6,28 @@
 {% block content %}
     <div class="slider">
         <div class="slides">
-            <div class="slide"><img src="{{ url_for('static',filename='./img/images.jpg') }}" alt="Image 1"></div>
-            <div class="slide"><img src="{{ url_for('static',filename='./img/images.png') }}" alt="Image 2"></div>
-            <div class="slide"><img src="{{ url_for('static',filename='./img/imagesi.jpg') }}" alt="Image 3"></div>
+            <div class="slide"><img src="{{ url_for('static',filename='./img/banner_1.png') }}" alt="Image 1"></div>
+            <div class="slide"><img src="{{ url_for('static',filename='./img/banner_2.png') }}" alt="Image 2"></div>
+            <div class="slide"><img src="{{ url_for('static',filename='./img/banner_3.png') }}" alt="Image 3"></div>
         </div>
         <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
         <button class="next" onclick="moveSlide(1)">&#10095;</button>
     </div>
 
-    <div class="announcement-section">
-        <h2 class="announcement-title">공지사항</h2>
-        <div class="announcement-container">
-            {% for notice in notices %}
-                <div class="announcement-card">
-                    <h3 class="announcement-card-title">{{ notice[0] }}</h3>
-                    <p class="announcement-card-date">{{ notice[1] }}</p>
-                    <p class="announcement-card-content">{{ notice[2] }}</p>
-                    <a href="#" class="announcement-card-link">더보기</a>
+    <div class="newscement-section">
+        <h2 class="newscement-title">공지사항</h2>
+        <div class="newscement-container">
+            {% for posts in posts %}
+                <div class="newscement-card">
+                    <h3 class="newscement-card-title">{{ posts['title'] }}</h3>
+                    <p class="newscement-card-date">{{ posts['date'] }}</p>
+                    <p class="newscement-card-content">{{ posts['content'] }}</p>
+                    <a href="{{ url_for('view_news', id=posts['id']) }}" class="newscement-card-link">더보기</a>
                 </div>
             {% endfor %}
         </div>
-        <a href="#" class="more-announcements-btn">전체 공지사항 보기</a>
+        <a href="{{ url_for('news') }}" class="more-newscements-btn">전체 공지사항 보기</a>
     </div>
-
+    
     <script src="{{ url_for('static',filename='./js/index.js') }}"></script>
 {% endblock %}

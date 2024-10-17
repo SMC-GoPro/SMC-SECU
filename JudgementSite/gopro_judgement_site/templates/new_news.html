@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}새 공지 작성{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/new_news.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="post">
+        <h1>새 공지 작성</h1>
+        <hr>
+        <div class="post-content">
+            <form method="POST" action="{{ url_for('new_news') }}">
+                <div class="form-group">
+                    <label for="title" class="form-label">제목</label>
+                    <input type="text" class="form-input" id="title" name="title" placeholder="제목을 입력하세요" required>
+                </div>
+                <div class="form-group">
+                    <label for="content" class="form-label">내용</label>
+                    <textarea class="form-input" id="content" name="content" rows="6" placeholder="내용을 입력하세요" required></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-submit">공지 등록</button>
+                </div>
+            </form>
+        </div>
+        <hr>
+        <button onclick="location.href='/news'" class="btn btn-back">뒤로가기</button>
+    </section>
+</main>
+{% endblock %}

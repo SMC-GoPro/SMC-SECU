@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}문제 풀이{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/problem_solving.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <div class="problem-description">
+        <h2>문제 설명</h2>
+        <p>
+            여기에 문제에 대한 설명을 작성하세요. 문제의 목표, 입력 조건, 출력 조건 등을 구체적으로 설명할 수 있습니다.
+        </p>
+    </div>
+
+    <div class="code-editor">
+        <div class="editor-header">
+            <h2>코드 작성</h2>
+            <div class="buttons">
+                <select class="language-select">
+                    <option value="c">C</option>
+                    <option value="cpp">C++</option>
+                    <option value="java">Java</option>
+                    <option value="python">Python</option>
+                </select>
+                <button class="run-btn">실행</button>
+                <button class="submit-btn">제출</button>
+            </div>
+        </div>
+        <textarea id="code-input" rows="20" placeholder="여기에 코드를 입력하세요..."></textarea>
+    </div>
+</main>
+
+<div class="output-area">
+    <h3>실행 결과</h3>
+    <div class="output-content">
+        <p>실행 결과가 여기에 표시됩니다.</p>
+    </div>
+</div>
+{% endblock %}

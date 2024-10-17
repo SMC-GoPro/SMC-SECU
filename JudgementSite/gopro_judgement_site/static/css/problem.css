@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+main {
+    padding: 40px 20px;
+}
+
+.problem-list h1 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #222;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.filter-bar select,
+.filter-bar input {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.filter-bar select:focus,
+.filter-bar input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    font-size: 1rem;
+}
+
+.search-bar button {
+    padding: 10px 15px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.search-bar button i {
+    color: #333;
+    font-size: 1.2rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th,
+table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+}
+
+table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.level {
+    font-weight: bold;
+}
+
+.lv5 {
+    color: #d6336c;
+}
+
+.lv4 {
+    color: #fa5252;
+}
+
+.lv3 {
+    color: #fd7e14;
+}
+
+.lv2 {
+    color: #228be6;
+}
+
+.lv1 {
+    color: #40c057;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination button {
+    padding: 10px 15px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #e9ecef;
+}
+
+.pagination .active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination .prev,
+.pagination .next {
+    border-radius: 50%;
+}
+
+tbody i {
+    color: #007bff;
+    font-size: 1.5rem;
+}

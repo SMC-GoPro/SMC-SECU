@@ -4,11 +4,10 @@ body {
     font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* 전체 화면 높이 차지 */
+    min-height: 100vh;
     background-color: #f4f7f6;
 }
 
-/* 메뉴바 스타일 */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -20,9 +19,9 @@ body {
 }
 
 .navbar-logo {
-    display:flex;
-    font-size: 40px; /* 로고 크기 확대 */
-    text-decoration: none; /* 링크의 밑줄 제거 */
+    display: flex;
+    font-size: 40px;
+    text-decoration: none;
     font-weight: 600;
     color: #007BFF;
 }
@@ -104,7 +103,6 @@ body {
     background-color: #f0f0f0;
 }
 
-/* 로그인/로그아웃 버튼 스타일 */
 .auth-buttons {
     display: flex;
     gap: 10px;
@@ -127,7 +125,7 @@ body {
 }
 
 .main-content {
-    flex: 1; /* 남은 공간을 채우도록 함 */
+    flex: 1;
     background-color: #f9f9f9;
 }
 
@@ -139,7 +137,7 @@ body {
     color: #555;
     width: 100%;
     box-sizing: border-box;
-    position: relative; /* 화면을 따라다니지 않도록 설정 */
+    position: relative;
 }
 
 /* 모바일 메뉴 스타일 */

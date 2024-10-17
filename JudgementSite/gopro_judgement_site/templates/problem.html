@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block title %}문제 리스트{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/problem.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="problem-list">
+        <h1>문제</h1>
+        <div class="filter-bar">
+            <select>
+                <option>난이도</option>
+                <option>Lv. 1</option>
+                <option>Lv. 2</option>
+                <option>Lv. 3</option>
+                <option>Lv. 4</option>
+                <option>Lv. 5</option>
+            </select>
+            <div class="search-bar" >
+                <input type="text" placeholder="제목 검색">
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>난이도</th>
+                    <th>정답률</th>
+                    <th>상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>3430 피보나치 수열과 순서쌍</td>
+                    <td>abc</td>
+                    <td><span class="level lv5">Lv. 5</span></td>
+                    <td>92%</td>
+                    <td><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr>
+                    <td>3430 피보나치 수열과 순서쌍</td>
+                    <td>abc</td>
+                    <td><span class="level lv4">Lv. 4</span></td>
+                    <td>92%</td>
+                    <td><i class="fa-solid fa-check"></i></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <button class="prev">&laquo;</button>
+            <button class="page active">1</button>
+            <button class="page">2</button>
+            <button class="page">3</button>
+            <button class="page">4</button>
+            <button class="page">5</button>
+            <button class="next">&raquo;</button>
+        </div>
+    </section>
+</main>
+{% endblock %}

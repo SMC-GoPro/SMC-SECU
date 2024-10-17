@@ -1,0 +1,151 @@
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+table, th, td {
+    border: none;
+    border-bottom: none;
+}
+
+table th, table td {
+    border-bottom: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.board {
+    background-color: #fff;
+    padding: 40px 30px;
+    margin: 0;
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.board h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.board p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.search-actions-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.search-bar button {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.search-bar button i {
+    color: #333;
+    font-size: 18px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    flex: 1;
+}
+
+table th, table td {
+    border-bottom: 1px solid #eaeaea;
+    padding: 15px;
+    text-align: center;
+    font-size: 16px;
+}
+
+table th {
+    background-color: #fafafa;
+    color: #555;
+    font-weight: 600;
+}
+
+table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.actions button:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    width: 100%;
+    position: relative;
+}

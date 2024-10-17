@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/layout.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     {% block head %}
     {% endblock %}
@@ -12,24 +13,32 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="{{ url_for('index') }}" class="navbar-logo">GoPRO</a>
+        <a href="{{ url_for('index') }}" class="navbar-logo">GoPro</a>
         <div class="hamburger" onclick="toggleMenu()">☰</div>
         <ul class="navbar-menu">
-            <li class="navbar-item"><a href="#" class="navbar-link">홈</a></li>
-            <li class="navbar-item"><a href="#" class="navbar-link">공지사항</a></li>
+            <li class="navbar-item"><a href="/" class="navbar-link">홈</a></li>
+            <li class="navbar-item"><a href="/news" class="navbar-link">공지사항</a></li>
             <li class="navbar-item dropdown">
-                <a href="#" class="navbar-link">문제</a>
+                <a href="/problem" class="navbar-link">문제</a>
                 <div class="dropdown-content">
-                    <a href="#" class="dropdown-link">문제</a>
+                    <a href="/problem" class="dropdown-link">문제</a>
                     <a href="#" class="dropdown-link">문제집</a>
                 </div>
             </li>
-            <li class="navbar-item"><a href="#" class="navbar-link">랭킹</a></li>
-            <li class="navbar-item"><a href="#" class="navbar-link">게시판</a></li>
+            <li class="navbar-item"><a href="/rank" class="navbar-link">랭킹</a></li>
+            <li class="navbar-item"><a href="/posts" class="navbar-link">게시판</a></li>
         </ul>
+
         <div class="auth-buttons">
-            <button class="auth-btn login-btn">로그인</button>
-            <button class="auth-btn logout-btn">로그아웃</button>
+            {% if session.logged_in %}
+                <button class="auth-btn logout-btn" onclick="location.href='/mypage'">
+                    <i class="fa-solid fa-circle-user"></i> 마이페이지
+                </button>
+                <button class="auth-btn logout-btn" onclick="location.href='/logout'">로그아웃</button>
+            {% else %}
+                <button class="auth-btn login-btn" onclick="location.href='/login'">로그인</button>
+                <button class="auth-btn signup-btn" onclick="location.href='/signup'">회원가입</button>
+            {% endif %}
         </div>
     </nav>
     
@@ -40,14 +49,20 @@
             <span class="close-btn" onclick="toggleMenu()">×</span>
             <div class="mobile-menu-logo">GoPRO</div>
             <ul class="mobile-menu-list">
-                <li><a href="#" class="mobile-menu-link">홈</a></li>
-                <li><a href="#" class="mobile-menu-link">공지사항</a></li>
-                <li><a href="#" class="mobile-menu-link">문제</a></li>
+                <li><a href="/" class="mobile-menu-link">홈</a></li>
+                <li><a href="/news" class="mobile-menu-link">공지사항</a></li>
+                <li><a href="/problem" class="mobile-menu-link">문제</a></li>
                 <li><a href="#" class="mobile-menu-link">문제집</a></li>
-                <li><a href="#" class="mobile-menu-link">랭킹</a></li>
-                <li><a href="#" class="mobile-menu-link">게시판</a></li>
-                <li><a href="#" class="mobile-menu-link">로그인</a></li>
-                <li><a href="#" class="mobile-menu-link">회원가입</a></li>
+                <li><a href="/rank" class="mobile-menu-link">랭킹</a></li>
+                <li><a href="/posts" class="mobile-menu-link">게시판</a></li>
+                <!-- 모바일 메뉴에서도 로그인 상태에 따른 링크 표시 -->
+                {% if session.logged_in %}
+                    <li><a href="/mypage" class="mobile-menu-link">마이페이지</a></li>
+                    <li><a href="/logout" class="mobile-menu-link">로그아웃</a></li>
+                {% else %}
+                    <li><a href="/login" class="mobile-menu-link">로그인</a></li>
+                    <li><a href="/signup" class="mobile-menu-link">회원가입</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

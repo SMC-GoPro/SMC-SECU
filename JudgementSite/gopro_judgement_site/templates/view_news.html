@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}공지사항{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/view_news.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="post">
+        <h1>{{ post.title }}</h1>
+        <div class="post-header">
+            <p class="user-id">{{ post.author }}</p>
+            <p class="post-date">{{ post.date }}</p>
+        </div>
+        <hr>
+        <div class="post-content">{{ post.content | nl2br }}</div>
+        <hr>
+        <div class="post-actions">
+            <!-- 뒤로가기 버튼 -->
+            <button onclick="location.href='/news'" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> 뒤로가기
+            </button>
+            {% if session.get('role') == 'admin' %}
+            <!-- 수정 버튼 -->
+            <button onclick="location.href=`{{ url_for('edit_news', id=post.id) }}`" class="btn btn-primary">
+                <i class="fa-solid fa-pen"></i> 수정
+            </button>
+            <!-- 삭제 버튼 -->
+            <form action="{{ url_for('delete_news', id=post.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('정말로 이 공지를 삭제하시겠습니까?');">
+                    <i class="fa-solid fa-trash"></i> 삭제
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </section>
+</main>
+{% endblock %}

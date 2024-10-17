@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}공지사항{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/news.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="board">
+        <h1>공지사항</h1>
+        <p>최근 공지사항을 확인하세요.</p>
+        <div class="search-actions-container">
+            <!-- 검색 기능 폼 -->
+            <form action="{{ url_for('news') }}" method="GET" class="search-bar">
+                <input type="text" name="search" placeholder="제목을 검색하세요" value="{{ request.args.get('search', '') }}">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+            <div class="actions">
+                {% if session.get('role') == 'admin' %}
+                <a href="{{ url_for('new_news') }}">
+                    <button class="new-post">새 공지 작성하기</button>
+                </a>
+                {% endif %}
+            </div>                
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td><a href="{{ url_for('view_news', id=post.id) }}" style="display: block; width: 100%; height: 100%;">{{ post.id }}</a></td>
+                    <td><a href="{{ url_for('view_news', id=post.id) }}" style="display: block; width: 100%; height: 100%;">{{ post.title }}</a></td>
+                    <td><a href="{{ url_for('view_news', id=post.id) }}" style="display: block; width: 100%; height: 100%;">{{ post.author }}</a></td>
+                    <td><a href="{{ url_for('view_news', id=post.id) }}" style="display: block; width: 100%; height: 100%;">{{ post.date }}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>                            
+        </table>
+
+        <!-- 페이지네이션 버튼 -->
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('news', page=page-1, search=request.args.get('search')) }}">&laquo; 이전</a>
+            {% endif %}
+            
+            {% for p in range(1, total_pages + 1) %}
+                {% if p == page %}
+                    <span class="current">{{ p }}</span>
+                {% else %}
+                    <a href="{{ url_for('news', page=p, search=request.args.get('search')) }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < total_pages %}
+                <a href="{{ url_for('news', page=page+1, search=request.args.get('search')) }}">다음 &raquo;</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+{% endblock %}

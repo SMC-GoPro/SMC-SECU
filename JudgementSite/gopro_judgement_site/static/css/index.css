@@ -62,13 +62,13 @@
 }
 
 /* 공지사항 섹션 스타일 */
-.announcement-section {
+.newscement-section {
     padding: 50px;
     background-color: #f9f9f9;
     text-align: center;
 }
 
-.announcement-title {
+.newscement-title {
     font-size: 32px;
     font-weight: 600;
     color: #333;
@@ -76,13 +76,13 @@
 }
 
 /* 공지사항 카드 스타일 */
-.announcement-container {
+.newscement-container {
     display: flex;
     justify-content: center; /* 카드들을 중앙 정렬 */
     gap: 10px; /* 카드 간격을 줄임 */
 }
 
-.announcement-card {
+.newscement-card {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -92,43 +92,43 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.announcement-card:hover {
+.newscement-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.announcement-card-title {
+.newscement-card-title {
     font-size: 20px;
     font-weight: 600;
     color: #007BFF;
     margin-bottom: 10px;
 }
 
-.announcement-card-date {
+.newscement-card-date {
     font-size: 14px;
     color: #999;
     margin-bottom: 15px;
 }
 
-.announcement-card-content {
+.newscement-card-content {
     font-size: 16px;
     color: #555;
     margin-bottom: 20px;
 }
 
-.announcement-card-link {
+.newscement-card-link {
     font-size: 14px;
     color: #007BFF;
     text-decoration: none;
     font-weight: 500;
 }
 
-.announcement-card-link:hover {
+.newscement-card-link:hover {
     text-decoration: underline;
 }
 
 /* 전체 공지사항 버튼 스타일 */
-.more-announcements-btn {
+.more-newscements-btn {
     display: inline-block;
     margin-top: 30px;
     padding: 12px 24px;
@@ -141,43 +141,43 @@
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.more-announcements-btn:hover {
+.more-newscements-btn:hover {
     background-color: #0056b3;
     transform: scale(1.05);
 }
 
 /* 공지사항 섹션 미디어 쿼리 */
 @media (max-width: 1000px) {
-    .announcement-container {
+    .newscement-container {
         flex-direction: column; /* 모바일에서는 카드들이 세로로 정렬되도록 설정 */
         align-items: center; /* 카드들을 중앙 정렬 */
     }
 
-    .announcement-card {
+    .newscement-card {
         width: 500px;
         margin-bottom: 20px; /* 카드 간의 간격 추가 */
     }
 }
 
 @media (max-width: 600px) {
-    .announcement-title {
+    .newscement-title {
         font-size: 24px; /* 제목 크기를 줄여 모바일에 맞게 조정 */
     }
 
-    .announcement-card-title {
+    .newscement-card-title {
         font-size: 18px; /* 카드 제목 크기를 조정 */
     }
 
-    .announcement-card-content {
+    .newscement-card-content {
         font-size: 14px; /* 내용 글씨 크기 조정 */
     }
 
-    .more-announcements-btn {
+    .more-newscements-btn {
         padding: 10px 20px; /* 버튼 크기 조정 */
         font-size: 14px; /* 버튼 텍스트 크기 조정 */
     }
 
-    .announcement-card {
+    .newscement-card {
         width: 300px;
     }
 }

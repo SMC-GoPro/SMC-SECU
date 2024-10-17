@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ post['title'] }} - 게시판{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/view_post.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="post">
+        <h1>{{ post['title'] }}</h1>
+        <div class="post-header">
+            <p class="user-id">{{ post['author'] }}</p>
+            <p class="post-date">{{ post['created_at'].strftime('%Y.%m.%d') }}</p>
+        </div>
+        <hr>
+        <div class="post-content">{{ post['content'] | nl2br }}</div>
+        <hr>
+
+        <div class="post-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> 뒤로가기</a>
+            {% if post['author'] == username or session.get('role') == 'admin' %}
+            <a href="{{ url_for('edit_post', post_id=post['id']) }}" class="btn btn-primary"><i class="fa-solid fa-pen"></i> 수정</a>
+            <form method="POST" action="{{ url_for('delete_post', post_id=post['id']) }}" style="display:inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('정말로 이 공지를 삭제하시겠습니까?');">
+                    <i class="fa-solid fa-trash"></i> 삭제
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="comments">
+        <h2>{{ comments|length }}개의 댓글</h2>
+        <div class="message-container">
+            <div class="message-icon">
+                <i class="fa-solid fa-comment-dots"></i>
+            </div>
+            <div class="comment-input">
+                <form method="POST">
+                    <input type="text" name="content" placeholder="댓글 작성하기" required>
+                    <button type="submit">등록</button>
+                </form>
+            </div>
+        </div>
+
+        {% for comment in comments %}
+        <div class="comment">
+            <div class="comment-header">
+                <span class="comment-id">{{ comment['author'] }}</span>
+                <span class="comment-date">{{ comment['created_at'].strftime('%Y.%m.%d') }}</span>
+            </div>
+            <p class="comment-text">{{ comment['content'] }}</p>
+        </div>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}
