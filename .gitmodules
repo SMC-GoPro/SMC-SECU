@@ -1,0 +1,3 @@
+[submodule "temporary/OnlineJudgeDeploy"]
+	path = temporary/OnlineJudgeDeploy
+	url = https://github.com/QingdaoU/OnlineJudgeDeploy
