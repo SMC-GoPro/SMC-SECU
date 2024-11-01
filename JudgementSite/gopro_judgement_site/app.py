@@ -9,8 +9,8 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(128)
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_HOST'] = '103.244.116.23'
+app.config['MYSQL_USER'] = 'rani'
 app.config['MYSQL_PASSWORD'] = 'RrT$^L[MdYs1h[T#,}+.&$m6*,nAM)X$'
 app.config['MYSQL_DB'] = 'go_pro'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
