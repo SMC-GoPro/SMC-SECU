@@ -23,12 +23,6 @@ main {
     padding: 0;
 }
 
-/* nav.navbar를 프로필 이미지 위로 오게 설정 */
-nav.navbar {
-    position: relative;
-    z-index: 10; /* 높은 값을 부여하여 이미지 위로 표시되도록 */
-}
-
 /* profile-imgw 이미지의 위치 조정 */
 .rank-first .profile-imgw {
     width: 160px;
@@ -59,89 +53,6 @@ nav.navbar {
     font-weight: 700;
 }
 
-.top-rank {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-    align-items: flex-end;
-    margin-top: 13%;
-}
-
-.rank-first, .rank-second, .rank-third {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    color: white;
-    position: relative;
-    border-radius: 8px; /* 둥근 모서리 추가 */
-    transition: transform 0.3s ease-in-out; /* 애니메이션 추가 */
-}
-
-.rank-first:hover, .rank-second:hover, .rank-third:hover {
-    transform: translateY(-10px); /* 마우스 호버 시 부드러운 애니메이션 */
-}
-
-.rank-first {
-    background-color: #ffcc00;
-    height: 240px;
-    width: 180px;
-}
-
-.rank-second {
-    background-color: #c0c0c0;
-    height: 180px;
-    width: 180px;
-}
-
-.rank-third {
-    background-color: #cd7f32;
-    height: 140px;
-    width: 180px;
-}
-
-.rank-first .profile-imgw, .rank-second .profile-imgq, .rank-third .profile-imge {
-    border: 4px solid #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.rank-first .profile-imgw {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    position: relative;
-    top: -140px;
-}
-
-.rank-second .profile-imgq {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    position: relative;
-    top: -80px;
-}
-
-.rank-third .profile-imge {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    position: relative;
-    top: -40px;
-}
-
-.rank-first p, .rank-second p, .rank-third p {
-    font-size: 20px;
-    text-align: center;
-    margin-top: 5px 0;
-    font-weight: bold;
-    color: #333;
-    position: static; /* position 속성 초기화 */
-}
 
 /* 테이블 스타일 */
 table {

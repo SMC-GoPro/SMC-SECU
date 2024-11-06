@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}문제 리스트{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/problem.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="problem-list">
+        <h1>문제</h1>
+        <div class="filter-bar">
+            <select>
+                <option>난이도</option>
+                <option>Lv. 1</option>
+                <option>Lv. 2</option>
+                <option>Lv. 3</option>
+                <option>Lv. 4</option>
+                <option>Lv. 5</option>
+            </select>
+            <div class="search-bar">
+                <input type="text" placeholder="제목 검색">
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="actions">
+                {% if session.get('logged_in') %}
+                    <button class="new-post" onclick="location.href=`{{ url_for('problem_new') }}`">문제 만들기</button>
+                {% endif %}
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>난이도</th>
+                    <th>정답률</th>
+                    <th>상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for problem in problems %}
+                <tr onclick="location.href=`{{ url_for('problem_detail', id=problem['id']) }}`" style="cursor: pointer;">
+                    <td>{{ problem['title'] }}</td>
+                    <td>{{ problem['author'] }}</td>
+                    <td><span class="level lv{{ problem['difficulty'] }}">Lv. {{ problem['difficulty'] }}</span></td>
+                    <td>{{ problem['correct_rate'] }}%</td>
+                    <td>
+                        <!-- 상태 아이콘 (추후 구현 가능) -->
+                        <i class="fa-solid fa-circle-question"></i>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+{% endblock %}

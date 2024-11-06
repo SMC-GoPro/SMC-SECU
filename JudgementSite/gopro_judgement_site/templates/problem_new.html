@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}새로운 문제 등록{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/problem_new.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="problem-new">
+        <h1>새로운 문제 등록</h1>
+        <form method="POST">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">문제 설명</label>
+            <textarea id="description" name="description" rows="10" required></textarea>
+
+            <label for="answer">정답</label>
+            <textarea id="answer" name="answer" rows="5" required></textarea>
+
+            <label for="difficulty">난이도</label>
+            <select id="difficulty" name="difficulty">
+                <option value="1">Lv. 1</option>
+                <option value="2">Lv. 2</option>
+                <option value="3">Lv. 3</option>
+                <option value="4">Lv. 4</option>
+                <option value="5">Lv. 5</option>
+            </select>
+
+            <button type="submit">등록</button>
+        </form>
+    </section>
+</main>
+{% endblock %}

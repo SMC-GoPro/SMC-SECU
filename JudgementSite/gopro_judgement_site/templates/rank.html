@@ -10,35 +10,6 @@
 {% block content %}
 <main>
     <section class="ranking">
-        <h1>순위(100)</h1>
-
-        <div class="top-rank">
-            {% if users|length > 1 %}
-            <div class="rank-second">
-                <img class="profile-imgq" src="{{ users[1].profile_img }}" alt="2위 프로필 사진">
-                <p>2</p>
-                <p>{{ users[1].username }}</p>
-                <p>{{ users[1].score }}점</p>
-            </div>
-            {% endif %}
-            {% if users|length > 0 %}
-            <div class="rank-first">
-                <img class="profile-imgw" src="{{ users[0].profile_img }}" alt="1위 프로필 사진">
-                <p>1</p>
-                <p>{{ users[0].username }}</p>
-                <p>{{ users[0].score }}점</p>
-            </div>
-            {% endif %}
-            {% if users|length > 2 %}
-            <div class="rank-third">
-                <img class="profile-imge" src="{{ users[2].profile_img }}" alt="3위 프로필 사진">
-                <p>3</p>
-                <p>{{ users[2].username }}</p>
-                <p>{{ users[2].score }}점</p>
-            </div>
-            {% endif %}
-        </div>
-
         <table>
             <thead>
                 <tr>

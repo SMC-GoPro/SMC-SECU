@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block title %}문제 풀이{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/problem_solve.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <div class="problem-description">
+        <h2>{{ problem['title'] }}</h2>
+        <p>
+            {{ problem['description'] | nl2br }}
+        </p>
+    </div>
+
+    <div class="code-editor">
+        <form method="POST">
+            <div class="editor-header">
+                <h2>코드 작성</h2>
+                <div class="buttons">
+                    <select class="language-select" name="language">
+                        <option value="python">Python</option>
+                        <option value="c">C</option>
+                        <option value="cpp">C++</option>
+                        <option value="java">Java</option>
+                    </select>
+                    <button type="submit" name="submit_action" value="run" class="run-btn">실행</button>
+                    <button type="submit" name="submit_action" value="submit" class="submit-btn">제출</button>
+                </div>
+            </div>
+            <textarea id="code-input" name="code" rows="20" placeholder="여기에 코드를 입력하세요...">{{ code|default('') }}</textarea>
+        </form>
+    </div>
+</main>
+
+{% if user_output %}
+<div class="output-area">
+    <h3>사용자 출력</h3>
+    <div class="output-content">
+        {{ user_output | nl2br | safe }}
+    </div>
+</div>
+{% endif %}
+
+{% if result_message %}
+<div class="output-area">
+    <h3>결과</h3>
+    <div class="output-content">
+        {{ result_message | nl2br | safe }}
+    </div>
+</div>
+
+<!-- 자동 리디렉션 기능 -->
+{% if action == 'submit' %}
+<script>
+    setTimeout(function() {
+        window.location.href = "{{ url_for('problem_list') }}";
+    }, 5000);  // 5초 후 이동
+</script>
+{% endif %}
+{% endif %}
+
+{% endblock %}

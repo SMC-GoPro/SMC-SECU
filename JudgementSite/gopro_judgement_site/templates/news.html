@@ -38,12 +38,12 @@
             </thead>
             <tbody>
                 {% for post in posts %}
-                <tr>
-                    <td><a href="{{ url_for('view_news', id=post.id) }}" style="display: block; width: 100%; height: 100%;">{{ post.id }}</a></td>
-                    <td><a href="{{ url_for('view_news', id=post.id) }}" style="display: block; width: 100%; height: 100%;">{{ post.title }}</a></td>
-                    <td><a href="{{ url_for('view_news', id=post.id) }}" style="display: block; width: 100%; height: 100%;">{{ post.author }}</a></td>
-                    <td><a href="{{ url_for('view_news', id=post.id) }}" style="display: block; width: 100%; height: 100%;">{{ post.date }}</a></td>
-                </tr>
+                <tr onclick="location.href=`{{ url_for('view_news', id=post.id) }}`" style="cursor: pointer;">
+                    <td>{{ post.id }}</td>
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.author }}</td>
+                    <td>{{ post.date }}</td>
+                </tr>                
                 {% endfor %}
             </tbody>                            
         </table>

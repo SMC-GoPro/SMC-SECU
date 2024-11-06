@@ -124,39 +124,28 @@ table tbody tr:hover {
     color: #40c057;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.pagination button {
-    padding: 10px 15px;
-    border: 1px solid #dee2e6;
-    background-color: #fff;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.pagination button:hover {
-    background-color: #e9ecef;
-}
-
-.pagination .active {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-}
-
-.pagination .prev,
-.pagination .next {
-    border-radius: 50%;
-}
-
 tbody i {
     color: #007bff;
     font-size: 1.5rem;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.actions button:hover {
+    background-color: #0056b3;
 }
