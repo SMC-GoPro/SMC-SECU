@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    {{ super() }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_logs.css') }}">
+{% endblock %}
+
+{% block title %}문제 풀이 로그{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>문제 풀이 로그</h1>
+  
+  <!-- 사용자 이름으로 검색할 수 있는 폼 -->
+  <form method="get" action="{{ url_for('admin.admin_logs') }}" class="search-form">
+    <input type="text" name="user_id" placeholder="사용자 ID 입력" value="{{ request.args.get('user_id', '') }}">
+    <button type="submit">검색</button>
+  </form>
+  
+  {% if logs %}
+  <div class="table-responsive">
+    <table class="logs-table">
+      <thead>
+        <tr>
+          <th>로그 ID</th>
+          <th>사용자</th>
+          <th>의심</th>
+          <th>문제</th>
+          <th>언어</th>
+          <th>결과</th>
+          <th>출력</th>
+          <th>제출 시간</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr onclick="window.location.href=`{{ url_for('admin.admin_log_detail', log_id=log.id) }}`;">
+          <td><span class="log-id">{{ log.id }}</span></td>
+          <td><span class="username">{{ log.user.username }}</span></td>
+          <td>
+            {% if log.is_suspicious %}
+              <span class="result-badge result-warning">의심</span>
+            {% endif %}
+          </td>
+          <td>{{ log.problem_id }}</td>
+          <td><span class="language-badge">{{ log.language }}</span></td>
+          <td>
+            {% if '정답입니다' in log.result_message %}
+              <span class="result-badge result-success">{{ log.result_message }}</span>
+            {% elif '틀렸습니다' in log.result_message %}
+              <span class="result-badge result-error">{{ log.result_message }}</span>
+            {% else %}
+              <span class="result-badge result-warning">{{ log.result_message }}</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="log-output">{{ log.output }}</div>
+          </td>
+          <td><span class="timestamp">{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- 모바일 카드 뷰 (모바일에서만 표시됨) -->
+  <div class="mobile-logs">
+    {% for log in logs %}
+    <div class="log-card" onclick="window.location.href=`{{ url_for('admin.admin_log_detail', log_id=log.id) }}`;">
+      <div class="log-card-header">
+        <span class="log-id">로그 #{{ log.id }}</span>
+        <span class="timestamp">{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+      </div>
+      <div class="log-card-body">
+        <div class="log-card-row">
+          <span class="log-card-label">사용자:</span>
+          <span class="username">{{ log.user.username }}</span>
+        </div>
+        <div class="log-card-row">
+          <span class="log-card-label">문제:</span>
+          <span>{{ log.problem_id }}</span>
+        </div>
+        <div class="log-card-row">
+          <span class="log-card-label">언어:</span>
+          <span class="language-badge">{{ log.language }}</span>
+        </div>
+        <div class="log-card-row">
+          <span class="log-card-label">결과:</span>
+          {% if '정답입니다' in log.result_message %}
+            <span class="result-badge result-success">{{ log.result_message }}</span>
+          {% elif '틀렸습니다' in log.result_message %}
+            <span class="result-badge result-error">{{ log.result_message }}</span>
+          {% else %}
+            <span class="result-badge result-warning">{{ log.result_message }}</span>
+          {% endif %}
+        </div>
+        {% if log.is_suspicious %}
+        <div class="log-card-row">
+          <span class="result-badge result-warning">의심</span>
+        </div>
+        {% endif %}
+        <div class="log-card-row">
+          <span class="log-card-label">출력:</span>
+          <div class="log-output">{{ log.output }}</div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <!-- 페이지네이션 컨트롤 -->
+  <div class="pagination">
+    {% if pagination.has_prev %}
+      <a href="{{ url_for('admin.admin_logs', page=pagination.prev_num, user_id=request.args.get('user_id', '')) }}">이전</a>
+    {% endif %}
+    <span>페이지 {{ pagination.page }} / {{ pagination.pages }}</span>
+    {% if pagination.has_next %}
+      <a href="{{ url_for('admin.admin_logs', page=pagination.next_num, user_id=request.args.get('user_id', '')) }}">다음</a>
+    {% endif %}
+  </div>
+  
+  {% else %}
+  <div class="empty-state">
+    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+      <polyline points="13 2 13 9 20 9"></polyline>
+    </svg>
+    <p>아직 로그가 존재하지 않습니다.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

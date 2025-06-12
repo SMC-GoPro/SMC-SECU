@@ -1,0 +1,619 @@
+{% extends "layout.html" %}
+
+{% block title %}문제 풀이 상세{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #f0f4f8;
+            color: #2d3748;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        /* Problem Card */
+        .problem-card {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Header Section */
+        .problem-header {
+            background: linear-gradient(120deg, #4776E6, #8E54E9);
+            color: white;
+            padding: 35px 30px;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .problem-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 107%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 80%);
+            pointer-events: none;
+        }
+        
+        .problem-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+        
+        .problem-id {
+            font-size: 14px;
+            opacity: 0.85;
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.17);
+            border-radius: 20px;
+            padding: 3px 12px;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Content Section */
+        .problem-content {
+            padding: 35px 30px;
+        }
+        
+        /* Description Box */
+        .description-box {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #8E54E9;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.03);
+            line-height: 1.8;
+        }
+        
+        .section-heading {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-heading::before {
+            content: '';
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: #8E54E9;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+        
+        /* Result Info Grid */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .result-item {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+        }
+        
+        .result-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+        }
+        
+        .result-label {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #4a5568;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-label::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #8E54E9;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+        
+        .status-correct {
+            color: #10b981;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+        }
+        
+        .status-correct:before {
+            content: "";
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2310b981' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .status-incorrect {
+            color: #ef4444;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+        }
+        
+        .status-incorrect:before {
+            content: "";
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ef4444' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .timestamp {
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+        
+        .timestamp::before {
+            content: "";
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        /* Logs Section */
+        .logs-section {
+            margin-bottom: 35px;
+        }
+        
+        .logs-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(142, 84, 233, 0.2);
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logs-title::before {
+            content: "";
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            margin-right: 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238E54E9' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .log-entry {
+            background-color: #fff;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            animation: slideIn 0.4s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .log-entry:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.07);
+        }
+        
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #edf2f7;
+        }
+        
+        .log-language {
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(120deg, #4776E6, #8E54E9);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(71, 118, 230, 0.25);
+        }
+        
+        .log-timestamp {
+            color: #64748b;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .log-timestamp::before {
+            content: "";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .log-section {
+            margin-bottom: 25px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .log-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-subheading {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .section-subheading.code-heading::before {
+            content: "";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234a5568' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .section-subheading.output-heading::before {
+            content: "";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234a5568' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M13 10V3L4 14h7v7l9-11h-7z' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .section-subheading.message-heading::before {
+            content: "";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234a5568' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .code-block {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            border-radius: 10px;
+            padding: 18px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .output-block {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .result-message {
+            background-color: #f1f5f9;
+            padding: 18px;
+            border-radius: 10px;
+            color: #4a5568;
+            position: relative;
+            border-left: 3px solid #8E54E9;
+        }
+        
+        .no-logs {
+            text-align: center;
+            padding: 45px 20px;
+            color: #64748b;
+            font-style: italic;
+            background-color: #f8fafc;
+            border-radius: 12px;
+            border: 2px dashed #dae1e7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .no-logs::before {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='1'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.5;
+        }
+        
+        /* Footer Section */
+        .footer {
+            background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+            padding: 25px 30px;
+            text-align: right;
+            border-top: 1px solid #e5e7eb;
+            border-radius: 0 0 16px 16px;
+        }
+        
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(120deg, #4776E6, #8E54E9);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(142, 84, 233, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .back-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(142, 84, 233, 0.4);
+        }
+        
+        .back-button:hover::after {
+            transform: translateX(100%);
+        }
+        
+        /* Mobile Responsiveness */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+                margin: 20px auto;
+            }
+            
+            .problem-header {
+                padding: 25px 20px;
+            }
+            
+            .problem-content {
+                padding: 25px 20px;
+            }
+            
+            .problem-title {
+                font-size: 22px;
+            }
+            
+            .description-box {
+                padding: 20px;
+            }
+            
+            .log-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .log-entry {
+                padding: 20px;
+            }
+            
+            .back-button {
+                padding: 12px 24px;
+                font-size: 15px;
+                width: 100%;
+                text-align: center;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+                margin: 15px auto;
+            }
+            
+            .problem-header {
+                padding: 20px 15px;
+            }
+            
+            .problem-content {
+                padding: 20px 15px;
+            }
+            
+            .problem-title {
+                font-size: 20px;
+            }
+            
+            .description-box {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .section-heading {
+                font-size: 18px;
+            }
+            
+            .result-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+            
+            .result-item {
+                padding: 15px;
+            }
+            
+            .code-block, .output-block {
+                padding: 15px;
+                font-size: 13px;
+            }
+            
+            .log-entry {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .footer {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="problem-card">
+        <div class="problem-header">
+            <h2 class="problem-title">{{ problem.title }}</h2>
+            <p class="problem-id">문제 번호: {{ problem.id }}</p>
+        </div>
+
+        <div class="problem-content">
+            <div class="description-box">
+                <h3 class="section-heading">문제 설명</h3>
+                <p>{{ problem.description }}</p>
+            </div>
+
+            <div class="result-grid">
+                <div class="result-item">
+                    <h3 class="result-label">정답 여부</h3>
+                    <p class="{{ 'status-correct' if attempt.is_correct else 'status-incorrect' }}">
+                        {{ "정답" if attempt.is_correct else "틀림" }}
+                    </p>
+                </div>
+                <div class="result-item">
+                    <h3 class="result-label">풀이 시도 시간</h3>
+                    <p class="timestamp">{{ attempt.attempted_at }}</p>
+                </div>
+            </div>
+
+            <div class="logs-section">
+                <h3 class="logs-title">풀이 로그</h3>
+                {% if logs %}
+                    {% for log in logs %}
+                        <div class="log-entry">
+                            <div class="log-header">
+                                <span class="log-language">{{ log.language }}</span>
+                                <span class="log-timestamp">{{ log.timestamp }}</span>
+                            </div>
+                            
+                            <div class="log-section">
+                                <h4 class="section-subheading code-heading">코드</h4>
+                                <pre class="code-block">{{ log.code }}</pre>
+                            </div>
+                            
+                            <div class="log-section">
+                                <h4 class="section-subheading output-heading">출력</h4>
+                                <pre class="output-block">{{ log.output }}</pre>
+                            </div>
+                            
+                            <div class="log-section">
+                                <h4 class="section-subheading message-heading">결과 메시지</h4>
+                                <div class="result-message">{{ log.result_message }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-logs">풀이 로그가 없습니다.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="footer">
+            <a href="{{ url_for('user.mypage') }}" class="back-button">
+                마이페이지로 돌아가기
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

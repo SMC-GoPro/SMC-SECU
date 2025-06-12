@@ -1,0 +1,595 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="exam-container">
+  <!-- 시험 헤더 -->
+  <div class="exam-header">
+    <h2>{{ year }}년 {{ exam_session }}회 시험</h2>
+    <span class="page-indicator">페이지 {{ pagination.page }} / {{ pagination.pages }}</span>
+  </div>
+
+  <!-- 과목 네비게이션 및 초기화 버튼 -->
+  <div class="top-controls">
+    <div class="subject-nav">
+      <button type="button" onclick="jumpToSubject('전자계산기일반')">전자계산기일반</button>
+      <button type="button" onclick="jumpToSubject('패키지활용')">패키지활용</button>
+      <button type="button" onclick="jumpToSubject('PC운영체제')">PC운영체제</button>
+      <button type="button" onclick="jumpToSubject('정보통신일반')">정보통신일반</button>
+    </div>
+    
+    <!-- 초기화 버튼 -->
+    <button type="button" class="reset-btn" onclick="resetAllAnswers()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+        <path d="M3 3v5h5"></path>
+      </svg>
+      초기화
+    </button>
+  </div>
+
+  <div class="main-layout">
+    <!-- 문제 영역 -->
+    <div class="problem-area">
+      <form method="POST" id="exam-form">
+        <input type="hidden" name="exam_session_id" id="examSessionId" value="">
+        <input type="hidden" name="submit_type" id="submitType" value="page">
+        <!-- 추가: 전체 답안을 담을 hidden 필드 -->
+        <input type="hidden" name="all_answers" id="allAnswers" value="">
+
+        {% for problem in problems %}
+          <div class="problem-card" data-subject="{{ problem.subject }}" id="problem-{{ problem.id }}">
+            <div class="problem-header">
+              <span class="problem-num">{{ loop.index + ((pagination.page - 1) * pagination.per_page) }}</span>
+              <span class="subject-tag">{{ problem.subject }}</span>
+            </div>
+            
+            <div class="problem-text">
+              {{ problem.question_text }}
+            </div>
+            
+            <div class="options-list">
+              <label class="option">
+                <input type="radio" name="selected_option_{{ problem.id }}" value="1"
+                  {% if answers.get(problem.id|string) == 1 %} checked {% endif %}
+                  onchange="syncAnswer('{{ problem.id }}', 1)">
+                <span class="option-content">
+                  <span class="option-num">1</span>
+                  <span class="option-text">{{ problem.option_1 }}</span>
+                </span>
+              </label>
+              <label class="option">
+                <input type="radio" name="selected_option_{{ problem.id }}" value="2"
+                  {% if answers.get(problem.id|string) == 2 %} checked {% endif %}
+                  onchange="syncAnswer('{{ problem.id }}', 2)">
+                <span class="option-content">
+                  <span class="option-num">2</span>
+                  <span class="option-text">{{ problem.option_2 }}</span>
+                </span>
+              </label>
+              <label class="option">
+                <input type="radio" name="selected_option_{{ problem.id }}" value="3"
+                  {% if answers.get(problem.id|string) == 3 %} checked {% endif %}
+                  onchange="syncAnswer('{{ problem.id }}', 3)">
+                <span class="option-content">
+                  <span class="option-num">3</span>
+                  <span class="option-text">{{ problem.option_3 }}</span>
+                </span>
+              </label>
+              <label class="option">
+                <input type="radio" name="selected_option_{{ problem.id }}" value="4"
+                  {% if answers.get(problem.id|string) == 4 %} checked {% endif %}
+                  onchange="syncAnswer('{{ problem.id }}', 4)">
+                <span class="option-content">
+                  <span class="option-num">4</span>
+                  <span class="option-text">{{ problem.option_4 }}</span>
+                </span>
+              </label>
+            </div>
+          </div>
+        {% endfor %}
+
+        <!-- 페이지 이동 -->
+        <div class="pagination">
+          {% if pagination.has_prev %}
+            <a href="{{ url_for('jeongchgi.jeongchgi_quiz_paginated', year=year, exam_session=exam_session, page=pagination.prev_num) }}" class="prev-btn">이전 페이지</a>
+          {% endif %}
+          <div class="page-nums">
+            {% for page in range(1, pagination.pages + 1) %}
+              <a href="{{ url_for('jeongchgi.jeongchgi_quiz_paginated', year=year, exam_session=exam_session, page=page) }}" 
+                 class="page-num {% if page == pagination.page %}active{% endif %}">
+                {{ page }}
+              </a>
+            {% endfor %}
+          </div>
+          {% if pagination.has_next %}
+            <button type="submit" class="next-btn" onclick="setSubmitType('page')">다음 페이지로 이동</button>
+          {% else %}
+            <button type="submit" class="submit-btn" onclick="setSubmitType('final')">최종 제출</button>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+
+    <!-- OMR 영역 -->
+    <div class="omr-area">
+      <div class="omr-card">
+        <h3>OMR 답안지</h3>
+        <div class="omr-grid">
+          {% for problem in problems %}
+            {% set problem_number = loop.index + ((pagination.page - 1) * pagination.per_page) %}
+            <div class="omr-row">
+              <div class="omr-num" onclick="scrollToProblem('problem-{{ problem.id }}')">{{ problem_number }}</div>
+              <div class="omr-choices">
+                {% for i in range(1, 5) %}
+                  <label class="omr-choice">
+                    <input type="radio" name="omr_{{ problem.id }}" value="{{ i }}" 
+                      {% if answers.get(problem.id|string) == i %} checked {% endif %}
+                      onchange="syncAnswer('{{ problem.id }}', {{ i }})">
+                    <span>{{ i }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* (기존 CSS 그대로 적용) */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { line-height: 1.5; color: #333; background-color: #f8f9fa; }
+.exam-container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.exam-header { text-align: center; margin-bottom: 16px; padding: 16px; background-color: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.exam-header h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 4px; color: #212529; }
+.page-indicator { font-size: 0.875rem; color: #6c757d; }
+.top-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+.subject-nav { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; }
+.subject-nav button { background-color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; color: #495057; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s; flex: 1; min-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.subject-nav button:hover { background-color: #f1f3f5; color: #228be6; }
+.reset-btn { padding: 8px 16px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; color: #495057; font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.reset-btn:hover { background-color: #e9ecef; border-color: #ced4da; }
+.reset-btn svg { transition: transform 0.3s ease; }
+.reset-btn:hover svg { transform: rotate(90deg); }
+.main-layout { display: flex; gap: 16px; }
+.problem-area { flex: 1; }
+.omr-area { width: 220px; position: sticky; top: 16px; align-self: flex-start; max-height: calc(100vh - 100px); overflow-y: auto; }
+.problem-card { background-color: white; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.problem-card.unanswered { border-left: 4px solid #fa5252; }
+.problem-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.problem-num { font-size: 0.875rem; font-weight: 600; color: white; background-color: #228be6; padding: 4px 8px; border-radius: 4px; }
+.subject-tag { font-size: 0.75rem; color: #6c757d; background-color: #f1f3f5; padding: 4px 8px; border-radius: 4px; }
+.problem-text { margin-bottom: 16px; color: #212529; font-size: 0.9375rem; }
+.options-list { display: flex; flex-direction: column; gap: 8px; }
+.option { display: block; position: relative; cursor: pointer; border: 1px solid #dee2e6; border-radius: 4px; transition: all 0.2s; }
+.option:hover { background-color: #f8f9fa; border-color: #adb5bd; }
+.option input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+.option-content { display: flex; align-items: flex-start; padding: 12px; }
+.option-num { font-size: 0.875rem; font-weight: 600; color: #495057; margin-right: 12px; flex-shrink: 0; }
+.option-text { font-size: 0.9375rem; color: #495057; }
+.option input:checked ~ .option-content { background-color: #e7f5ff; border-color: #74c0fc; }
+.option input:checked ~ .option-content .option-num { color: #228be6; }
+.omr-card { background-color: white; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.omr-card h3 { text-align: center; font-size: 0.9375rem; font-weight: 600; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #dee2e6; color: #212529; }
+.omr-grid { display: flex; flex-direction: column; gap: 8px; }
+.omr-row { display: flex; align-items: center; gap: 8px; }
+.omr-num { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background-color: #f1f3f5; border-radius: 4px; font-size: 0.875rem; font-weight: 500; color: #495057; cursor: pointer; transition: all 0.2s; }
+.omr-num:hover { background-color: #e7f5ff; color: #228be6; }
+.omr-choices { display: flex; gap: 4px; }
+.omr-choice { position: relative; width: 32px; height: 32px; cursor: pointer; }
+.omr-choice input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+.omr-choice span { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; color: #495057; transition: all 0.2s; }
+.omr-choice input:checked ~ span { background-color: #228be6; color: white; border-color: #228be6; }
+.omr-choice span:hover { background-color: #e9ecef; }
+.omr-choice input:checked ~ span:hover { background-color: #1c7ed6; }
+.pagination { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; background-color: white; padding: 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.page-nums { display: flex; gap: 4px; flex-wrap: wrap; }
+.page-num { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; color: #495057; text-decoration: none; border-radius: 4px; transition: all 0.2s; }
+.page-num:hover { background-color: #f1f3f5; }
+.page-num.active { background-color: #228be6; color: white; }
+.prev-btn, .next-btn, .submit-btn { padding: 8px 16px; border: none; border-radius: 4px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.prev-btn { background-color: #f1f3f5; color: #495057; }
+.next-btn { background-color: #228be6; color: white; }
+.submit-btn { background-color: #fa5252; color: white; }
+.prev-btn:hover { background-color: #e9ecef; }
+.next-btn:hover { background-color: #1c7ed6; }
+.submit-btn:hover { background-color: #e03131; }
+.toast-message { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: #212529; color: white; padding: 10px 20px; border-radius: 4px; font-size: 0.875rem; z-index: 1000; opacity: 0; transition: opacity 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+.toast-message.show { opacity: 1; }
+.highlight { animation: highlight-pulse 1s ease; }
+@keyframes highlight-pulse { 0% { box-shadow: 0 0 0 0 rgba(34, 139, 230, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(34, 139, 230, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 139, 230, 0); } }
+@keyframes highlight-unanswered { 0% { box-shadow: 0 0 0 0 rgba(250, 82, 82, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(250, 82, 82, 0); } 100% { box-shadow: 0 0 0 0 rgba(250, 82, 82, 0); } }
+.highlight-unanswered { animation: highlight-unanswered 1s ease; }
+.reset-animation { animation: reset-fade 0.5s ease; }
+@keyframes reset-fade { 0% { opacity: 0.5; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
+@media (max-width: 768px) {
+  .main-layout { flex-direction: column; }
+  .omr-area { width: 100%; position: static; max-height: none; margin-top: 16px; }
+  .omr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+  .omr-row { border: 1px solid #dee2e6; border-radius: 4px; padding: 4px; }
+  .pagination { flex-direction: column; gap: 16px; }
+  .page-nums { order: -1; justify-content: center; width: 100%; }
+  .prev-btn, .next-btn, .submit-btn { width: 100%; text-align: center; }
+}
+@media (max-width: 480px) {
+  .exam-container { padding: 8px; }
+  .top-controls { flex-direction: column; align-items: stretch; }
+  .reset-btn { width: 100%; justify-content: center; }
+  .subject-nav { flex-wrap: wrap; }
+  .subject-nav button { flex: 1 0 calc(50% - 4px); font-size: 0.75rem; padding: 8px; }
+  .problem-card { padding: 12px; }
+  .problem-text { font-size: 0.875rem; }
+  .option-content { padding: 10px; }
+  .option-text { font-size: 0.875rem; }
+}
+</style>
+
+<div id="toastMessage" class="toast-message"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+var subjectPages = {{ subject_pages | tojson }};
+var currentPage = {{ pagination.page }};
+
+function generateExamSessionId() {
+  return 'exam_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function getCurrentExamSession() {
+  const resetFlag = localStorage.getItem('quizResetFlag');
+  if (resetFlag === 'true') {
+    const newSessionId = generateExamSessionId();
+    localStorage.setItem('currentExamSessionId', newSessionId);
+    localStorage.removeItem('quizResetFlag');
+    return newSessionId;
+  }
+  let sessionId = localStorage.getItem('currentExamSessionId');
+  if (!sessionId || window.location.href.includes('new_session=true')) {
+    sessionId = generateExamSessionId();
+    localStorage.setItem('currentExamSessionId', sessionId);
+    clearAllStoredAnswers();
+    showToast('새 시험 세션이 시작되었습니다.');
+  }
+  return sessionId;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const style = document.createElement('style');
+  style.textContent = `
+    .problem-card.unanswered {
+      border-left: 4px solid #fa5252;
+    }
+    @keyframes highlight-unanswered {
+      0% { box-shadow: 0 0 0 0 rgba(250, 82, 82, 0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(250, 82, 82, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(250, 82, 82, 0); }
+    }
+    .highlight-unanswered {
+      animation: highlight-unanswered 1s ease;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  const resetFlag = localStorage.getItem('quizResetFlag');
+  if (resetFlag === 'true') {
+    const newSessionId = generateExamSessionId();
+    localStorage.setItem('currentExamSessionId', newSessionId);
+    document.getElementById('examSessionId').value = newSessionId;
+    localStorage.removeItem('quizResetFlag');
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      keys.push(localStorage.key(i));
+    }
+    keys.forEach(key => {
+      if (key.startsWith('examAnswers_')) {
+        localStorage.removeItem(key);
+      }
+    });
+    showToast('이전 세션이 종료되었습니다. 새로운 세션이 시작되었습니다.');
+  } else {
+    const sessionId = getCurrentExamSession();
+    document.getElementById('examSessionId').value = sessionId;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('final_submit') && urlParams.get('final_submit') === 'true') {
+      localStorage.setItem('quizResetFlag', 'true');
+      localStorage.setItem('quizResetTime', Date.now().toString());
+      const newSessionId = generateExamSessionId();
+      localStorage.setItem('currentExamSessionId', newSessionId);
+      document.getElementById('examSessionId').value = newSessionId;
+      const keys = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        keys.push(localStorage.key(i));
+      }
+      keys.forEach(key => {
+        if (key.startsWith('examAnswers_')) {
+          localStorage.removeItem(key);
+        }
+      });
+      Swal.fire({
+        title: '제출 완료!',
+        text: '최종 제출이 완료되었습니다. 모든 답안이 초기화되었습니다.',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: '확인'
+      });
+      if (window.history && window.history.replaceState) {
+        const newUrl = window.location.pathname + (urlParams.has('page') ? '?page=' + urlParams.get('page') : '');
+        window.history.replaceState({}, document.title, newUrl);
+      }
+    } else {
+      loadSavedAnswers(sessionId);
+    }
+  }
+});
+
+function setSubmitType(type) {
+  document.getElementById('submitType').value = type;
+  if (type === 'final') {
+    checkUnansweredQuestions().then(hasUnanswered => {
+      if (hasUnanswered) {
+        Swal.fire({
+          title: '미응답 문항 있음',
+          text: '아직 답하지 않은 문항이 있습니다. 그래도 제출하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: '제출',
+          cancelButtonText: '돌아가기'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            proceedWithSubmission();
+          }
+        });
+      } else {
+        Swal.fire({
+          title: '최종 제출',
+          text: '정말 최종 제출하시겠습니까? 제출 후에는 이전 답안이 모두 초기화됩니다.',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '제출',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            proceedWithSubmission();
+          }
+        });
+      }
+    });
+    event.preventDefault();
+    return false;
+  } else if (type === 'page') {
+    checkUnansweredQuestions().then(hasUnanswered => {
+      if (hasUnanswered) {
+        Swal.fire({
+          title: '미응답 문항 있음',
+          text: '아직 답하지 않은 문항이 있습니다. 그래도 다음 페이지로 이동하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '이동',
+          cancelButtonText: '돌아가기'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById('exam-form').submit();
+          }
+        });
+      } else {
+        document.getElementById('exam-form').submit();
+      }
+    });
+    event.preventDefault();
+    return false;
+  }
+}
+
+function proceedWithSubmission() {
+  localStorage.setItem('quizResetFlag', 'true');
+  localStorage.setItem('quizResetTime', Date.now().toString());
+  // 최종 제출 전에 localStorage에 저장된 전체 답안을 hidden 필드에 설정
+  const sessionId = document.getElementById('examSessionId').value;
+  const storageKey = `examAnswers_${sessionId}`;
+  document.getElementById('allAnswers').value = localStorage.getItem(storageKey) || '{}';
+  clearAllStoredAnswers();
+  const form = document.getElementById('exam-form');
+  const currentAction = form.action;
+  const separator = currentAction.includes('?') ? '&' : '?';
+  form.action = currentAction + separator + 'final_submit=true';
+  form.submit();
+}
+
+function checkUnansweredQuestions() {
+  return new Promise(resolve => {
+    const problems = document.querySelectorAll('.problem-card');
+    let unansweredCount = 0;
+    problems.forEach(problem => {
+      const problemId = problem.id.split('-')[1];
+      const hasAnswer = document.querySelector(`input[name="selected_option_${problemId}"]:checked`);
+      if (!hasAnswer) {
+        unansweredCount++;
+        problem.classList.add('highlight-unanswered');
+        problem.classList.add('unanswered');
+        setTimeout(() => {
+          problem.classList.remove('highlight-unanswered');
+        }, 2000);
+      } else {
+        problem.classList.remove('unanswered');
+      }
+    });
+    resolve(unansweredCount > 0);
+  });
+}
+
+function jumpToSubject(subject) {
+  var blocks = document.querySelectorAll('.problem-card');
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].dataset.subject === subject) {
+      blocks[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      blocks[i].classList.add('highlight');
+      setTimeout(() => { blocks[i].classList.remove('highlight'); }, 1000);
+      return;
+    }
+  }
+  var mapping = subjectPages[subject];
+  if (mapping) {
+    window.location.href = "{{ url_for('jeongchgi.jeongchgi_quiz_paginated', year=year, exam_session=exam_session) }}" + "?page=" + mapping.page + "#problem-" + mapping.problem_id;
+  }
+}
+
+function scrollToProblem(problemId) {
+  var element = document.getElementById(problemId);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    element.classList.add('highlight');
+    setTimeout(() => { element.classList.remove('highlight'); }, 1000);
+  }
+}
+
+function syncAnswer(problemId, option) {
+  var mainRadio = document.querySelector(`input[name="selected_option_${problemId}"][value="${option}"]`);
+  if (mainRadio) {
+    mainRadio.checked = true;
+    const problemCard = document.getElementById(`problem-${problemId}`);
+    if (problemCard) { problemCard.classList.remove('unanswered'); }
+  }
+  var omrRadio = document.querySelector(`input[name="omr_${problemId}"][value="${option}"]`);
+  if (omrRadio) { omrRadio.checked = true; }
+  const sessionId = document.getElementById('examSessionId').value;
+  saveAnswer(sessionId, problemId, option);
+}
+
+function saveAnswer(sessionId, problemId, option) {
+  const storageKey = `examAnswers_${sessionId}`;
+  const allAnswers = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  allAnswers[problemId] = option;
+  localStorage.setItem(storageKey, JSON.stringify(allAnswers));
+}
+
+function loadSavedAnswers(sessionId) {
+  const storageKey = `examAnswers_${sessionId}`;
+  const savedAnswers = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  for (const problemId in savedAnswers) {
+    const option = savedAnswers[problemId];
+    const mainRadio = document.querySelector(`input[name="selected_option_${problemId}"][value="${option}"]`);
+    if (mainRadio) {
+      mainRadio.checked = true;
+      const problemCard = document.getElementById(`problem-${problemId}`);
+      if (problemCard) { problemCard.classList.remove('unanswered'); }
+      const omrRadio = document.querySelector(`input[name="omr_${problemId}"][value="${option}"]`);
+      if (omrRadio) { omrRadio.checked = true; }
+    }
+  }
+}
+
+function clearAllStoredAnswers() {
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    keys.push(localStorage.key(i));
+  }
+  keys.forEach(key => {
+    if (key.startsWith('examAnswers_')) { localStorage.removeItem(key); }
+  });
+  document.querySelectorAll('input[type="radio"]').forEach(radio => { radio.checked = false; });
+}
+
+function resetCurrentSessionAnswers() {
+  const sessionId = document.getElementById('examSessionId').value;
+  localStorage.setItem('quizResetFlag', 'true');
+  localStorage.setItem('quizResetTime', Date.now().toString());
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    keys.push(localStorage.key(i));
+  }
+  keys.forEach(key => {
+    if (key.startsWith('examAnswers_')) { localStorage.removeItem(key); }
+  });
+  document.querySelectorAll('input[type="radio"]').forEach(radio => { radio.checked = false; });
+  document.querySelectorAll('.problem-card').forEach(card => {
+    card.classList.remove('unanswered');
+    card.classList.add('reset-animation');
+    setTimeout(() => { card.classList.remove('reset-animation'); }, 500);
+  });
+  showToast('모든 답안이 초기화되었습니다.');
+}
+
+function resetAllAnswers() {
+  Swal.fire({
+    title: '답안 초기화',
+    text: '정말 모든 답안을 초기화하시겠습니까?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: '초기화',
+    cancelButtonText: '취소'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      resetCurrentSessionAnswers();
+      Swal.fire('초기화 완료!', '모든 답안이 초기화되었습니다.', 'success');
+    }
+  });
+}
+
+function showToast(message) {
+  Swal.fire({
+    toast: true,
+    position: 'bottom',
+    icon: 'info',
+    title: message,
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+  });
+}
+
+function getFocusedProblem() {
+  var problems = document.querySelectorAll('.problem-card');
+  var windowMiddle = window.scrollY + window.innerHeight / 2;
+  var closestProblem = null, closestDistance = Infinity;
+  problems.forEach(problem => {
+    var rect = problem.getBoundingClientRect();
+    var problemMiddle = window.scrollY + rect.top + rect.height / 2;
+    var distance = Math.abs(windowMiddle - problemMiddle);
+    if (distance < closestDistance) { closestDistance = distance; closestProblem = problem; }
+  });
+  return closestProblem;
+}
+
+function navigateProblems(direction) {
+  var problems = document.querySelectorAll('.problem-card');
+  var currentProblem = getFocusedProblem();
+  var currentIndex = Array.from(problems).indexOf(currentProblem);
+  if (currentIndex !== -1) {
+    var nextIndex = (currentIndex + direction + problems.length) % problems.length;
+    problems[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+document.addEventListener('keydown', function(event) {
+  if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+  if ('1234'.includes(event.key)) {
+    var focusedProblem = getFocusedProblem();
+    if (focusedProblem) {
+      var problemId = focusedProblem.id.split('-')[1];
+      syncAnswer(problemId, parseInt(event.key));
+    }
+  }
+  if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    event.preventDefault();
+    navigateProblems(event.key === 'ArrowDown' ? 1 : -1);
+  }
+  if (event.key === 'r' || event.key === 'R') {
+    if (event.ctrlKey || event.metaKey) {
+      event.preventDefault();
+      resetAllAnswers();
+    }
+  }
+});
+
+window.addEventListener('beforeunload', function(e) {});
+</script>
+{% endblock %}

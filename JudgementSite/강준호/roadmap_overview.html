@@ -1,0 +1,181 @@
+{% extends "layout.html" %}
+
+{% block title %}학습 로드맵 개요{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/roadmap_overview.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="roadmap-main">
+    <div class="page-header">
+        <span class="header-badge">로드맵</span>
+        <h1>나의 학습 여정</h1>
+        <p class="subtitle">여러분들만의 맞춤형 학습 프로그램을 통해 배워보세요</p>
+    </div>
+    
+    <div class="roadmap-container">
+        {% for data in roadmap_data %}
+            <a href="{{ url_for('roadmap.roadmap_subject', slug=data.slug) }}" class="subject-card" aria-label="{{ data.subject }} - 진행도 {{ data.progress }}%">
+                <div class="card-glow"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <h2>{{ data.subject }}</h2>
+                        <div class="subject-emoji">{{ data.emoji|default('📚') }}</div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-info">
+                            <span class="progress-label">학습 진행도</span>
+                            <span class="progress-percentage">{{ data.progress }}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;" data-progress="{{ data.progress }}"></div>
+                        </div>
+                        <div class="progress-status">
+                            {% if data.progress == 0 %}
+                                <span class="status-badge not-started">시작 전</span>
+                            {% elif data.progress < 30 %}
+                                <span class="status-badge just-started">입문 단계</span>
+                            {% elif data.progress < 70 %}
+                                <span class="status-badge in-progress">학습 중</span>
+                            {% elif data.progress < 100 %}
+                                <span class="status-badge almost-done">거의 완료</span>
+                            {% else %}
+                                <span class="status-badge completed">학습 완료</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <span class="view-details">계속 학습하기</span>
+                    </div>
+                </div>
+                <div class="card-decoration"></div>
+            </a>
+        {% endfor %}
+    </div>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 초기 로딩 애니메이션
+    setTimeout(() => {
+        document.querySelector('.page-header').classList.add('visible');
+        
+        // 순차적인 카드 애니메이션
+        document.querySelectorAll('.subject-card').forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add('visible');
+            }, 100 + (index * 120)); // 카드마다 시간차
+        });
+    }, 100);
+
+    // 프로그레스 바 애니메이션 설정
+    const progressObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const progressBar = entry.target;
+                const targetWidth = progressBar.getAttribute('data-progress') + '%';
+                
+                // 진행도에 따른 클래스 추가
+                const value = parseInt(progressBar.getAttribute('data-progress'));
+                if (value > 80) progressBar.classList.add('high-progress');
+                else if (value > 40) progressBar.classList.add('mid-progress');
+                else progressBar.classList.add('low-progress');
+                
+                // 진행도 애니메이션
+                setTimeout(() => {
+                    progressBar.style.width = targetWidth;
+                }, 300);
+                
+                // 퍼센티지 카운터 애니메이션
+                const card = progressBar.closest('.subject-card');
+                const percentElement = card.querySelector('.progress-percentage');
+                const targetPercent = parseInt(progressBar.getAttribute('data-progress'));
+                
+                let startPercent = 0;
+                const duration = 1500; // 1.5초
+                const interval = 15;
+                const increment = (targetPercent / (duration / interval));
+                
+                const counter = setInterval(() => {
+                    startPercent += increment;
+                    if (startPercent >= targetPercent) {
+                        percentElement.textContent = `${targetPercent}%`;
+                        clearInterval(counter);
+                    } else {
+                        percentElement.textContent = `${Math.floor(startPercent)}%`;
+                    }
+                }, interval);
+                
+                progressObserver.unobserve(progressBar);
+            }
+        });
+    }, { threshold: 0.2, rootMargin: '0px 0px -10% 0px' });
+    
+    document.querySelectorAll('.progress-fill').forEach(bar => {
+        progressObserver.observe(bar);
+    });
+    
+    // 카드 호버 효과 (마우스 움직임에 따른 3D 효과)
+    document.querySelectorAll('.subject-card').forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // 카드 내에서의 상대적 위치 (0~1)
+            const xPercent = x / rect.width;
+            const yPercent = y / rect.height;
+            
+            // 기울기 계산 (-7~7 정도로 제한)
+            const tiltX = (0.5 - yPercent) * 7;
+            const tiltY = (xPercent - 0.5) * 7;
+            
+            // 그림자 위치 계산
+            const shadowX = (0.5 - xPercent) * 10;
+            const shadowY = (0.5 - yPercent) * 10;
+            
+            // 애니메이션 적용
+            this.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+            this.style.boxShadow = `${shadowX}px ${shadowY}px 30px rgba(0, 0, 0, 0.1)`;
+            
+            // Glow 효과
+            const glow = this.querySelector('.card-glow');
+            glow.style.opacity = '1';
+            glow.style.background = `radial-gradient(circle at ${xPercent * 100}% ${yPercent * 100}%, rgba(66, 99, 235, 0.2), transparent 50%)`;
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            // 원래 상태로 복귀
+            this.style.transform = '';
+            this.style.boxShadow = '';
+            const glow = this.querySelector('.card-glow');
+            glow.style.opacity = '0';
+        });
+        
+        // 터치 디바이스용 이벤트
+        card.addEventListener('touchstart', function() {
+            this.classList.add('touch-active');
+        }, { passive: true });
+        
+        card.addEventListener('touchend', function() {
+            this.classList.remove('touch-active');
+        }, { passive: true });
+    });
+    
+    // 작은 화면에서 스크롤 유도 애니메이션
+    if (window.innerWidth <= 768) {
+        const container = document.querySelector('.roadmap-container');
+        setTimeout(() => {
+            container.classList.add('scroll-hint');
+            setTimeout(() => container.classList.remove('scroll-hint'), 1500);
+        }, 2000);
+    }
+});
+</script>
+{% endblock %}

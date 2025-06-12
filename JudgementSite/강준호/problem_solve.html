@@ -1,0 +1,466 @@
+{% extends "layout.html" %}
+{% block title %}문제 풀이{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/problem_solve.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.23.1/src-min-noconflict/ace.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.23.1/src-min-noconflict/ext-language_tools.js"></script>
+    <style>
+        .terminal-input-area {
+            border-radius: 0;
+        }
+        
+        .user-input-field:focus {
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.25);
+        }
+        
+        #run-with-inputs {
+            transition: background-color 0.2s ease;
+        }
+        
+        #run-with-inputs:hover {
+            background-color: #0062a3;
+        }
+        
+        #run-with-inputs:active {
+            background-color: #004d80;
+        }
+        
+        .output-section {
+            margin-bottom: 0 !important;
+            border-bottom: none !important;
+        }
+        
+        #input-preparation {
+            border-top-width: 1px !important;
+            margin-top: 0 !important;
+        }
+        
+        .terminal-tabs {
+            margin-top: 0 !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="problem-solve-container">
+    <div class="vscode-header">
+        <div class="menu-item">File</div>
+        <div class="menu-item">Edit</div>
+        <div class="menu-item">View</div>
+        <div class="menu-item">Go</div>
+        <div class="menu-item">Run</div>
+        <div class="menu-item">Terminal</div>
+        <div class="menu-item">Help</div>
+    </div>
+    
+    <div class="vscode-main">
+        <div class="vscode-sidebar">
+            <div class="sidebar-icon active">
+                <i class="fas fa-file-code"></i>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fas fa-code-branch"></i>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fas fa-bug"></i>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fas fa-puzzle-piece"></i>
+            </div>
+        </div>
+
+        <div class="vscode-activity-bar">
+            <div class="activity-bar-header">
+                <span>EXPLORER</span>
+                <span><i class="fas fa-ellipsis-h"></i></span>
+            </div>
+            <div class="activity-bar-content">
+                <div class="problem-description">
+                    <h2>{{ problem['title'] }}</h2>
+                    <div class="problem-content">
+                        {{ problem['description'] | nl2br }}
+                    </div>
+                </div>
+                
+                <div class="explorer-tree">
+                    <div class="explorer-item">
+                        <i class="fas fa-folder folder"></i>
+                        문제 목록
+                    </div>
+                    <div class="explorer-item active">
+                        <i class="fas fa-file-code file"></i>
+                        {{ problem['title'] }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="vscode-editor-area">
+            <form id="code-form" method="post" style="display: flex; flex-direction: column; height: 100%;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="editor-tabs" 
+                     style="display: flex; justify-content: space-between; align-items: center; background-color: #252526;">
+                    
+                    <div class="editor-tab active" style="display: flex; align-items: center; padding: 0 10px;">
+                        <i class="fas fa-code"></i>
+                        <span class="tab-label" style="margin-left: 5px;">{{ problem['title'] }}</span>
+                        <span class="tab-close" style="cursor: pointer; margin-left: 10px;">×</span>
+                    </div>
+                    
+                    <div class="editor-controls" style="display: flex; align-items: center; padding: 0 10px;">
+                        <select name="language" class="vs-select" style="margin-right: 10px;">
+                            <option value="python" {% if language == 'python' %}selected{% endif %}>Python</option>
+                            <option value="c" {% if language == 'c' %}selected{% endif %}>C</option>
+                            <option value="cpp" {% if language == 'cpp' %}selected{% endif %}>C++</option>
+                            <option value="java" {% if language == 'java' %}selected{% endif %}>Java</option>
+                        </select>
+                        <button type="submit" name="action" value="run" class="vs-button run-btn" style="margin-right: 10px;">
+                            <i class="fas fa-play"></i> 실행
+                        </button>
+                        <button type="submit" name="action" value="submit" class="vs-button submit-btn">
+                            <i class="fas fa-paper-plane"></i> 제출
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="editor-content" style="flex: 1; display: flex; min-height: 0;">
+                    <div id="ace-editor" style="width: 100%; height: 100%;"></div>
+                </div>
+                
+                {% if user_output %}
+                <div class="output-section" style="max-height: 30vh; overflow: auto; margin-bottom: 0;">
+                    <div class="terminal-tabs">
+                        <div class="terminal-tab active">
+                            <i class="fas fa-terminal"></i> Output
+                        </div>
+                    </div>
+                    <div class="terminal-output">
+                        <div class="terminal-output-text">
+                            <span class="terminal-prompt">C:\Users\PC\Desktop\gopro&gt;</span>
+                            {{ user_output | nl2br | safe }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Terminal-style User Input Section -->
+                <div id="input-preparation" style="display: none; border-top: 1px solid #333; margin: 0; background-color: #1e1e1e;">
+                    <div class="terminal-tabs" style="margin: 0;">
+                        <div class="terminal-tab active">
+                            <i class="fas fa-keyboard"></i> Program Input
+                        </div>
+                    </div>
+                    <div class="terminal-input-area" style="background-color: #1e1e1e; padding: 12px; font-family: 'Consolas', monospace; border-radius: 0;">
+                        <div id="input-fields-container" style="max-width: 600px;">
+                            <!-- JavaScript will dynamically generate input fields here -->
+                        </div>
+                        <button id="run-with-inputs" class="vs-button" style="margin-top: 15px; background-color: #007acc; border: none; padding: 8px 15px; border-radius: 3px; color: white; display: flex; align-items: center; cursor: pointer;">
+                            <i class="fas fa-play" style="margin-right: 8px;"></i> Run with Input
+                        </button>
+                    </div>
+                </div>
+
+                <div class="vscode-statusbar" style="background-color: #007acc;">
+                    <div class="statusbar-right" style="margin-left: auto; padding: 0 10px;">
+                        <div class="statusbar-item" style="margin-right: 15px;">
+                            <i class="fas fa-check-circle"></i> Online
+                        </div>
+                        <div class="statusbar-item">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- SweetAlert 로직 -->
+{% if action == 'submit' and result_message %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var resultMessage = "{{ result_message|e }}".trim();
+    var iconType = "info";
+
+    if(resultMessage === "정답입니다!") {
+        iconType = "success";
+        Swal.fire({
+            icon: iconType,
+            title: resultMessage,
+            showConfirmButton: true,
+            confirmButtonText: "확인",
+            timer: 5000,
+            timerProgressBar: true
+        }).then(function() {
+            // 정답이면 문제 목록으로 이동
+            window.location.href = "{{ url_for('problems.problem_list') }}";
+        });
+    } else if(resultMessage === "틀렸습니다.") {
+        iconType = "error";
+        Swal.fire({
+            icon: iconType,
+            title: resultMessage,
+            showConfirmButton: true,
+            confirmButtonText: "확인",
+            timer: 5000,
+            timerProgressBar: true
+        });
+        // 오답이면 그대로 머무름 (리다이렉트 X)
+    }
+});
+</script>
+{% endif %}
+
+<script>
+/* eslint-disable */
+document.addEventListener("DOMContentLoaded", function() {
+    // code를 안전하게 JS 문자열로
+    const initialCode = {{ code|tojson }};
+    const editor = ace.edit("ace-editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/python");
+    editor.setOptions({
+        fontSize: "13px",
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
+    });
+
+    editor.setValue(initialCode, 1);
+    editor.clearSelection();
+
+    const codeForm = document.getElementById("code-form");
+    const runBtn = document.querySelector('button[value="run"]');
+    const submitBtn = document.querySelector('button[value="submit"]');
+    
+    // 입력 준비 섹션
+    const inputPreparation = document.getElementById('input-preparation');
+    const inputFieldsContainer = document.getElementById('input-fields-container');
+    const runWithInputsBtn = document.getElementById('run-with-inputs');
+    
+    // Function to show input preparation with animation
+    function showInputPreparation() {
+        const inputPrep = document.getElementById('input-preparation');
+        inputPrep.style.display = 'block';
+        inputPrep.style.opacity = '0';
+        inputPrep.style.maxHeight = '0';
+        inputPrep.style.overflow = 'hidden';
+        inputPrep.style.transition = 'opacity 0.3s ease, max-height 0.3s ease';
+        
+        // Trigger animation
+        setTimeout(() => {
+            inputPrep.style.opacity = '1';
+            inputPrep.style.maxHeight = '500px'; // 충분히 큰 값
+        }, 10);
+    }
+    
+    // 출력 처리 함수
+    function processOutput(output) {
+        // 입력값을 보존하면서 정리
+        const lines = output.split('\n');
+        let cleanedLines = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            // 터미널 프롬프트만 제거
+            if (line.includes('C:\\Users\\PC\\Desktop\\gopro>')) {
+                continue;
+            }
+            cleanedLines.push(line);
+        }
+        
+        return cleanedLines.join('\n');
+    }
+    
+    // input() 함수 감지 및 입력 필드 생성 함수
+    function checkForInputs(code, actionType) {
+        // input() 함수 사용 검사
+        const inputRegex = /input\s*\(\s*(['"])(.*?)\1\s*\)/g;
+        const matches = code.match(inputRegex);
+        
+        if (matches && matches.length > 0) {
+            // 입력 필드 컨테이너 초기화
+            inputFieldsContainer.innerHTML = '';
+            
+            // 각 input() 함수에 대한 입력 필드 생성
+            matches.forEach((match, index) => {
+                // 프롬프트 텍스트 추출
+                const promptMatch = match.match(/input\s*\(\s*(['"])(.*?)\1\s*\)/);
+                const promptText = promptMatch ? promptMatch[2] : `Input ${index + 1}:`;
+                
+                // 입력 그룹 생성
+                const inputGroup = document.createElement('div');
+                inputGroup.style.cssText = 'margin-bottom: 12px; position: relative;';
+                
+                // 터미널 스타일 프롬프트 생성
+                const promptElement = document.createElement('div');
+                promptElement.style.cssText = 'display: flex; align-items: center; margin-bottom: 6px;';
+                
+                const promptIcon = document.createElement('span');
+                promptIcon.innerHTML = '<i class="fas fa-angle-right" style="color: #569cd6; margin-right: 8px;"></i>';
+                
+                const promptLabel = document.createElement('span');
+                promptLabel.textContent = promptText;
+                promptLabel.style.cssText = 'color: #dcdcdc; font-family: Consolas, monospace;';
+                
+                promptElement.appendChild(promptIcon);
+                promptElement.appendChild(promptLabel);
+                
+                // 입력 필드 생성
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'user-input-field';
+                input.style.cssText = 'width: 100%; padding: 8px 10px; background-color: #2d2d2d; color: #dcdcdc; ' +
+                                    'border: 1px solid #3c3c3c; border-radius: 3px; font-family: Consolas, monospace; ' +
+                                    'transition: border-color 0.2s ease;';
+                
+                // 입력 필드 포커스 효과
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = '#007acc';
+                    this.style.outline = 'none';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.style.borderColor = '#3c3c3c';
+                });
+                
+                // 엔터키 이벤트 (다음 필드로 이동 또는 실행)
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const allInputs = document.querySelectorAll('.user-input-field');
+                        const currentIndex = Array.from(allInputs).indexOf(this);
+                        
+                        if (currentIndex < allInputs.length - 1) {
+                            // 다음 필드로 이동
+                            allInputs[currentIndex + 1].focus();
+                        } else {
+                            // 마지막 필드면 실행
+                            document.getElementById('run-with-inputs').click();
+                        }
+                    }
+                });
+                
+                inputGroup.appendChild(promptElement);
+                inputGroup.appendChild(input);
+                inputFieldsContainer.appendChild(inputGroup);
+            });
+            
+            // 데이터 속성에 액션 유형 저장
+            runWithInputsBtn.dataset.actionType = actionType;
+            
+            // 입력 준비 섹션 표시
+            showInputPreparation();
+            
+            // 첫 번째 입력 필드에 포커스
+            const firstInput = document.querySelector('.user-input-field');
+            if (firstInput) firstInput.focus();
+            
+            return true; // input 함수가 발견됨
+        }
+        
+        return false; // input 함수가 발견되지 않음
+    }
+    
+    // 실행 및 제출 버튼 이벤트 처리
+    if (runBtn) {
+        runBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const code = editor.getValue();
+            
+            // 코드에 input() 함수가 있는지 확인
+            if (!checkForInputs(code, 'run')) {
+                // input() 함수가 없으면 기존 방식으로 폼 제출
+                submitForm(code, '', 'run');
+            }
+        });
+    }
+    
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const code = editor.getValue();
+            
+            // 코드에 input() 함수가 있는지 확인
+            if (!checkForInputs(code, 'submit')) {
+                // input() 함수가 없으면 기존 방식으로 폼 제출
+                submitForm(code, '', 'submit');
+            }
+        });
+    }
+    
+    // 입력값으로 실행하기 버튼 이벤트 처리
+    if (runWithInputsBtn) {
+        runWithInputsBtn.addEventListener('click', function() {
+            const code = editor.getValue();
+            const actionType = this.dataset.actionType || 'run';
+            
+            // 모든 입력 필드 값 수집
+            const inputFields = document.querySelectorAll('.user-input-field');
+            const inputs = Array.from(inputFields).map(field => field.value);
+            
+            // 개행으로 구분된 하나의 문자열로 합치기
+            const stdin = inputs.join('\n');
+            
+            // 폼 제출
+            submitForm(code, stdin, actionType);
+            
+            // 입력 준비 섹션 숨기기
+            inputPreparation.style.display = 'none';
+        });
+    }
+    
+    // 폼 제출 함수
+    function submitForm(code, stdin, actionType) {
+        // 코드 hidden input 설정
+        let hiddenInput = document.getElementById("ace-hidden-input");
+        if (!hiddenInput) {
+            hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "code";
+            hiddenInput.id = "ace-hidden-input";
+            codeForm.appendChild(hiddenInput);
+        }
+        hiddenInput.value = code;
+        
+        // stdin hidden input 설정
+        let stdinInput = document.getElementById("stdin-hidden-input");
+        if (!stdinInput) {
+            stdinInput = document.createElement("input");
+            stdinInput.type = "hidden";
+            stdinInput.name = "stdin";
+            stdinInput.id = "stdin-hidden-input";
+            codeForm.appendChild(stdinInput);
+        }
+        stdinInput.value = stdin;
+        
+        // 액션 값 설정 (run 또는 submit)
+        let actionInput = document.createElement("input");
+        actionInput.type = "hidden";
+        actionInput.name = "action";
+        actionInput.value = actionType;
+        codeForm.appendChild(actionInput);
+        
+        // CSRF 토큰 추가
+        let csrfToken = document.querySelector('meta[name="csrf-token"]');
+        if (csrfToken) {
+            let csrfInput = document.createElement("input");
+            csrfInput.type = "hidden";
+            csrfInput.name = "csrf_token";
+            csrfInput.value = csrfToken.getAttribute("content");
+            codeForm.appendChild(csrfInput);
+        }
+        
+        // 폼 제출
+        codeForm.submit();
+    }
+});
+</script>
+{% endblock %}
