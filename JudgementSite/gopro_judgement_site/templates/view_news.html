@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}공지사항{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_news.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="post-container">
+        <div class="post-card">
+            <h1 class="post-title">{{ post.title }}</h1>
+            <div class="post-header">
+                <p class="user-id"><i class="fa-solid fa-user"></i> {{ post.author }}</p>
+                <p class="post-date"><i class="fa-regular fa-calendar"></i> {{ post.date }}</p>
+            </div>
+            
+            <div class="post-content">{{ post.content | nl2br }}</div>
+            
+            
+            
+
+            <div class="post-actions">
+                <button onclick="location.href='{{ url_for('news.news') }}';" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> 뒤로가기
+                </button>
+                {% if session.get('role') == 'admin' %}
+                <button onclick="location.href='{{ url_for('news.edit_news', id=post.id) }}';" class="btn btn-primary">
+                    <i class="fa-solid fa-pen"></i> 수정
+                </button>
+                <form action="{{ url_for('news.delete_news', id=post.id) }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">
+                        <i class="fa-solid fa-trash"></i> 삭제
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

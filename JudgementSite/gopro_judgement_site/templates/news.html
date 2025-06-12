@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+
+{% block title %}공지사항{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/news.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 페이지 로드시 글로벌 폰트 스타일 유지
+            document.body.classList.add('fonts-loaded');
+            
+            const tabs = document.querySelectorAll(".tab");
+            const rows = document.querySelectorAll(".notice-table tbody tr");
+            
+            tabs.forEach(tab => {
+                tab.addEventListener("click", function () {
+                    tabs.forEach(t => t.classList.remove("active"));
+                    this.classList.add("active");
+                    
+                    const category = this.innerText.trim();
+                    rows.forEach(row => {
+                        const typeCell = row.querySelector(".type-cell").innerText.trim();
+                        if (category === "전체" || typeCell === category) {
+                            row.style.display = "table-row";
+                        } else {
+                            row.style.display = "none";
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="notice-container">
+        <div class="header">
+            <h1>공지사항</h1>
+            <div class="search-box">GOPRO</div>
+        </div>
+
+        <div class="tab-menu">
+            <div class="tab active">
+                <div class="tab-indicator"></div>
+                전체
+            </div>
+            <div class="tab">
+                <div class="tab-indicator"></div>
+                공지
+            </div>
+            <div class="tab">
+                <div class="tab-indicator"></div>
+                점검
+            </div>
+            <div class="tab">
+                <div class="tab-indicator"></div>
+                업데이트
+            </div>
+            <div class="tab">
+                <div class="tab-indicator"></div>
+                이벤트
+            </div>
+        </div>
+
+        <div class="notice-top-section">
+            <div class="search-section">
+                <form class="search-container" action="{{ url_for('news.news') }}" method="get">
+                    <input type="text" name="search" class="search-input"
+                           value="{{ request.args.get('search') or '검색어를 입력하세요' }}"
+                           onfocus="if(this.value==='검색어를 입력하세요') { this.value=''; }"
+                           onblur="if(this.value==='') { this.value='검색어를 입력하세요'; }">
+                    <button type="submit" class="search-btn">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            {% if session.role in ['admin'] %}
+            <div class="create-section">
+                <a href="{{ url_for('news.new_news') }}" class="create-btn">새 글 작성하기</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <table class="notice-table">
+            <thead>
+                <tr>
+                    <th>구분</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td class="type-cell">{{ post.category }}</td>
+                    <td>
+                        <div class="post-title" onclick="location.href=`{{ url_for('news.view_news', id=post.id) }}`">
+                            {{ post.title }}
+                            {% if post.is_new %}
+                            <span class="new-badge">N</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td class="author-cell">{{ post.author }}</td>
+                    <td class="date-cell">{{ post.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('news.news', page=page-1, search=request.args.get('search')) }}" class="page-btn">◀</a>
+            {% endif %}
+
+            {% for p in range(1, total_pages + 1) %}
+            {% if p == page %}
+            <a href="{{ url_for('news.news', page=p, search=request.args.get('search')) }}" class="page-btn active">{{ p }}</a>
+            {% else %}
+            <a href="{{ url_for('news.news', page=p, search=request.args.get('search')) }}" class="page-btn">{{ p }}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if page < total_pages %}
+            <a href="{{ url_for('news.news', page=page+1, search=request.args.get('search')) }}" class="page-btn">▶</a>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}

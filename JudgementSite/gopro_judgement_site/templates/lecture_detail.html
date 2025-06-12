@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}{{ lecture.title }} - {{ task.title }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lecture_detail.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="lecture-header">
+        <h1>{{ lecture.title }}</h1>
+        <div class="lecture-meta">
+            <span class="task-badge">{{ task.title }}</span>
+            <span class="subject-badge">{{ lecture.title }}</span>
+        </div>
+    </div>
+
+    <div class="lecture-container">
+        <div class="lecture-content">
+            {{ lecture.content | safe }}
+        </div>
+    </div>
+    
+    <div class="lecture-actions">
+        <a href="{{ url_for('roadmap.roadmap_task_detail', slug=slug, task_id=task.id) }}" class="btn btn-back">
+            <i class="fas fa-arrow-left"></i> 목록으로 돌아가기
+        </a>
+        
+        {% if lecture.id in completed_lectures %}
+          <form action="{{ url_for('roadmap.toggle_lecture', slug=slug, task_id=task.id, lecture_id=lecture.id) }}" method="post" class="inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-warning hover-effect">
+              <i class="fas fa-times-circle"></i> 완료 취소
+            </button>
+          </form>
+        {% else %}
+          <form action="{{ url_for('roadmap.toggle_lecture', slug=slug, task_id=task.id, lecture_id=lecture.id) }}" method="post" class="inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-success hover-effect">
+              <i class="fas fa-check-circle"></i> 완료
+            </button>
+          </form>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

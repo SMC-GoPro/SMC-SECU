@@ -1,0 +1,426 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ username }}님의 마이페이지{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="mypage-container">
+    <header class="page-header">
+        <div class="header-content">
+            <div class="user-profile-icon">
+                <i class="fa-solid fa-circle-user"></i>
+            </div>
+            <h1><span class="highlight">{{ username }}</span>님의 마이페이지</h1>
+            <p class="subtitle">학습 관리와 계정 설정을 한 곳에서 관리하세요</p>
+            
+            <!-- 사용자 점수 표시 섹션 추가 -->
+            <div class="user-score-container">
+                <div class="user-score">
+                    <i class="fas fa-star"></i>
+                    <div class="score-details">
+                        <span class="score-label">현재 점수</span>
+                        <span class="score-value">{{ user_score }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 탭 네비게이션 -->
+    <div class="tab-container">
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="password">
+                <i class="fas fa-lock"></i>
+                <span>비밀번호 변경</span>
+            </button>
+            <button class="tab-btn" data-tab="problem-history">
+                <i class="fas fa-history"></i>
+                <span>문제 풀이 기록</span>
+            </button>
+            <button class="tab-btn" data-tab="exam-history">
+                <i class="fas fa-award"></i>
+                <span>정보처리기능사 시험 기록</span>
+            </button>
+            <button class="tab-btn" data-tab="account-delete">
+                <i class="fas fa-user-times"></i>
+                <span>회원 탈퇴</span>
+            </button>
+        </div>
+
+        <!-- 비밀번호 변경 탭 -->
+        <div class="tab-content active" id="password-tab">
+            <div class="card">
+                <div class="card-header">
+                    <div class="section-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h2>비밀번호 변경</h2>
+                    <p class="section-desc">안전한 계정 관리를 위해 주기적으로 비밀번호를 변경해주세요</p>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('auth.change_password') }}" method="POST" class="password-form">
+                        <input type="hidden" id="username" name="username" value="{{ username }}" autocomplete="username">
+                        <div class="form-group">
+                            <label for="current_password">현재 비밀번호</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="current_password" name="current_password" required autocomplete="current-password">
+                                <button type="button" class="toggle-password" aria-label="비밀번호 표시">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_password">새 비밀번호</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="new_password" name="new_password" required autocomplete="new-password">
+                                <button type="button" class="toggle-password" aria-label="비밀번호 표시">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_new_password">새 비밀번호 확인</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="confirm_new_password" name="confirm_new_password" required autocomplete="new-password">
+                                <button type="button" class="toggle-password" aria-label="비밀번호 표시">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <span>비밀번호 변경</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                    {% if password_error %}
+                        <div class="alert alert-error">
+                            <div class="alert-icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>오류 발생</h4>
+                                <p>{{ password_error }}</p>
+                            </div>
+                        </div>
+                    {% elif password_success %}
+                        <div class="alert alert-success">
+                            <div class="alert-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>변경 완료</h4>
+                                <p>{{ password_success }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 문제 풀이 기록 탭 -->
+        <div class="tab-content" id="problem-history-tab">
+            <div class="card">
+                <div class="card-header">
+                    <div class="section-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h2>문제 풀이 기록</h2>
+                    <p class="section-desc">지금까지 풀어본 문제들의 기록을 확인하세요</p>
+                    
+                    <div class="search-container">
+                        <form action="{{ url_for('user.mypage') }}" method="GET">
+                            <input type="text" name="search" placeholder="문제 검색..." value="{{ request.args.get('search', '') }}">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>문제 번호</th>
+                                    <th>문제 제목</th>
+                                    <th>정답 여부</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for attempt, title in attempts %}
+                                <tr class="history-item" data-href="{{ url_for('user.mypage_attempt_detail', attempt_id=attempt.id) }}">
+                                    <td>
+                                        <div class="problem-number">{{ attempt.problem_id }}</div>
+                                    </td>
+                                    <td class="problem-title">{{ title }}</td>
+                                    <td>
+                                        <span class="status-badge {{ 'correct' if attempt.is_correct else 'incorrect' }}">
+                                            {% if attempt.is_correct %}
+                                                <i class="fas fa-check"></i> 정답
+                                            {% else %}
+                                                <i class="fas fa-times"></i> 틀림
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 페이지네이션 -->
+                    {% if total_pages > 1 %}
+                    <div class="pagination">
+                        {% if page > 1 %}
+                        <a href="{{ url_for('user.mypage', page=page-1, search=request.args.get('search')) }}" class="page-nav">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% set start = [page - 2, 1] | max %}
+                        {% set end = [start + 4, total_pages + 1] | min %}
+                        {% set start = [end - 5, 1] | max %}
+                        
+                        {% if start > 1 %}
+                            <a href="{{ url_for('user.mypage', page=1, search=request.args.get('search')) }}" class="page-num">1</a>
+                            {% if start > 2 %}<span class="page-ellipsis">...</span>{% endif %}
+                        {% endif %}
+                        
+                        {% for p in range(start, end) %}
+                            {% if p == page %}
+                                <span class="page-num current">{{ p }}</span>
+                            {% else %}
+                                <a href="{{ url_for('user.mypage', page=p, search=request.args.get('search')) }}" class="page-num">{{ p }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if end <= total_pages %}
+                            {% if end < total_pages %}<span class="page-ellipsis">...</span>{% endif %}
+                            <a href="{{ url_for('user.mypage', page=total_pages, search=request.args.get('search')) }}" class="page-num">{{ total_pages }}</a>
+                        {% endif %}
+                        
+                        {% if page < total_pages %}
+                        <a href="{{ url_for('user.mypage', page=page+1, search=request.args.get('search')) }}" class="page-nav">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 정보처리기능사 시험 기록 탭 -->
+        <div class="tab-content" id="exam-history-tab">
+            <div class="card">
+                <div class="card-header">
+                    <div class="section-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h2>정보처리기능사 시험 기록</h2>
+                    <p class="section-desc">연도별 정보처리기사 모의고사 결과를 확인하세요</p>
+                </div>
+                <div class="card-body">
+                    <div class="exam-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <p class="stat-title">총 응시 횟수</p>
+                                <p class="stat-value">{{ quiz_results|length }}</p>
+                            </div>
+                        </div>
+                        
+                        {% if quiz_results %}
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <p class="stat-title">평균 정답률</p>
+                                {% set total = namespace(correct=0, questions=0) %}
+                                {% for result in quiz_results %}
+                                    {% set total.correct = total.correct + result.correct_count %}
+                                    {% set total.questions = total.questions + result.total %}
+                                {% endfor %}
+                                <p class="stat-value">
+                                    {% if total.questions > 0 %}
+                                        {{ (total.correct / total.questions * 100)|round }}%
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>연도</th>
+                                    <th>회차</th>
+                                    <th>풀이 날짜</th>
+                                    <th>정답률</th>
+                                    <th>상세</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in quiz_results %}
+                                <tr class="history-item">
+                                    <td>
+                                        <div class="year-badge">{{ result.year }}</div>
+                                    </td>
+                                    <td>{{ result.exam_session }}회</td>
+                                    <td>{{ result.attempted_at.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        {% set score_percent = (result.correct_count / result.total * 100)|round %}
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar {{ 'high' if score_percent >= 70 else ('medium' if score_percent >= 40 else 'low') }}" style="width: {{ score_percent }}%"></div>
+                                            <span class="progress-text">{{ score_percent }}%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('user.mypage_jeongchgi_result', result_id=result.id) }}" class="btn-detail">
+                                            상세보기 <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 회원 탈퇴 탭 -->
+        <div class="tab-content" id="account-delete-tab">
+            <div class="card">
+                <div class="card-header">
+                    <div class="section-icon">
+                        <i class="fas fa-user-times"></i>
+                    </div>
+                    <h2>회원 탈퇴</h2>
+                    <p class="section-desc">계정을 삭제하면 모든 데이터가 영구적으로 제거됩니다</p>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <div class="alert-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="alert-content">
+                            <h4>주의사항</h4>
+                            <p>회원 탈퇴 시 다음 사항에 유의해주세요:</p>
+                            <ul>
+                                <li>모든 학습 기록과 개인 데이터가 영구적으로 삭제됩니다.</li>
+                                <li>삭제된 데이터는 복구할 수 없습니다.</li>
+                                <li>탈퇴 후에는 동일한 계정으로 다시 가입할 수 있습니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <form action="{{ url_for('auth.delete_account') }}" method="POST" class="delete-account-form" id="delete-account-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <label for="delete_password">현재 비밀번호</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="delete_password" name="delete_password" required autocomplete="current-password">
+                                <button type="button" class="toggle-password" aria-label="비밀번호 표시">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group confirmation-checkbox">
+                            <input type="checkbox" id="confirm_delete" required>
+                            <label for="confirm_delete">계정을 삭제하면 모든 데이터가 영구적으로 제거된다는 것을 이해했습니다.</label>
+                        </div>
+                        <button type="button" id="delete-account-btn" class="btn btn-danger">
+                            <span>회원 탈퇴</span>
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                    {% if account_delete_error %}
+                        <div class="alert alert-error">
+                            <div class="alert-icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>오류 발생</h4>
+                                <p>{{ account_delete_error }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // 탭 전환 기능
+    document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            // 활성화된 탭 제거
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // 클릭된 탭 활성화
+            button.classList.add('active');
+            document.getElementById(`${button.dataset.tab}-tab`).classList.add('active');
+        });
+    });
+
+    // 비밀번호 토글 기능
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.parentNode.querySelector('input');
+            const icon = this.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
+
+    // 테이블 행 클릭 이벤트
+    document.querySelectorAll('#problem-history-tab .history-item').forEach(row => {
+        row.addEventListener('click', function() {
+            window.location.href = this.dataset.href;
+        });
+    });
+
+    // 회원 탈퇴 버튼 클릭 이벤트
+    document.getElementById('delete-account-btn').addEventListener('click', function() {
+        const confirmCheckbox = document.getElementById('confirm_delete');
+        const passwordField = document.getElementById('delete_password');
+        
+        if (!confirmCheckbox.checked) {
+            alert('계정 삭제를 확인하려면 체크박스를 선택해주세요.');
+            return;
+        }
+        
+        if (!passwordField.value) {
+            alert('현재 비밀번호를 입력해주세요.');
+            return;
+        }
+        
+        if (confirm('정말로 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+            document.getElementById('delete-account-form').submit();
+        }
+    });
+</script>
+{% endblock %}

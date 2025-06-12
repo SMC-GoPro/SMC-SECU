@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}댓글 수정{% endblock %}
+
+
+{% block head %}
+    {{ super() }}
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_comment.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <h1>댓글 수정</h1>
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group">
+            <label for="content"><i class="fas fa-pen-fancy"></i> 내용</label>
+            <textarea name="content" id="content" class="form-control" required maxlength="1000">{{ comment.content }}</textarea>
+            <div class="char-counter" id="contentCounter">0/1000</div>
+        </div>
+        <div class="button-group">
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> 수정 완료</button>
+            <button type="button" class="btn btn-cancel" onclick="window.location.href=`{{ url_for('posts.view_post', post_id=comment.post_id) }}`"><i class="fas fa-times"></i> 취소</button>
+        </div>
+    </form>
+</main>
+
+<script>
+    // 글자수 카운터 기능
+    document.addEventListener('DOMContentLoaded', function() {
+        const content = document.getElementById('content');
+        const contentCounter = document.getElementById('contentCounter');
+        
+        // 초기 글자수 표시
+        contentCounter.textContent = `${content.value.length}/1000`;
+        
+        // 내용 글자수 카운터
+        content.addEventListener('input', function() {
+            contentCounter.textContent = `${this.value.length}/1000`;
+            if(this.value.length > 900) {
+                contentCounter.style.color = '#e74c3c';
+            } else {
+                contentCounter.style.color = '#aaa';
+            }
+        });
+    });
+</script>
+{% endblock %}

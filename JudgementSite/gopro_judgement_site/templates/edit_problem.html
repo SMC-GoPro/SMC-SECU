@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+{% block title %}문제 수정{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/edit_problem.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="problem-new">
+        <h1>문제 수정</h1>
+        <form action="{{ url_for('problems.edit_problem', id=problem.id) }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="form-group">
+                <label for="title"><i class="fas fa-heading"></i> 제목</label>
+                <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required maxlength="100" value="{{ problem.title }}">
+                <div class="char-counter" id="titleCounter">0/100</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="description"><i class="fas fa-quote-left"></i> 문제 설명</label>
+                <textarea id="description" name="description" rows="10" placeholder="내용을 입력하세요" required maxlength="2000">{{ problem.description }}</textarea>
+                <div class="char-counter" id="descCounter">0/2000</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="answer"><i class="fas fa-check-circle"></i> 정답</label>
+                <textarea id="answer" name="answer" rows="5" placeholder="내용을 입력하세요" required maxlength="1000">{{ problem.answer }}</textarea>
+                <div class="char-counter" id="answerCounter">0/1000</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="ban_command"><i class="fas fa-ban"></i> ban command</label>
+                <textarea id="ban_command" name="ban_command" rows="3" placeholder="금지할 코드를 입력하세요">{{ problem.ban_command }}</textarea>
+            </div>
+
+            
+            <div class="difficulty-container">
+                <label><i class="fas fa-star"></i> 난이도</label>
+                <div class="difficulty-options">
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv1" name="difficulty" value="1" {% if problem.difficulty == 1 %}checked{% endif %}>
+                        <label for="lv1">Lv. 1</label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv2" name="difficulty" value="2" {% if problem.difficulty == 2 %}checked{% endif %}>
+                        <label for="lv2">Lv. 2</label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv3" name="difficulty" value="3" {% if problem.difficulty == 3 %}checked{% endif %}>
+                        <label for="lv3">Lv. 3</label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv4" name="difficulty" value="4" {% if problem.difficulty == 4 %}checked{% endif %}>
+                        <label for="lv4">Lv. 4</label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv5" name="difficulty" value="5" {% if problem.difficulty == 5 %}checked{% endif %}>
+                        <label for="lv5">Lv. 5</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button type="submit"><i class="fas fa-save"></i> 수정</button>
+                <button type="button" onclick="location.href=`{{ url_for('problems.problem_detail', id=problem.id) }}`"><i class="fas fa-times"></i> 취소</button>
+            </div>
+        </form>
+    </section>
+</main>
+<script>
+    // 글자수 카운터 기능
+    document.addEventListener('DOMContentLoaded', function() {
+        const title = document.getElementById('title');
+        const description = document.getElementById('description');
+        const answer = document.getElementById('answer');
+        const titleCounter = document.getElementById('titleCounter');
+        const descCounter = document.getElementById('descCounter');
+        const answerCounter = document.getElementById('answerCounter');
+        
+        // 초기 글자수 설정
+        titleCounter.textContent = `${title.value.length}/100`;
+        descCounter.textContent = `${description.value.length}/2000`;
+        answerCounter.textContent = `${answer.value.length}/1000`;
+        
+        // 글자수에 따른 색상 설정
+        if(title.value.length > 80) titleCounter.style.color = '#e74c3c';
+        if(description.value.length > 1800) descCounter.style.color = '#e74c3c';
+        if(answer.value.length > 800) answerCounter.style.color = '#e74c3c';
+        
+        // 제목 글자수 카운터
+        title.addEventListener('input', function() {
+            titleCounter.textContent = `${this.value.length}/100`;
+            if(this.value.length > 80) {
+                titleCounter.style.color = '#e74c3c';
+            } else {
+                titleCounter.style.color = '#aaa';
+            }
+        });
+        
+        // 문제 설명 글자수 카운터
+        description.addEventListener('input', function() {
+            descCounter.textContent = `${this.value.length}/2000`;
+            if(this.value.length > 1800) {
+                descCounter.style.color = '#e74c3c';
+            } else {
+                descCounter.style.color = '#aaa';
+            }
+        });
+        
+        // 정답 글자수 카운터
+        answer.addEventListener('input', function() {
+            answerCounter.textContent = `${this.value.length}/1000`;
+            if(this.value.length > 800) {
+                answerCounter.style.color = '#e74c3c';
+            } else {
+                answerCounter.style.color = '#aaa';
+            }
+        });
+    });
+</script>
+{% endblock %}

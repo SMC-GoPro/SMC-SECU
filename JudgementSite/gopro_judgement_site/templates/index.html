@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/index.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block content %}
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slides">
+                <div class="slide"><img src="{{ url_for('static',filename='./img/banner_1.png') }}" alt="Image 1"></div>
+                <div class="slide"><img src="{{ url_for('static',filename='./img/banner_2.png') }}" alt="Image 2"></div>
+                <div class="slide"><img src="{{ url_for('static',filename='./img/banner_3.png') }}" alt="Image 3"></div>
+            </div>
+            <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+            <button class="next" onclick="moveSlide(1)">&#10095;</button>
+            
+            <!-- Pagination dots -->
+            <div class="dots-container">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="newscement-section">
+        <div class="section-header">
+            <h2 class="section-title">공지사항</h2>
+        </div>
+        
+        <div class="newscement-grid">
+            {% if posts %}
+                {% for post in posts %}
+                    <div class="newscement-card">
+                        <div class="card-date">
+                            <span class="date-day">{{ post.created_at.strftime('%d') if post.created_at else '01' }}</span>
+                            <span class="date-month">{{ post.created_at.strftime('%b') if post.created_at else 'Jan' }}</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="newscement-card-title">{{ post.title }}</h3>
+                            <div class="newscement-card-excerpt">{{ post.content|truncate(100) }}</div>
+                            <a href="{{ url_for('news.view_news', id=post.id) }}" class="newscement-card-link">더보기</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-posts">
+                    <p>현재 등록된 공지사항이 없습니다.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="section-footer">
+            <a href="{{ url_for('news.news') }}" class="more-btn">전체 공지사항 보기</a>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static',filename='./js/index.js') }}"></script>
+{% endblock %}

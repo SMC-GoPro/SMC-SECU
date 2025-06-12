@@ -1,0 +1,401 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+  body {
+    background-color: #f7f9fc;
+    color: #2d3748;
+    line-height: 1.5;
+  }
+
+  .quiz-container {
+    max-width: 620px;
+    margin: 24px auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+  }
+
+  .quiz-header {
+    padding: 20px 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #edf2f7;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0;
+  }
+
+  .quiz-body {
+    padding: 24px;
+  }
+
+  .question-box {
+    background-color: #f7fafc;
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  }
+
+  .question-text {
+    font-size: 17px;
+    font-weight: 500;
+    color: #2d3748;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px 0;
+  }
+
+  .option-item {
+    margin-bottom: 14px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+    overflow: hidden;
+  }
+
+  .option-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .option-content {
+    display: flex;
+    padding: 16px 20px;
+    align-items: center;
+  }
+
+  .option-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #edf2f7;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 16px;
+    flex-shrink: 0;
+  }
+
+  .option-label {
+    font-size: 16px;
+    color: #4a5568;
+    flex-grow: 1;
+  }
+
+  .option-status {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+  }
+
+  .option-correct {
+    border-color: #9ae6b4;
+    background-color: #f0fff4;
+  }
+
+  .option-correct .option-circle {
+    background-color: #38a169;
+    color: white;
+  }
+
+  .option-correct .option-status {
+    background-color: #38a169;
+  }
+
+  .option-status.correct:after {
+    content: "✓";
+    font-size: 14px;
+  }
+
+  .option-incorrect {
+    border-color: #feb2b2;
+    background-color: #fff5f5;
+  }
+
+  .option-incorrect .option-circle {
+    background-color: #e53e3e;
+    color: white;
+  }
+
+  .option-incorrect .option-status {
+    background-color: #e53e3e;
+  }
+
+  .option-status.incorrect:after {
+    content: "×";
+    font-size: 14px;
+  }
+
+  .result-section {
+    margin-top: 30px;
+  }
+
+  .result-box {
+    margin-bottom: 20px;
+    border-radius: 14px;
+    padding: 20px;
+  }
+
+  .user-answer-box {
+    background-color: #ebf8ff;
+    border: 1px solid #bee3f8;
+  }
+
+  .correct-answer-box {
+    background-color: #f0fff4;
+    border: 1px solid #c6f6d5;
+  }
+
+  .explanation-box {
+    background-color: #fffaf0;
+    border: 1px solid #feebc8;
+  }
+
+  .result-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  .result-title svg {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+  }
+
+  .user-answer-title {
+    color: #3182ce;
+  }
+
+  .correct-answer-title {
+    color: #38a169;
+  }
+
+  .explanation-title {
+    color: #dd6b20;
+  }
+
+  .result-content {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #2d3748;
+  }
+
+  .result-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+
+  .correct-badge {
+    background-color: #c6f6d5;
+    color: #22543d;
+  }
+
+  .incorrect-badge {
+    background-color: #fed7d7;
+    color: #822727;
+  }
+
+  .quiz-footer {
+    padding: 20px 24px;
+    text-align: center;
+    border-top: 1px solid #edf2f7;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: #edf2f7;
+    color: #4a5568;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .back-link:hover {
+    background-color: #e2e8f0;
+  }
+
+  .back-link svg {
+    margin-right: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .quiz-container {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      height: 100vh;
+    }
+    
+    .quiz-body {
+      padding: 20px;
+    }
+    
+    .question-box {
+      padding: 18px;
+    }
+    
+    .option-content {
+      padding: 14px 16px;
+    }
+  }
+</style>
+
+<script>
+  // 페이지 로드 시 실행되는 스크립트
+  document.addEventListener('DOMContentLoaded', function() {
+    // 뒤로가기 버튼 설정
+    document.getElementById('backButton').addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // 이전 페이지 정보가 저장되어 있는지 확인
+      if(document.referrer) {
+        // 이전 페이지로 이동 (GET 요청으로)
+        window.location.href = document.referrer;
+      } else {
+        // 이전 페이지 정보가 없으면 기본 리스트 페이지로 이동
+        window.location.href = '/jeongchgi/quiz/wrong-answers';
+      }
+    });
+  });
+</script>
+
+<div class="quiz-container">
+  <div class="quiz-header">
+    <h1 class="header-title">문제 상세</h1>
+  </div>
+  
+  <div class="quiz-body">
+    <div class="question-box">
+      <p class="question-text">{{ problem.question_text }}</p>
+    </div>
+    
+    <ul class="options-list">
+      {% set user_choice = user_answer|int if user_answer else 0 %}
+      {% set correct_option = correct_answer|int if correct_answer is string else correct_answer %}
+      
+      {% for i in range(1, 5) %}
+        {% if i == 1 %}{% set option_text = problem.option_1 %}
+        {% elif i == 2 %}{% set option_text = problem.option_2 %}
+        {% elif i == 3 %}{% set option_text = problem.option_3 %}
+        {% elif i == 4 %}{% set option_text = problem.option_4 %}
+        {% endif %}
+        
+        <li class="option-item 
+          {% if i == correct_option %}option-correct
+          {% elif user_choice == i and i != correct_option %}option-incorrect{% endif %}">
+          <div class="option-content">
+            <div class="option-circle">{{ i }}</div>
+            <div class="option-label">{{ option_text }}</div>
+            {% if i == correct_option %}
+              <div class="option-status correct"></div>
+            {% elif user_choice == i and i != correct_option %}
+              <div class="option-status incorrect"></div>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    
+    <div class="result-section">
+      {% if user_answer %}
+        <div class="result-box user-answer-box">
+          <div class="result-title user-answer-title">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z"></path>
+            </svg>
+            내가 선택한 답
+            {% if user_choice == correct_option %}
+              <span class="result-badge correct-badge">정답</span>
+            {% else %}
+              <span class="result-badge incorrect-badge">오답</span>
+            {% endif %}
+          </div>
+          <div class="result-content">
+            {% if user_answer == 1 %}{{ problem.option_1 }}
+            {% elif user_answer == 2 %}{{ problem.option_2 }}
+            {% elif user_answer == 3 %}{{ problem.option_3 }}
+            {% elif user_answer == 4 %}{{ problem.option_4 }}
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+      
+      <div class="result-box correct-answer-box">
+        <div class="result-title correct-answer-title">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+          </svg>
+          정답
+        </div>
+        <div class="result-content">
+          {% if correct_option == 1 %}{{ problem.option_1 }}
+          {% elif correct_option == 2 %}{{ problem.option_2 }}
+          {% elif correct_option == 3 %}{{ problem.option_3 }}
+          {% elif correct_option == 4 %}{{ problem.option_4 }}
+          {% else %}{{ correct_answer }}
+          {% endif %}
+        </div>
+      </div>
+      
+      {% if problem.answer_explanation %}
+        <div class="result-box explanation-box">
+          <div class="result-title explanation-title">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm0-4h-2V7h2v8z"></path>
+            </svg>
+            해설
+          </div>
+          <div class="result-content">{{ problem.answer_explanation }}</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="quiz-footer">
+    <button id="backButton" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
+      </svg>
+      오답 리스트로 돌아가기
+    </button>
+  </div>
+</div>
+{% endblock %}

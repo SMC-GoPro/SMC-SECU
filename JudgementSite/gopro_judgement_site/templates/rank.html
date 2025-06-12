@@ -1,0 +1,204 @@
+{% extends "layout.html" %}
+
+{% block title %}순위{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rank.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="ranking-container">
+        <div class="rank-header">
+            <h1>🏆 랭킹</h1>
+            <div class="view-toggle">
+                <button class="toggle-btn active" data-view="table">테이블</button>
+                <button class="toggle-btn" data-view="chart">그래프</button>
+            </div>
+        </div>
+        
+        <div class="view-content">
+            <!-- 테이블 뷰 -->
+            <div class="table-wrapper view active" id="table-view">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>랭킹</th>
+                            <th>사용자</th>
+                            <th>점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr class="rank-row {% if loop.index == 1 %}first{% elif loop.index == 2 %}second{% elif loop.index == 3 %}third{% endif %}" data-rank="{{ loop.index }}">
+                            <td>
+                                {% if loop.index == 1 %}
+                                    <span class="medal gold">🥇</span>
+                                {% elif loop.index == 2 %}
+                                    <span class="medal silver">🥈</span>
+                                {% elif loop.index == 3 %}
+                                    <span class="medal bronze">🥉</span>
+                                {% else %}
+                                    {{ loop.index }}
+                                {% endif %}
+                            </td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.score }}점</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="chart-wrapper view" id="chart-view">
+                <canvas id="rankingChart"></canvas>
+                <div id="custom-tooltip" class="tooltip-content">
+                    <div class="tooltip-rank"></div>
+                    <div class="tooltip-name"></div>
+                    <div class="tooltip-score"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let rankChart = null;
+    
+    // 차트 초기화 및 그리기
+    function initChart() {
+        if (rankChart) {
+            rankChart.destroy();
+        }
+        
+        // Jinja 템플릿을 통해 users 데이터를 JSON 문자열로 전달한 후, 파싱하고 순위를 추가합니다.
+        const users = JSON.parse('{{ users | tojson | safe }}').map((user, index) => ({
+            rank: index + 1,
+            username: user.username,
+            score: user.score
+        }));
+
+        const ctx = document.getElementById('rankingChart').getContext('2d');
+
+        // 차트 데이터 준비
+        const labels = users.map(user => user.username);
+        const scores = users.map(user => user.score);
+        const colors = users.map((user, index) => {
+            if (index === 0) return 'rgba(255, 215, 0, 0.7)'; // 금
+            if (index === 1) return 'rgba(192, 192, 192, 0.7)'; // 은
+            if (index === 2) return 'rgba(205, 127, 50, 0.7)'; // 동
+            return 'rgba(54, 162, 235, 0.5)';
+        });
+
+        // 차트 생성
+        rankChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '점수',
+                    data: scores,
+                    backgroundColor: colors,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: colors,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true, // 기본 Chart.js 툴팁 사용
+                        callbacks: {
+                            title: function(context) {
+                                const dataIndex = context[0].dataIndex;
+                                return `${users[dataIndex].rank}위: ${users[dataIndex].username}`;
+                            },
+                            label: function(context) {
+                                return `${context.formattedValue}점`;
+                            }
+                        },
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#333',
+                        bodyColor: '#333',
+                        borderColor: '#ddd',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: Math.floor(Math.min(...scores) * 0.9),
+                        grid: {
+                            color: 'rgba(200, 200, 200, 0.2)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                }
+            }
+        });
+        
+        // 차트 클릭 이벤트 (선택사항)
+        document.getElementById('rankingChart').onclick = function(evt) {
+            const points = rankChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+            
+            if (points.length) {
+                const firstPoint = points[0];
+                const dataIndex = firstPoint.index;
+                const user = users[dataIndex];
+                
+                // 클릭시 액션 (필요시 구현)
+                // console.log(`${user.username}: ${user.score}점 (${user.rank}위)`);
+            }
+        };
+    }
+    
+    // 뷰 전환 및 차트 초기화 코드
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+    const views = document.querySelectorAll('.view');
+    
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetView = this.getAttribute('data-view');
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            views.forEach(view => view.classList.remove('active'));
+            document.getElementById(`${targetView}-view`).classList.add('active');
+            if (targetView === 'chart') {
+                initChart();
+            }
+        });
+    });
+    
+    // 순위 애니메이션 적용
+    const rankRows = document.querySelectorAll('.rank-row');
+    rankRows.forEach((row, index) => {
+        row.style.animationDelay = `${index * 0.1}s`;
+    });
+});
+</script>
+
+{% endblock %}

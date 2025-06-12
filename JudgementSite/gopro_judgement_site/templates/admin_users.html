@@ -1,0 +1,295 @@
+{% extends "layout.html" %}
+
+{% block title %}관리자 - 회원 관리{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_users.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <!-- Admin Header -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <h1><i class="fas fa-users-cog"></i> 회원 관리</h1>
+            <div class="header-actions">
+                <span class="user-count"><i class="fas fa-user-friends"></i> 총 회원수: <strong>{{ total_users }}명</strong></span>
+                <a href="{{ url_for('admin.admin_logs') }}" class="btn btn-primary">
+                    <i class="fas fa-clipboard-list"></i> <span class="btn-text">문제 로그</span>
+                </a>
+                <a href="{{ url_for('index') }}" class="btn btn-outline">
+                    <i class="fas fa-home"></i> <span class="btn-text">홈으로</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="search-container">
+            <form method="GET" action="{{ url_for('admin.admin_users') }}">
+                <div class="search-wrapper">
+                    <input type="text" name="search" placeholder="사용자 이름 또는 이메일 검색" value="{{ request.args.get('search', '') }}">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <!-- User Management Section -->
+    <div class="users-container">
+        <div class="table-responsive">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>사용자</th>
+                        <th class="hide-mobile">이메일</th>
+                        <th>역할</th>
+                        <th>점수</th>
+                        <th>상태</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr class="{% if user.is_suspended %}suspended-row{% endif %}">
+                        <td>{{ user.id }}</td>
+                        <td data-label="사용자">{{ user.username }}</td>
+                        <td data-label="이메일" class="hide-mobile">{{ user.email }}</td>
+                        <td data-label="역할">
+                            <form action="{{ url_for('admin.admin_update_role', user_id=user.id) }}" method="POST" class="update-role-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <div class="select-wrapper">
+                                    <select name="new_role" class="form-control">
+                                        <option value="user" {% if user.role == 'user' %}selected{% endif %}>일반</option>
+                                        <option value="gopro" {% if user.role == 'gopro' %}selected{% endif %}>gopro</option>
+                                        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>관리자</option>
+                                    </select>
+                                    <button type="submit" class="btn-update"><i class="fas fa-check"></i></button>
+                                </div>
+                            </form>
+                        </td>
+                        <td data-label="점수">
+                            <form action="{{ url_for('admin.admin_update_score', user_id=user.id) }}" method="POST" class="update-score-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <div class="input-wrapper">
+                                    <input type="number" name="new_score" value="{{ user.score }}" class="form-control">
+                                    <button type="submit" class="btn-update"><i class="fas fa-check"></i></button>
+                                </div>
+                            </form>
+                        </td>
+                        <td data-label="상태" class="status-cell">
+                            {% if user.is_suspended %}
+                                <span class="status suspended"><i class="fas fa-ban"></i> 정지됨</span>
+                            {% else %}
+                                <span class="status active"><i class="fas fa-check-circle"></i> 활성화</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="관리" class="actions-cell">
+                            <div class="action-buttons">
+                                <form action="{{ url_for('admin.admin_reset_password', user_id=user.id) }}" method="POST" class="reset-password-form">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn-icon" title="비밀번호 초기화">
+                                        <i class="fas fa-key"></i>
+                                    </button>
+                                </form>
+                                
+                                {% if user.is_suspended %}
+                                    <form action="{{ url_for('admin.admin_unsuspend_user', user_id=user.id) }}" method="POST" class="unsuspend-user-form">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn-icon success" title="정지 해제">
+                                            <i class="fas fa-user-check"></i>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form action="{{ url_for('admin.admin_suspend_user', user_id=user.id) }}" method="POST" class="suspend-user-form">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn-icon warning" title="계정 정지">
+                                            <i class="fas fa-user-lock"></i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                                
+                                <form action="{{ url_for('admin.admin_delete_user', user_id=user.id) }}" method="POST" class="delete-user-form">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn-icon danger" title="사용자 삭제">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                <span>{{ start_idx }}~{{ end_idx }}명 / 총 {{ total_users }}명</span>
+            </div>
+            <div class="pagination">
+                {% if page > 1 %}
+                    <a href="{{ url_for('admin.admin_users', page=1, search=request.args.get('search', '')) }}" class="page-link first" title="처음으로">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                    <a href="{{ url_for('admin.admin_users', page=page-1, search=request.args.get('search', '')) }}" class="page-link prev" title="이전 페이지">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                {% endif %}
+                
+                {% set start_page = [1, page-2]|max %}
+                {% set end_page = [start_page + 4, total_pages + 1]|min %}
+                
+                {% for p in range(start_page, end_page) %}
+                    <a href="{{ url_for('admin.admin_users', page=p, search=request.args.get('search', '')) }}" 
+                        class="page-link {% if p == page %}active{% endif %}">
+                        {{ p }}
+                    </a>
+                {% endfor %}
+                
+                {% if page < total_pages %}
+                    <a href="{{ url_for('admin.admin_users', page=page+1, search=request.args.get('search', '')) }}" class="page-link next" title="다음 페이지">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                    <a href="{{ url_for('admin.admin_users', page=total_pages, search=request.args.get('search', '')) }}" class="page-link last" title="마지막으로">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SweetAlert2 라이브러리 추가 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // 회원 삭제 폼 확인창
+    document.querySelectorAll('.delete-user-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '정말 삭제하시겠습니까?',
+                text: "해당 회원의 계정이 삭제됩니다.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '네, 삭제합니다!',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // 역할 변경 폼 확인창
+    document.querySelectorAll('.update-role-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '역할 변경 확인',
+                text: "회원의 역할을 변경하시겠습니까?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#007bff',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '변경',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // 점수 변경 폼 확인창
+    document.querySelectorAll('.update-score-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '점수 변경 확인',
+                text: "회원의 점수를 변경하시겠습니까?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#007bff',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '변경',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // 비밀번호 초기화 폼 확인창
+    document.querySelectorAll('.reset-password-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '비밀번호 초기화 확인',
+                text: "이 사용자의 비밀번호를 초기화하시겠습니까? 다음 로그인 시 새로운 비밀번호를 입력해야 합니다.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#007bff',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '초기화',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // 계정 정지 폼 확인창
+    document.querySelectorAll('.suspend-user-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '계정 정지 확인',
+                text: "이 사용자의 계정을 정지하시겠습니까? 해당 사용자는 더 이상 로그인할 수 없습니다.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#fd7e14',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '정지',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // 계정 정지 해제 폼 확인창
+    document.querySelectorAll('.unsuspend-user-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '정지 해제 확인',
+                text: "이 사용자의 계정 정지를 해제하시겠습니까? 해당 사용자는 다시 로그인할 수 있습니다.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '해제',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

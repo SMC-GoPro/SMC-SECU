@@ -1,0 +1,754 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="result-container">
+  <div class="page-header">
+    <h1 class="main-title">{{ result.year }}년 {{ result.exam_session }}회 시험 결과 분석</h1>
+    <p>풀이 날짜: {{ result.attempted_at.strftime('%Y-%m-%d') }}</p>
+  </div>
+  
+  <!-- 상단 요약 카드 -->
+  <div class="dashboard-card primary-card">
+    <div class="score-overview">
+      <div class="score-chart">
+        <!-- 모바일에서도 안정적인 CSS 기반 원형 프로그레스 -->
+        <div class="progress-circle-container">
+          <div class="progress-circle">
+            <div class="progress-circle-bg"></div>
+            <div class="progress-circle-value" style="--percent: {{ (result.correct_count / result.total * 100) | round }}"></div>
+            <div class="progress-content">
+              <div class="progress-score">{{ (result.correct_count / result.total * 100) | round }}%</div>
+              <div class="progress-label">정답률</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="score-details">
+        <div class="score-card">
+          <div class="score-icon total-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22">
+              <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+            </svg>
+          </div>
+          <div class="score-data">
+            <div class="score-value">{{ result.total }}</div>
+            <div class="score-label">총 문제</div>
+          </div>
+        </div>
+        
+        <div class="score-card correct-card">
+          <div class="score-icon correct-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22">
+              <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+            </svg>
+          </div>
+          <div class="score-data">
+            <div class="score-value">{{ result.correct_count }}</div>
+            <div class="score-label">정답</div>
+          </div>
+        </div>
+        
+        <div class="score-card incorrect-card">
+          <div class="score-icon incorrect-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22">
+              <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+            </svg>
+          </div>
+          <div class="score-data">
+            <div class="score-value">{{ result.total - result.correct_count }}</div>
+            <div class="score-label">오답</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 필터링 컨트롤 -->
+  <div class="filter-section">
+    <div class="tab-filter">
+      <button class="tab-btn active" data-filter="all">
+        <span class="tab-icon all-icon"></span>
+        <span class="tab-text">전체</span>
+      </button>
+      <button class="tab-btn" data-filter="correct">
+        <span class="tab-icon correct-icon"></span>
+        <span class="tab-text">정답</span>
+      </button>
+      <button class="tab-btn" data-filter="incorrect">
+        <span class="tab-icon incorrect-icon"></span>
+        <span class="tab-text">오답</span>
+      </button>
+    </div>
+    
+    <div class="search-container">
+      <input type="text" id="problem-search" placeholder="문제 번호 검색">
+      <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18">
+        <path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+      </svg>
+    </div>
+  </div>
+  
+  <!-- 결과 목록 -->
+  <div class="results-list-container dashboard-card">
+    <div class="results-header">
+      <div class="col col-num">문제 번호</div>
+      <div class="col col-result">결과</div>
+      <div class="col col-correct">정답</div>
+      <div class="col col-user">내 답안</div>
+    </div>
+    
+    <div class="results-body">
+      {% for pid, res in overall_results.items() %}
+      <a href="{{ url_for('jeongchgi.jeongchgi_problem_detail', problem_id=pid, user_answer=res.user_answer) }}" 
+         class="result-row {% if res.result == '정답' %}correct{% else %}incorrect{% endif %}"
+         data-problem-number="{{ res.global_index }}">
+        <div class="col col-num">{{ res.global_index }}</div>
+        <div class="col col-result">
+          {% if res.result == '정답' %}
+            <span class="result-badge correct">정답</span>
+          {% else %}
+            <span class="result-badge incorrect">오답</span>
+          {% endif %}
+        </div>
+        <div class="col col-correct">{{ res.correct_answer }}</div>
+        <div class="col col-user">
+          {% if res.user_answer is none %}
+            <span class="no-answer">미응답</span>
+          {% else %}
+            {{ res.user_answer }}
+          {% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    
+    <!-- 결과가 없을 때 -->
+    <div class="empty-state" style="display: none;">
+      <div class="empty-illustration">
+        <svg width="120" height="120" viewBox="0 0 24 24">
+          <path d="M11,2V4.07C7.38,4.53 4.53,7.38 4.07,11H2V13H4.07C4.53,16.62 7.38,19.47 11,19.93V22H13V19.93C16.62,19.47 19.47,16.62 19.93,13H22V11H19.93C19.47,7.38 16.62,4.53 13,4.07V2M11,6.08V8H13V6.09C15.5,6.5 17.5,8.5 17.92,11H16V13H17.91C17.5,15.5 15.5,17.5 13,17.92V16H11V17.91C8.5,17.5 6.5,15.5 6.08,13H8V11H6.09C6.5,8.5 8.5,6.5 11,6.08M12,11A1,1 0 0,0 11,12A1,1 0 0,0 12,13A1,1 0 0,0 13,12A1,1 0 0,0 12,11Z" />
+        </svg>
+      </div>
+      <div class="empty-title">검색 결과가 없습니다</div>
+      <div class="empty-subtitle">다른 검색어를 입력하거나 필터를 변경해보세요</div>
+    </div>
+  </div>
+  
+  <a href="{{ url_for('user.mypage') }}">마이페이지로 돌아가기</a>
+</div>
+
+<style>
+  /* 기본 스타일 */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background-color: #f7f9fc;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  .result-container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+  
+  /* 대시보드 카드 공통 스타일 */
+  .dashboard-card {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 
+                0 5px 10px -5px rgba(0, 0, 0, 0.01);
+    margin-bottom: 25px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.08), 
+                0 5px 15px -5px rgba(0, 0, 0, 0.02);
+  }
+  
+  /* 헤더 스타일 - 수정됨 */
+  .page-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .main-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 5px;
+  }
+  
+  /* 주요 카드 스타일 */
+  .primary-card {
+    padding: 30px;
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  }
+  
+  .score-overview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  @media (min-width: 768px) {
+    .score-overview {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+    }
+  }
+  
+  /* 새로운 CSS 기반 원형 프로그레스 */
+  .progress-circle-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin-bottom: 30px;
+  }
+  
+  @media (min-width: 768px) {
+    .progress-circle-container {
+      margin-bottom: 0;
+      margin-right: 20px;
+    }
+  }
+  
+  .progress-circle {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .progress-circle-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+  }
+  
+  .progress-circle-value {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(#4c6fff calc(var(--percent) * 1%), transparent 0);
+    animation: progress-fill 1.5s ease-out;
+  }
+  
+  @keyframes progress-fill {
+    0% { background: conic-gradient(#4c6fff 0%, transparent 0); }
+    100% { background: conic-gradient(#4c6fff calc(var(--percent) * 1%), transparent 0); }
+  }
+  
+  .progress-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .progress-score {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #4c6fff;
+    line-height: 1.1;
+  }
+  
+  .progress-label {
+    font-size: 0.9rem;
+    color: #718096;
+    letter-spacing: 0.5px;
+  }
+  
+  /* 점수 세부사항 스타일 */
+  .score-details {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .score-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+  }
+  
+  .score-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .score-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+  }
+  
+  .score-icon svg {
+    fill: white;
+  }
+  
+  .total-icon {
+    background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+  }
+  
+  .correct-icon {
+    background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  }
+  
+  .incorrect-icon {
+    background: linear-gradient(135deg, #F87171 0%, #EF4444 100%);
+  }
+  
+  .score-data {
+    flex: 1;
+  }
+  
+  .score-value {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #1F2937;
+    line-height: 1.2;
+  }
+  
+  .score-label {
+    color: #6B7280;
+    font-size: 0.9rem;
+  }
+  
+  /* 필터 섹션 */
+  .filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .tab-filter {
+    display: flex;
+    background: #EDF2F7;
+    border-radius: 12px;
+    padding: 4px;
+    overflow: hidden;
+  }
+  
+  .tab-btn {
+    border: none;
+    background: transparent;
+    color: #4A5568;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .tab-btn:hover {
+    color: #2D3748;
+  }
+  
+  .tab-btn.active {
+    background: white;
+    color: #3B82F6;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  }
+  
+  .tab-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .tab-btn .all-icon {
+    background: #718096;
+  }
+  
+  .tab-btn .correct-icon {
+    background: #10B981;
+  }
+  
+  .tab-btn .incorrect-icon {
+    background: #EF4444;
+  }
+  
+  .search-container {
+    position: relative;
+  }
+  
+  #problem-search {
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 10px 15px 10px 38px;
+    font-size: 0.9rem;
+    width: 200px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+  }
+  
+  #problem-search:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    width: 230px;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    fill: #A0AEC0;
+  }
+  
+  /* 결과 리스트 스타일 */
+  .results-list-container {
+    overflow: hidden;
+  }
+  
+  .results-header {
+    display: flex;
+    background: #F8FAFC;
+    padding: 15px 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #4A5568;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  
+  .results-body {
+    max-height: 500px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E0 #F1F5F9;
+  }
+  
+  .results-body::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .results-body::-webkit-scrollbar-track {
+    background: #F1F5F9;
+  }
+  
+  .results-body::-webkit-scrollbar-thumb {
+    background-color: #CBD5E0;
+    border-radius: 3px;
+  }
+  
+  .col {
+    padding: 0 10px;
+  }
+  
+  .col-num {
+    flex: 1;
+  }
+  
+  .col-result {
+    flex: 1.5;
+    text-align: center;
+  }
+  
+  .col-correct, .col-user {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .result-row {
+    display: flex;
+    padding: 15px 20px;
+    font-size: 0.95rem;
+    color: #1F2937;
+    text-decoration: none;
+    border-bottom: 1px solid #F1F5F9;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  
+  .result-row:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .result-row.correct:before {
+    background: #10B981;
+  }
+  
+  .result-row.incorrect:before {
+    background: #EF4444;
+  }
+  
+  .result-row:hover {
+    background: #F8FAFC;
+  }
+  
+  .result-row:hover:before {
+    opacity: 1;
+  }
+  
+  .result-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .result-badge.correct {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+  }
+  
+  .result-badge.incorrect {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+  }
+  
+  .no-answer {
+    color: #94A3B8;
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+  
+  /* 빈 상태 스타일 */
+  .empty-state {
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .empty-illustration {
+    margin-bottom: 20px;
+  }
+  
+  .empty-illustration svg {
+    fill: #CBD5E0;
+    opacity: 0.6;
+  }
+  
+  .empty-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #4A5568;
+    margin-bottom: 10px;
+  }
+  
+  .empty-subtitle {
+    color: #718096;
+    font-size: 0.95rem;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  /* 애니메이션 */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .result-row {
+    animation: fadeIn 0.3s ease;
+  }
+  
+  /* 반응형 스타일 */
+  @media (max-width: 768px) {
+    .result-container {
+      padding: 20px 15px;
+    }
+    
+    .filter-section {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .tab-filter {
+      width: 100%;
+    }
+    
+    .tab-btn {
+      flex: 1;
+      justify-content: center;
+    }
+    
+    .search-container {
+      width: 100%;
+    }
+    
+    #problem-search {
+      width: 100%;
+    }
+    
+    #problem-search:focus {
+      width: 100%;
+    }
+    
+    .score-details {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .score-card {
+      padding: 15px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .main-title {
+      font-size: 1.5rem;
+    }
+    
+    .primary-card {
+      padding: 20px 15px;
+    }
+    
+    .progress-circle-container {
+      width: 150px;
+      height: 150px;
+    }
+    
+    .progress-score {
+      font-size: 2rem;
+    }
+    
+    .results-header {
+      padding: 12px 15px;
+      font-size: 0.8rem;
+    }
+    
+    .result-row {
+      padding: 12px 15px;
+      font-size: 0.85rem;
+    }
+    
+    .col {
+      padding: 0 5px;
+    }
+    
+    .result-badge {
+      padding: 3px 8px;
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 필터링 기능
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const resultRows = document.querySelectorAll('.result-row');
+    const emptyState = document.querySelector('.empty-state');
+    const searchInput = document.getElementById('problem-search');
+    
+    // 필터링 및 검색 로직
+    function updateResults() {
+      const activeFilter = document.querySelector('.tab-btn.active').getAttribute('data-filter');
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      
+      let visibleCount = 0;
+      
+      resultRows.forEach(row => {
+        const problemNumber = row.getAttribute('data-problem-number');
+        const isCorrect = row.classList.contains('correct');
+        
+        const matchesFilter = activeFilter === 'all' || 
+                             (activeFilter === 'correct' && isCorrect) || 
+                             (activeFilter === 'incorrect' && !isCorrect);
+                             
+        const matchesSearch = searchTerm === '' || 
+                             problemNumber.includes(searchTerm);
+        
+        if (matchesFilter && matchesSearch) {
+          row.style.display = 'flex';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+      
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+    
+    // 탭 버튼 클릭 이벤트
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        updateResults();
+      });
+    });
+    
+    // 검색 입력 이벤트
+    searchInput.addEventListener('input', updateResults);
+    
+    // 결과 리스트에 애니메이션 적용
+    function addStaggeredAnimation() {
+      const visibleRows = Array.from(resultRows).filter(row => 
+        row.style.display !== 'none'
+      );
+      
+      visibleRows.forEach((row, index) => {
+        row.style.animationDelay = `${index * 0.05}s`;
+      });
+    }
+    
+    // 탭 변경 시 애니메이션 업데이트
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        setTimeout(addStaggeredAnimation, 0);
+      });
+    });
+    
+    // 초기 필터링 및 애니메이션 설정
+    updateResults();
+    setTimeout(addStaggeredAnimation, 0);
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block title %}글 작성{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/new_post.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <h1>글 작성</h1>
+
+    <form method="POST" action="{{ url_for('posts.new_post') }}" id="postForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group">
+            <label for="title"><i class="fas fa-heading"></i> 제목</label>
+            <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required maxlength="100">
+            <div class="char-counter" id="titleCounter">0/100</div>
+        </div>
+        <div class="form-group">
+            <label for="content"><i class="fas fa-pen-fancy"></i> 내용</label>
+            <textarea id="content" name="content" placeholder="내용을 입력하세요" required maxlength="2000"></textarea>
+            <div class="char-counter" id="contentCounter">0/2000</div>
+        </div>
+        
+        <div class="button-group">
+            <button type="submit"><i class="fas fa-check"></i> 등록</button>
+            <button type="button" onclick="location.href='{{ url_for('posts.posts') }}';" ><i class="fas fa-times"></i> 취소</button>
+        </div>
+    </form>
+</main>
+
+<script>
+    // 글자수 카운터 기능
+    document.addEventListener('DOMContentLoaded', function() {
+        const title = document.getElementById('title');
+        const content = document.getElementById('content');
+        const titleCounter = document.getElementById('titleCounter');
+        const contentCounter = document.getElementById('contentCounter');
+        
+        // 제목 글자수 카운터
+        title.addEventListener('input', function() {
+            titleCounter.textContent = `${this.value.length}/100`;
+            if(this.value.length > 80) {
+                titleCounter.style.color = '#e74c3c';
+            } else {
+                titleCounter.style.color = '#aaa';
+            }
+        });
+        
+        // 내용 글자수 카운터
+        content.addEventListener('input', function() {
+            contentCounter.textContent = `${this.value.length}/2000`;
+            if(this.value.length > 1800) {
+                contentCounter.style.color = '#e74c3c';
+            } else {
+                contentCounter.style.color = '#aaa';
+            }
+        });
+        
+        // 입력 필드에 포커스 효과
+        const formGroups = document.querySelectorAll('.form-group');
+        formGroups.forEach(group => {
+            const input = group.querySelector('input, textarea');
+            input.addEventListener('focus', () => {
+                group.classList.add('focused');
+            });
+            input.addEventListener('blur', () => {
+                group.classList.remove('focused');
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block title %}{{ task.title }} - {{ subject }} 로드맵{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/roadmap_task_detail.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="task-header">
+        <h1>{{ task.title }}</h1>
+        <div class="task-meta">
+            <span class="subject-badge">{{ subject }}</span>
+            {% if task.estimated_time %}
+            <span class="time-badge"><i class="fas fa-clock"></i> {{ task.estimated_time }}</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="task-content">
+      {{ task.description | safe }}
+      
+      {% if lectures or session.get('role') == 'admin' %}
+      <div class="lectures-section">
+        <h2>강의 목록</h2>
+        <ul class="lecture-list">
+          {% for lecture in lectures %}
+          <li class="lecture-item {% if lecture.id in completed_lectures %}completed{% endif %}">
+            <!-- 강의 제목 -->
+            <a href="{{ url_for('roadmap.lecture_detail', slug=slug, task_id=task.id, lecture_id=lecture.id) }}"
+               class="lecture-title">
+              {{ lecture.title }}
+            </a>
+
+            <div class="lecture-actions">
+              {% if lecture.id in completed_lectures %}
+                <!-- 완료 취소 버튼 -->
+                <form action="{{ url_for('roadmap.toggle_lecture', slug=slug, task_id=task.id, lecture_id=lecture.id) }}"
+                      method="post" class="inline-form">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                  <button type="submit" class="btn btn-warning hover-effect">
+                    <i class="fas fa-times-circle"></i> 완료 취소
+                  </button>
+                </form>
+              {% else %}
+                <!-- 완료 버튼 -->
+                <form action="{{ url_for('roadmap.toggle_lecture', slug=slug, task_id=task.id, lecture_id=lecture.id) }}"
+                      method="post" class="inline-form">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                  <button type="submit" class="btn btn-success hover-effect">
+                    <i class="fas fa-check-circle"></i> 완료
+                  </button>
+                </form>
+              {% endif %}
+
+              {% if session.get('role') == 'admin' %}
+              <!-- 관리자 전용: 강의 수정/삭제 -->
+              <div class="admin-actions">
+                <a href="{{ url_for('roadmap.edit_lecture', slug=slug, task_id=task.id, lecture_id=lecture.id) }}"
+                   class="btn btn-edit">
+                  <i class="fas fa-edit"></i> 수정
+                </a>
+                <form action="{{ url_for('roadmap.delete_lecture', slug=slug, task_id=task.id, lecture_id=lecture.id) }}"
+                      method="post" class="inline-form"
+                      onsubmit="return confirm('정말로 이 강의를 삭제하시겠습니까?');">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                  <button type="submit" class="btn btn-delete">
+                    <i class="fas fa-trash-alt"></i> 삭제
+                  </button>
+                </form>
+              </div>
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+
+        {% if session.get('role') == 'admin' %}
+        <div class="admin-add-section">
+          <a href="{{ url_for('roadmap.new_lecture', slug=slug, task_id=task.id) }}" class="btn btn-primary btn-add">
+            <i class="fas fa-plus"></i> 강의 추가
+          </a>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>    
+    
+    <div class="task-actions">
+        <a href="{{ url_for('roadmap.roadmap_subject', slug=slug) }}" class="btn btn-back">
+            <i class="fas fa-arrow-left"></i> 목록으로 돌아가기
+        </a>
+    </div>
+</main>
+{% endblock %}

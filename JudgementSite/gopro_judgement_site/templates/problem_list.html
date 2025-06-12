@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}문제 목록{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/problem_list.css') }}">
+    <!-- Font Awesome은 layout.html에서 이미 로드됨 -->
+{% endblock %}
+
+{% block content %}
+<div class="problem-list-container">
+    <div class="problem-list-header">
+        <h1>코딩 문제</h1>
+    </div>
+    
+    <div class="filter-section">
+        <div class="filter-difficulty">
+            <button class="filter-btn {% if not selected_difficulty %}active{% endif %}" data-url="{{ url_for('problems.problem_list', search=search_query) }}">전체</button>
+            <button class="filter-btn {% if selected_difficulty == '1' %}active{% endif %}" data-url="{{ url_for('problems.problem_list', difficulty=1, search=search_query) }}">Lv.1</button>
+            <button class="filter-btn {% if selected_difficulty == '2' %}active{% endif %}" data-url="{{ url_for('problems.problem_list', difficulty=2, search=search_query) }}">Lv.2</button>
+            <button class="filter-btn {% if selected_difficulty == '3' %}active{% endif %}" data-url="{{ url_for('problems.problem_list', difficulty=3, search=search_query) }}">Lv.3</button>
+            <button class="filter-btn {% if selected_difficulty == '4' %}active{% endif %}" data-url="{{ url_for('problems.problem_list', difficulty=4, search=search_query) }}">Lv.4</button>
+            <button class="filter-btn {% if selected_difficulty == '5' %}active{% endif %}" data-url="{{ url_for('problems.problem_list', difficulty=5, search=search_query) }}">Lv.5</button>
+        </div>
+        
+        <div class="search-create">
+            <form action="{{ url_for('problems.problem_list') }}" method="GET" class="search-form">
+                <input type="text" name="search" placeholder="문제 검색" value="{{ search_query or '' }}">
+                <button type="submit"><i class="fas fa-search"></i></button>
+                {% if selected_difficulty %}
+                <input type="hidden" name="difficulty" value="{{ selected_difficulty }}">
+                {% endif %}
+            </form>
+            {% if session.role == 'admin' %}
+            <a href="{{ url_for('problems.problem_new') }}" class="new-post">문제 만들기</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="problem-list">
+        {% for problem in problems %}
+        <a href="{{ url_for('problems.problem_detail', id=problem['id']) }}" class="problem-card">
+            <div class="problem-info">
+                <div class="problem-title">{{ problem['title'] }}</div>
+                <div class="problem-author">{{ problem['author'] }}</div>
+            </div>
+            <div class="problem-stats">
+                <div class="problem-stat difficulty level-{{ problem['difficulty'] }}">
+                    <span class="stat-label">난이도</span>
+                    <span class="stat-value">Lv.{{ problem['difficulty'] }}</span>
+                </div>
+                <div class="problem-stat correct-rate">
+                    <span class="stat-label">정답률</span>
+                    <span class="stat-value">{{ problem['correct_rate'] }}%</span>
+                </div>
+                <div class="problem-status"><i class="fas {{ problem['status_icon'] }}"></i></div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    
+    <div class="pagination">
+        {% if page > 1 %}
+        <a href="{{ url_for('problems.problem_list', page=page-1, search=search_query, difficulty=selected_difficulty) }}">&laquo; 이전</a>
+        {% endif %}
+        
+        {% for p in range(1, total_pages + 1) %}
+        {% if p == page %}
+        <a href="#" class="active">{{ p }}</a>
+        {% else %}
+        <a href="{{ url_for('problems.problem_list', page=p, search=search_query, difficulty=selected_difficulty) }}">{{ p }}</a>
+        {% endif %}
+        {% endfor %}
+        
+        {% if page < total_pages %}
+        <a href="{{ url_for('problems.problem_list', page=page+1, search=search_query, difficulty=selected_difficulty) }}">다음 &raquo;</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

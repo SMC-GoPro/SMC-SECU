@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ subject }} 로드맵{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/roadmap_subject.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block content %}
+<main class="roadmap-container">
+    <div class="content-wrapper">
+        <header class="roadmap-header">
+            <h1 class="page-title">{{ subject }} 학습 로드맵</h1>
+            <p class="roadmap-description">단계별 학습 과정을 따라 {{ subject }}의 핵심 개념을 완벽하게 이해하세요.</p>
+        </header>
+        
+        {% if session.get('role') == 'admin' %}
+            <div class="admin-controls">
+                <a href="{{ url_for('roadmap.new_roadmap_task', slug=slug) }}" class="btn btn-primary">
+                    <span class="btn-icon">+</span>새 항목 추가
+                </a>
+            </div>
+        {% endif %}
+
+        <section class="roadmap-content">
+            {% if tasks|length > 0 %}
+                <ul class="task-list">
+                    {% for task in tasks %}
+                    <li class="task-item">
+                        <div class="task-content">
+                            <a href="{{ url_for('roadmap.roadmap_task_detail', slug=slug, task_id=task.id) }}" class="task-title">
+                                {{ task.title }}
+                            </a>
+                        </div>
+                        
+                        {% if session.get('role') == 'admin' %}
+                        <div class="task-actions">
+                            <a href="{{ url_for('roadmap.edit_roadmap_task', slug=slug, task_id=task.id) }}" class="btn btn-icon-only btn-edit" aria-label="수정">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </a>
+                            <form action="{{ url_for('roadmap.delete_roadmap_task', slug=slug, task_id=task.id) }}" method="post" class="inline-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <button type="submit" class="btn btn-icon-only btn-delete" onclick="return confirm('정말 삭제하시겠습니까?');" aria-label="삭제">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">📚</div>
+                    <h3>로드맵이 아직 없습니다</h3>
+                    <p>이 주제에 대한 로드맵 항목이 곧 추가될 예정입니다.</p>
+                </div>
+            {% endif %}
+        </section>
+
+        <footer class="roadmap-footer">
+            <a href="{{ url_for('roadmap.roadmap_overview') }}" class="btn btn-back">
+                <span class="btn-icon">←</span>로드맵 목록으로
+            </a>
+        </footer>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,244 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+  :root {
+    --primary-color: #4663ea;
+    --primary-light: #eef2ff;
+    --primary-dark: #3b52cc;
+    --primary-border: rgba(70, 99, 234, 0.3);
+    --text-dark: #2d3748;
+    --text-medium: #4a5568;
+    --text-light: #718096;
+    --background-light: #ffffff;
+    --background-off: #f9fafd;
+    --border-color: #e8eff6;
+    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    --item-shadow: 0 4px 12px rgba(70, 99, 234, 0.15);
+    --radius-sm: 10px;
+    --radius-md: 18px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .year-container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 28px 16px 50px;
+    color: var(--text-dark);
+    line-height: 1.5;
+  }
+  
+  .page-title {
+    text-align: center;
+    color: var(--text-dark);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    padding-bottom: 22px;
+    position: relative;
+    letter-spacing: -0.5px;
+  }
+  
+  .page-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+  }
+  
+  .card {
+    background-color: var(--background-light);
+    border-radius: var(--radius-md);
+    box-shadow: var(--card-shadow);
+    padding: 32px 28px;
+    margin-bottom: 32px;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+  }
+  
+  .card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+  }
+  
+  .card-title {
+    font-size: 19px;
+    color: var(--text-medium);
+    margin-bottom: 28px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+  }
+  
+  .card-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 20px;
+    background-color: var(--primary-color);
+    border-radius: 3px;
+    margin-right: 12px;
+  }
+  
+  .year-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .year-item {
+    background-color: var(--background-off);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0;
+    text-align: center;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .year-item:hover, .year-item:focus {
+    background-color: var(--primary-light);
+    transform: translateY(-3px);
+    box-shadow: var(--item-shadow);
+    color: var(--primary-dark);
+    border-color: var(--primary-border);
+    outline: none;
+  }
+
+  .year-item:active {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(70, 99, 234, 0.1);
+  }
+  
+  .year-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .year-item:hover::before {
+    transform: scaleX(1);
+  }
+  
+  .info-text {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 15px;
+    margin-top: 26px;
+    line-height: 1.6;
+    padding: 0 15px;
+  }
+  
+  /* Responsive design improvements */
+  @media (max-width: 399px) {
+    .year-grid {
+      gap: 12px;
+    }
+    
+    .year-item {
+      height: 54px;
+      font-size: 15px;
+    }
+    
+    .card {
+      padding: 24px 20px;
+    }
+  }
+  
+  @media (min-width: 400px) {
+    .year-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 576px) {
+    .year-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .year-container {
+      padding: 35px 28px 60px;
+    }
+    
+    .card {
+      padding: 34px 30px;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .year-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    
+    .page-title {
+      font-size: 32px;
+      margin-bottom: 36px;
+    }
+    
+    .card {
+      padding: 36px;
+    }
+    
+    .card-title {
+      font-size: 21px;
+      margin-bottom: 30px;
+    }
+    
+    .year-item {
+      font-size: 17px;
+      height: 62px;
+    }
+  }
+  
+  /* Touch device optimization */
+  @media (hover: none) {
+    .year-item {
+      padding: 0;
+      height: 65px;
+    }
+  }
+</style>
+
+<div class="year-container">
+  <h2 class="page-title">정보처리기능사 기출 문제</h2>
+  
+  <div class="card">
+    <h3 class="card-title">연도 선택</h3>
+    
+    <div class="year-grid">
+      {% for year in years %}
+        <a href="{{ url_for('jeongchgi.jeongchgi_year', year=year) }}" class="year-item" aria-label="{{ year }}년 정보처리기사 기출문제 보기">
+          {{ year }}년
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <p class="info-text">
+    원하시는 연도를 선택하시면 해당 연도의 정보처리기사 기출문제를 확인하실 수 있습니다.
+    <br>체계적인 학습을 통해 시험 준비에 도움이 되길 바랍니다.
+  </p>
+</div>
+{% endblock %}

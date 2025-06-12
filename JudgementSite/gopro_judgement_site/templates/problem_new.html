@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+{% block title %}새로운 문제 등록{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/problem_new.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="problem-new">
+        <h1>문제 만들기</h1>
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <!-- 제목 -->
+            <div class="form-group">
+                <label for="title"><i class="fas fa-heading"></i> 제목</label>
+                <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required maxlength="100">
+                <div class="char-counter" id="titleCounter">0/100</div>
+            </div>
+            
+            <!-- 문제 설명 -->
+            <div class="form-group">
+                <label for="description"><i class="fas fa-quote-left"></i> 문제 설명</label>
+                <textarea id="description" name="description" rows="10" placeholder="내용을 입력하세요" required maxlength="2000"></textarea>
+                <div class="char-counter" id="descCounter">0/2000</div>
+            </div>
+            
+            <!-- 정답 -->
+            <div class="form-group">
+                <label for="answer"><i class="fas fa-check-circle"></i> 정답</label>
+                <textarea id="answer" name="answer" rows="5" placeholder="내용을 입력하세요" required maxlength="1000"></textarea>
+                <div class="char-counter" id="answerCounter">0/1000</div>
+            </div>
+            
+            <!-- 난이도 -->
+            <div class="difficulty-container">
+                <label><i class="fas fa-star"></i> 난이도</label>
+                <div class="difficulty-options">
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv1" name="difficulty" value="1" checked>
+                        <label for="lv1">Lv. 1</label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv2" name="difficulty" value="2">
+                        <label for="lv2">Lv. 2</label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv3" name="difficulty" value="3">
+                        <label for="lv3">Lv. 3</label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv4" name="difficulty" value="4">
+                        <label for="lv4">Lv. 4</label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="lv5" name="difficulty" value="5">
+                        <label for="lv5">Lv. 5</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 버튼 -->
+            <div class="button-group">
+                <button type="submit"><i class="fas fa-plus-circle"></i> 등록</button>
+                <a href="{{ url_for('problems.problem_list') }}" class="btn btn-cancel"><i class="fas fa-times"></i> 취소</a>
+            </div>
+        </form>
+    </section>
+</main>
+
+<script>
+    // 글자수 카운터 기능
+    document.addEventListener('DOMContentLoaded', function() {
+        const title = document.getElementById('title');
+        const description = document.getElementById('description');
+        const answer = document.getElementById('answer');
+        const requiredVars = document.getElementById('required_vars');
+
+        const titleCounter = document.getElementById('titleCounter');
+        const descCounter = document.getElementById('descCounter');
+        const answerCounter = document.getElementById('answerCounter');
+        const reqVarsCounter = document.getElementById('reqVarsCounter');
+
+        // 제목 글자수 카운터
+        title.addEventListener('input', function() {
+            titleCounter.textContent = this.value.length + "/100";
+            titleCounter.style.color = (this.value.length > 80) ? '#e74c3c' : '#aaa';
+        });
+        
+        // 문제 설명 글자수 카운터
+        description.addEventListener('input', function() {
+            descCounter.textContent = this.value.length + "/2000";
+            descCounter.style.color = (this.value.length > 1800) ? '#e74c3c' : '#aaa';
+        });
+        
+        // 정답 글자수 카운터
+        answer.addEventListener('input', function() {
+            answerCounter.textContent = this.value.length + "/1000";
+            answerCounter.style.color = (this.value.length > 800) ? '#e74c3c' : '#aaa';
+        });
+        
+        // 필수 변수 글자수 카운터
+        if (requiredVars) {
+            requiredVars.addEventListener('input', function() {
+                reqVarsCounter.textContent = this.value.length + "/1000";
+                reqVarsCounter.style.color = (this.value.length > 800) ? '#e74c3c' : '#aaa';
+            });
+        }
+    });
+</script>
+{% endblock %}

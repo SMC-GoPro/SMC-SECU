@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_post.css') }}">
+    <!-- SweetAlert2 and other scripts are loaded in layout.html -->
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="post-container">
+        <!-- 수정된 post-header 영역 -->
+        <div class="post-header">
+            <h1 class="post-title">{{ post.title }}</h1>
+            <div class="post-info">
+                <p class="user-id">{{ post.author }}</p>
+                <p class="post-date">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+            </div>
+        </div>
+        
+        <div class="post-content">{{ post.content | nl2br }}</div>
+        
+        <div class="post-actions">
+            <a href="{{ url_for('posts.posts') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </a>
+            {% if session.get('username') == post.author or session.get('role') == 'admin' %}
+            <a href="{{ url_for('posts.edit_post', post_id=post.id) }}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> 수정
+            </a>
+            <form method="POST" action="{{ url_for('posts.delete_post', post_id=post.id) }}" style="display:inline;" class="delete-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> 삭제
+                </button>
+            </form>
+            {% endif %}
+        </div>
+
+        <div class="comments-section">
+            <h2 class="comments-heading">댓글 {{ comments|length }}개</h2>
+            <div class="comments">
+                {% for comment in comments %}
+                <div class="comment" id="comment-{{ comment.id }}">
+                    <div class="comment-meta">
+                        <span class="comment-author">{{ comment.author }}</span>
+                        <span class="comment-date">{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                    <div class="comment-content">{{ comment.content }}</div>
+                    {% if session.logged_in %}
+                    <div class="comment-actions">
+                        <button class="comment-reply-btn" data-parent-id="{{ comment.id }}">답글</button>
+                        {% if session.username == comment.author %}
+                        <a href="{{ url_for('posts.edit_comment', comment_id=comment.id) }}" class="comment-edit-btn">수정</a>
+                        {% endif %}
+                        {% if session.username == comment.author or session.role == 'admin' %}
+                        <form method="POST" action="{{ url_for('posts.delete_comment', comment_id=comment.id) }}" style="display:inline;" class="delete-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="comment-delete-btn">삭제</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <!-- 대댓글 폼 (기본적으로 숨겨져 있음) -->
+                    <div class="reply-form-container" id="reply-form-{{ comment.id }}" style="display: none;">
+                        {% if session.logged_in %}
+                        <form method="POST" action="{{ url_for('posts.view_post', post_id=post.id) }}" class="reply-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                            <div class="form-group">
+                                <textarea name="content" class="form-control" rows="2" placeholder="답글을 남겨보세요"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-sm">답글 작성</button>
+                                <button type="button" class="btn btn-secondary btn-sm cancel-reply">취소</button>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+
+                    <!-- 대댓글 목록 -->
+                    <div class="replies">
+                        {% for reply in comment.replies if reply.parent_id == comment.id %}
+                        <div class="reply" id="comment-{{ reply.id }}">
+                            <div class="reply-meta">
+                                <span class="reply-author">{{ reply.author }}</span>
+                                <span class="reply-date">{{ reply.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                            </div>
+                            <div class="reply-content">{{ reply.content }}</div>
+                            {% if session.logged_in %}
+                            <div class="reply-actions">
+                                <button class="comment-reply-btn" data-parent-id="{{ comment.id }}">답글</button>
+                                {% if session.username == reply.author %}
+                                <a href="{{ url_for('posts.edit_comment', comment_id=reply.id) }}" class="comment-edit-btn">수정</a>
+                                {% endif %}
+                                {% if session.username == reply.author or session.role == 'admin' %}
+                                <form method="POST" action="{{ url_for('posts.delete_comment', comment_id=reply.id) }}" style="display:inline;" class="delete-form">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="comment-delete-btn">삭제</button>
+                                </form>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="comment-form-section">
+                {% if session.logged_in %}
+                <form method="POST" action="{{ url_for('posts.view_post', post_id=post.id) }}" class="comment-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="form-group">
+                        <textarea name="content" class="form-control" rows="3" placeholder="댓글을 남겨보세요"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">댓글 작성</button>
+                    </div>
+                </form>
+                {% else %}
+                <div class="login-required">
+                    <p>댓글을 작성하려면 <a href="{{ url_for('auth.login') }}">로그인</a>이 필요합니다.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
