@@ -1,0 +1,240 @@
+/* 기본 배경 및 폰트 */
+body {
+  background-color: #f5f7fa;
+  font-family: 'Pretendard', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* 메인 컨테이너 카드 스타일 */
+.privacy-main {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.privacy-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+}
+
+/* 제목 스타일 */
+.privacy-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #191919;
+  position: relative;
+}
+
+.privacy-date {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* 개인정보 처리방침 섹션 */
+.privacy-section {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.privacy-section:last-child {
+  border-bottom: none;
+}
+
+.privacy-intro {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  line-height: 1.8;
+  color: #333;
+}
+
+/* 본문 문단 */
+.privacy-content p {
+  line-height: 1.8;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* 소제목 */
+.privacy-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 25px;
+  margin-bottom: 20px;
+  color: #111;
+  padding-bottom: 8px;
+}
+
+/* 리스트 스타일 */
+.privacy-list {
+  margin-left: 30px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+}
+
+.privacy-list li {
+  margin-bottom: 12px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.privacy-list li strong {
+  font-weight: 600;
+  color: #111;
+}
+
+.privacy-list.sub-list {
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+.privacy-list ul {
+  margin-top: 8px;
+  margin-left: 20px;
+  list-style-type: disc;
+}
+
+.privacy-list ul li {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+/* 테이블 스타일 */
+.privacy-table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 30px;
+}
+
+.privacy-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.privacy-table th,
+.privacy-table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.privacy-table th {
+  background-color: #f7f7f7;
+  font-weight: 600;
+  color: #333;
+}
+
+.privacy-table td {
+  vertical-align: top;
+}
+
+/* 연락처 정보 스타일 */
+.privacy-contact-info {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 15px 0 25px;
+}
+
+.privacy-contact-info p {
+  margin-bottom: 0;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1024px) {
+  .privacy-container {
+    padding: 30px;
+  }
+  
+  .privacy-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-container {
+    padding: 25px 20px;
+    border-radius: 8px;
+  }
+  
+  .privacy-title {
+    font-size: 1.8rem;
+  }
+  
+  .privacy-content h2 {
+    font-size: 1.4rem;
+  }
+  
+  .privacy-intro,
+  .privacy-content p {
+    font-size: 0.95rem;
+  }
+  
+  .privacy-list {
+    margin-left: 20px;
+  }
+  
+  .privacy-table th,
+  .privacy-table td {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-main {
+    padding: 15px;
+  }
+  
+  .privacy-container {
+    padding: 20px 15px;
+    border-radius: 6px;
+  }
+  
+  .privacy-title {
+    font-size: 1.6rem;
+  }
+  
+  .privacy-date {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  
+  .privacy-content h2 {
+    font-size: 1.3rem;
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .privacy-section {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+  }
+  
+  .privacy-list {
+    margin-left: 15px;
+    padding-left: 5px;
+  }
+  
+  .privacy-table th,
+  .privacy-table td {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+  
+  .privacy-contact-info {
+    padding: 15px;
+  }
+}

@@ -1,0 +1,244 @@
+/* rank.css */
+:root {
+    --primary-color: #4a6cfa;
+    --secondary-color: #6c84fa;
+    --background-color: #f8f9ff;
+    --card-bg-color: #ffffff;
+    --text-color: #333;
+    --gold-color: #ffd700;
+    --silver-color: #c0c0c0;
+    --bronze-color: #cd7f32;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.ranking-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    background-color: var(--card-bg-color);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.rank-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.rank-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+    animation: fadeIn 0.8s ease;
+}
+
+.view-toggle {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.toggle-btn {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.view-content {
+    position: relative;
+    min-height: 400px;
+}
+
+.view {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.view.active {
+    display: block;
+    opacity: 1;
+    animation: fadeIn 0.5s ease;
+}
+
+/* 테이블 스타일 */
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead {
+    background-color: #f0f4ff;
+}
+
+th {
+    padding: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+td {
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.rank-row {
+    transition: transform 0.2s ease;
+    opacity: 0;
+    animation: slideIn 0.5s forwards;
+}
+
+.rank-row:hover {
+    background-color: #f8f9ff;
+    transform: translateX(5px);
+}
+
+.rank-row.first {
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+.rank-row.second {
+    background-color: rgba(192, 192, 192, 0.1);
+}
+
+.rank-row.third {
+    background-color: rgba(205, 127, 50, 0.1);
+}
+
+.medal {
+    font-size: 1.3rem;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+/* 차트 스타일 */
+.chart-wrapper {
+    position: relative;
+    height: 400px;
+    padding: 1rem;
+}
+
+.chart-tooltip {
+    position: absolute;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    padding: 0.8rem;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 10;
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+
+.tooltip-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.tooltip-rank {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.tooltip-name {
+    font-size: 0.9rem;
+}
+
+.tooltip-score {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.chart-tooltip.first {
+    border-left: 4px solid var(--gold-color);
+}
+
+.chart-tooltip.second {
+    border-left: 4px solid var(--silver-color);
+}
+
+.chart-tooltip.third {
+    border-left: 4px solid var(--bronze-color);
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .ranking-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+    
+    .rank-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    th, td {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .chart-wrapper {
+        height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    th, td {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+    
+    .toggle-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}

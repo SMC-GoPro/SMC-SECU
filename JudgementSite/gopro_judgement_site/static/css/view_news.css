@@ -1,0 +1,172 @@
+
+        .post-container {
+            
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding:0 1rem;
+            padding-bottom: 30px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .post-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #007bff;
+            transition: width 0.3s ease;
+        }
+
+        .post-title:hover::after {
+            width: 100px;
+        }
+
+        .post-header {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .post-header i {
+            margin-right: 0.5rem;
+            color: #007bff;
+        }
+
+        .post-content {
+            line-height: 1.8;
+            margin: 2rem 0;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: scale(1.2);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            filter: brightness(110%);
+            transform: translateY(-2px);
+        }
+
+
+        
+       
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .post-container {
+                margin: 1rem;
+            }
+
+            .post-card {
+                padding: 1rem;
+            }
+
+            .post-title {
+                font-size: 1.5rem;
+            }
+
+            .post-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 새로운 기능: 읽은 시간 표시 */
+        .read-time {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* 새로운 기능: 프린트 버튼 스타일 */
+        @media print {
+            .post-actions, .share-buttons {
+                display: none;
+            }
+        }

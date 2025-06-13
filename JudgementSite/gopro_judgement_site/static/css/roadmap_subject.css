@@ -1,0 +1,272 @@
+/* roadmap_subject.css */
+:root {
+    --primary-color: #4263eb;
+    --primary-hover: #3b5bdb;
+    --secondary-color: #f8f9fa;
+    --text-primary: #212529;
+    --text-secondary: #495057;
+    --text-muted: #6c757d;
+    --border-color: #e9ecef;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.05);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.05);
+    --border-radius: 8px;
+    --transition: all 0.2s ease;
+}
+
+/* No need to override the body font-family as we want to inherit from layout.css */
+/* body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: #f5f7fa;
+} */
+
+.roadmap-container {
+    padding: 1.5rem 1rem;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.content-wrapper {
+    max-width: 800px;
+    width: 100%;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.5s ease;
+}
+
+.roadmap-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.roadmap-description {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.admin-controls {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.roadmap-content {
+    flex: 1;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.task-item {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    position: relative;
+}
+
+.task-item:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: #e1e5ea;
+}
+
+.task-item:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.task-item:hover:before {
+    opacity: 1;
+}
+
+.task-content {
+    flex: 1;
+    padding-right: 1rem;
+}
+
+.task-title {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: block;
+    transition: var(--transition);
+}
+
+.task-title:hover {
+    color: var(--primary-color);
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    border: none;
+    font-size: 0.875rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-back {
+    background-color: var(--secondary-color);
+    color: var(--text-secondary);
+}
+
+.btn-back:hover {
+    background-color: #e9ecef;
+}
+
+.btn-icon {
+    display: inline-block;
+    font-weight: 700;
+}
+
+.btn-icon-only {
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: transparent;
+}
+
+.btn-edit {
+    color: #4dabf7;
+}
+
+.btn-edit:hover {
+    background-color: rgba(77, 171, 247, 0.1);
+}
+
+.btn-delete {
+    color: #fa5252;
+}
+
+.btn-delete:hover {
+    background-color: rgba(250, 82, 82, 0.1);
+}
+
+.inline-form {
+    display: inline;
+}
+
+.roadmap-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-start;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--text-muted);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 태블릿 & 모바일 반응형 스타일 */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 1.5rem;
+    }
+    
+    .task-item {
+        padding: 0.875rem 1rem;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .roadmap-container {
+        padding: 1rem 0.5rem;
+    }
+    
+    .content-wrapper {
+        padding: 1.25rem;
+        border-radius: var(--border-radius);
+    }
+    
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .task-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}

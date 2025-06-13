@@ -1,0 +1,232 @@
+/* Modern Login & Signup Styles */
+:root {
+    --primary-color: #4285f4;
+    --primary-dark: #3367d6;
+    --text-color: #333;
+    --light-gray: #f5f5f5;
+    --border-color: #ddd;
+    --error-color: #e53935;
+    --success-color: #43a047;
+    --shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Basic Reset for login/signup pages only */
+.login-container *,
+.signup-container * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.login-container,
+.signup-container {
+    background-color: var(--light-gray);
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Container Styling */
+.login-container,
+.signup-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Card Styling */
+.login-card,
+.signup-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+    transition: transform 0.3s ease;
+}
+
+.login-card:hover,
+.signup-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Header Styling */
+.login-header,
+.signup-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1,
+.signup-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.login-header p,
+.signup-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* Form Group */
+.login-container .form-group,
+.signup-container .form-group {
+    margin-bottom: 20px;
+}
+
+.login-container .form-group label,
+.signup-container .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.login-container .form-control,
+.signup-container .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-container .form-control:focus,
+.signup-container .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
+    outline: none;
+}
+
+.login-container .form-control::placeholder,
+.signup-container .form-control::placeholder {
+    color: #aaa;
+}
+
+/* Error Message */
+.login-container .error-message,
+.signup-container .error-message {
+    color: var(--error-color);
+    font-size: 14px;
+    margin-bottom: 15px;
+    background-color: rgba(229, 57, 53, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Buttons - renamed to avoid conflicts */
+.form-submit-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.form-submit-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Footer */
+.login-footer,
+.signup-footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 15px;
+}
+
+.login-footer a,
+.signup-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.login-footer a:hover,
+.signup-footer a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+    color: #777;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.divider span {
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+/* Password Requirements */
+.password-requirements {
+    font-size: 13px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Terms Checkbox */
+.terms-check {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.terms-check input {
+    margin-top: 3px;
+    margin-right: 10px;
+}
+
+.terms-check label {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .login-container,
+    .signup-container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-card,
+    .signup-card {
+        padding: 20px 15px;
+    }
+    
+    .login-header h1,
+    .signup-header h1 {
+        font-size: 24px;
+    }
+    
+    .login-container .form-control,
+    .signup-container .form-control,
+    .form-submit-btn {
+        padding: 12px;
+    }
+}

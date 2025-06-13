@@ -1,0 +1,621 @@
+:root {
+    /* 기본 색상 */
+    --primary: #4263eb;
+    --primary-light: #5c7cfa;
+    --primary-dark: #364fc7;
+    --secondary: #228be6;
+    --secondary-light: #339af0;
+    --accent: #ae3ec9;
+    
+    /* 상태 색상 */
+    --success: #37b24d;
+    --warning: #f59f00;
+    --danger: #f03e3e;
+    --info: #1c7ed6;
+    
+    /* 중립 색상 */
+    --white: #ffffff;
+    --gray-50: #f9fafb;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --black: #020617;
+    
+    /* 그림자 */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+    --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+    
+    /* 그라데이션 */
+    --gradient-primary: linear-gradient(110deg, var(--primary), var(--primary-dark));
+    --gradient-blue: linear-gradient(110deg, #4facfe, #00f2fe);
+    --gradient-purple: linear-gradient(110deg, #7367f0, #ce9ffc);
+    --gradient-success: linear-gradient(110deg, #9be15d, #00e3ae);
+    
+    /* 테두리 반경 */
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+    
+    /* 애니메이션 */
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    /* 타이포그래피 */
+    --font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    
+    /* 간격 */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+}
+
+/* 기본 스타일 초기화 및 설정 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* No need to override the body styles here as we want to inherit from layout.css */
+/* body {
+    margin: 0;
+    font-family: var(--font-main);
+    background-color: var(--gray-50);
+    color: var(--gray-800);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+} */
+
+/* 메인 컨테이너 */
+.roadmap-main {
+    max-width: 1100px;
+    width: 92%;
+    margin: 2.5rem auto 4rem;
+    padding: 0;
+}
+
+/* 헤더 섹션 */
+.page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all var(--transition-slow);
+}
+
+.page-header.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.header-badge {
+    background: var(--gradient-blue);
+    color: white;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-full);
+    display: inline-block;
+    margin-bottom: 1rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-sm);
+}
+
+.page-header h1 {
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 0.75rem;
+    word-break: keep-all;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--gray-600);
+    max-width: 640px;
+    margin: 0 auto;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+/* 로드맵 그리드 */
+.roadmap-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.75rem;
+    width: 100%;
+    position: relative;
+}
+
+.roadmap-container.scroll-hint {
+    animation: scrollHint 1.5s ease;
+}
+
+/* 카드 스타일 */
+.subject-card {
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background-color: var(--white);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-bounce), box-shadow var(--transition-normal);
+    opacity: 0;
+    transform: translateY(30px);
+    border: 1px solid var(--gray-200);
+    isolation: isolate;
+    will-change: transform, box-shadow;
+}
+
+.subject-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.subject-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--gray-300);
+}
+
+.subject-card:hover::before {
+    opacity: 1;
+}
+
+.subject-card:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(66, 99, 235, 0.3);
+}
+
+.card-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.card-content {
+    position: relative;
+    padding: 1.8rem;
+    z-index: 2;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+}
+
+.subject-card h2 {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--gray-900);
+    margin: 0;
+    transition: color var(--transition-fast);
+    word-break: keep-all;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    flex: 1;
+}
+
+.subject-emoji {
+    font-size: 1.5rem;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+    background: var(--gray-100);
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform var(--transition-normal);
+}
+
+.subject-emoji::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0.2;
+    background: var(--gradient-primary);
+    z-index: -1;
+}
+
+.subject-card:hover h2 {
+    color: var(--primary);
+}
+
+.subject-card:hover .subject-emoji {
+    transform: scale(1.15) rotate(10deg);
+}
+
+/* 프로그레스 바 스타일 */
+.progress-container {
+    width: 100%;
+    margin: 1.5rem 0 1.75rem;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+}
+
+.progress-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--gray-600);
+}
+
+.progress-percentage {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--primary);
+    opacity: 0.85;
+    transition: all var(--transition-fast);
+}
+
+.subject-card:hover .progress-percentage {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: var(--gray-200);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.progress-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.5) 10px,
+        rgba(255, 255, 255, 0.5) 20px
+    );
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    z-index: 1;
+}
+
+.progress-fill.low-progress {
+    background: var(--gradient-blue);
+}
+
+.progress-fill.mid-progress {
+    background: var(--gradient-purple);
+}
+
+.progress-fill.high-progress {
+    background: var(--gradient-success);
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 2s infinite;
+}
+
+.progress-status {
+    margin-top: 0.65rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.status-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+    display: inline-block;
+    letter-spacing: 0.01em;
+}
+
+.status-badge.not-started {
+    background-color: var(--gray-200);
+    color: var(--gray-600);
+}
+
+.status-badge.just-started {
+    background-color: #e6f4ff;
+    color: #0958d9;
+}
+
+.status-badge.in-progress {
+    background-color: #edf2ff;
+    color: #3b5bdb;
+}
+
+.status-badge.almost-done {
+    background-color: #e6fcf5;
+    color: #0ca678;
+}
+
+.status-badge.completed {
+    background-color: #d3f9d8;
+    color: #2b8a3e;
+}
+
+/* 카드 푸터 */
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--gray-200);
+}
+
+.view-details {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--primary);
+    position: relative;
+    padding-right: 24px;
+    display: inline-block;
+    transition: all var(--transition-normal);
+}
+
+.view-details::after {
+    content: '→';
+    position: absolute;
+    right: 0;
+    transition: transform var(--transition-normal);
+}
+
+.subject-card:hover .view-details {
+    color: var(--primary-dark);
+    transform: translateX(-5px);
+}
+
+.subject-card:hover .view-details::after {
+    transform: translateX(5px);
+}
+
+/* 카드 데코레이션 */
+.card-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.card-decoration::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, transparent, rgba(66, 99, 235, 0.1));
+}
+
+.card-decoration::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: -50px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, transparent, rgba(66, 99, 235, 0.08));
+}
+
+/* 터치 디바이스 스타일 */
+.touch-active {
+    transform: scale(0.98) !important;
+    transition: transform 0.2s ease !important;
+}
+
+.touch-active .card-content {
+    opacity: 0.9;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes scrollHint {
+    0% { transform: translateX(0); }
+    35% { transform: translateX(-12px); }
+    65% { transform: translateX(8px); }
+    85% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
+}
+
+/* 반응형 스타일 */
+@media (min-width: 1024px) {
+    .roadmap-main {
+        margin: 3.5rem auto 5rem;
+    }
+    
+    .page-header {
+        margin-bottom: 3.5rem;
+    }
+    
+    .page-header h1 {
+        font-size: 2.75rem;
+    }
+    
+    .roadmap-container {
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .roadmap-main {
+        width: 94%;
+        margin: 2rem auto 3rem;
+    }
+    
+    .page-header {
+        margin-bottom: 2rem;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .roadmap-container {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    .progress-bar {
+        height: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .roadmap-main {
+        width: 94%;
+        margin: 1.5rem auto 2.5rem;
+    }
+    
+    .header-badge {
+        padding: 0.3rem 0.7rem;
+        font-size: 0.7rem;
+    }
+    
+    .page-header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .card-content {
+        padding: 1.4rem;
+    }
+    
+    .subject-card h2 {
+        font-size: 1.1rem;
+    }
+    
+    .progress-label {
+        font-size: 0.8rem;
+    }
+    
+    .progress-percentage {
+        font-size: 0.9rem;
+    }
+    
+    .card-footer {
+        padding-top: 0.8rem;
+        margin-top: 1rem;
+    }
+    
+    .view-details {
+        font-size: 0.8rem;
+    }
+}
+
+/* 터치 디바이스 모드 */
+@media (hover: none) {
+    .subject-card {
+        transform: translateY(0) !important;
+    }
+    
+    .view-details::before {
+        content: '';
+        position: absolute;
+        top: -12px;
+        bottom: -12px;
+        left: -12px;
+        right: -12px;
+    }
+    
+    .card-footer {
+        margin-bottom: 0.25rem;
+    }
+}

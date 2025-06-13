@@ -1,0 +1,228 @@
+/* 폰트 및 기본 설정 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+main.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 강의 헤더 스타일 */
+.lecture-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.lecture-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #2c3e50;
+}
+
+.lecture-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.task-badge, .subject-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.task-badge {
+    background-color: #9b59b6;
+    color: white;
+}
+
+.subject-badge {
+    background-color: #3498db;
+    color: white;
+}
+
+/* 강의 내용 스타일 */
+.lecture-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.lecture-content {
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+/* 강의 내용의 요소들 스타일 */
+.lecture-content h2 {
+    font-size: 1.8rem;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.lecture-content h3 {
+    font-size: 1.5rem;
+    margin-top: 25px;
+    margin-bottom: 12px;
+    color: #34495e;
+}
+
+.lecture-content p {
+    margin-bottom: 20px;
+}
+
+.lecture-content ul, .lecture-content ol {
+    margin-bottom: 20px;
+    padding-left: 25px;
+}
+
+.lecture-content li {
+    margin-bottom: 8px;
+}
+
+.lecture-content blockquote {
+    background-color: #f9f9f9;
+    border-left: 4px solid #3498db;
+    padding: 15px;
+    margin: 20px 0;
+    color: #555;
+    font-style: italic;
+}
+
+.lecture-content code {
+    background-color: #f5f5f5;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: monospace;
+    color: #e74c3c;
+}
+
+.lecture-content pre {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.lecture-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 5px;
+}
+
+.lecture-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.lecture-content th, .lecture-content td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.lecture-content th {
+    background-color: #f5f5f5;
+}
+
+/* 버튼 스타일 */
+.lecture-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-back {
+    background-color: #f1f1f1;
+    color: #555;
+}
+
+.btn-back:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-success {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+}
+
+.btn-warning {
+    background-color: #f1c40f;
+    color: #333;
+}
+
+.btn-warning:hover {
+    background-color: #f39c12;
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.hover-effect:hover {
+    transform: scale(1.05);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .lecture-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .lecture-container {
+        padding: 20px;
+    }
+    
+    .lecture-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .lecture-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .lecture-actions .btn, .lecture-actions form {
+        width: 100%;
+    }
+    
+    .lecture-actions button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,169 @@
+/* 기본 스타일 설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+/* 메인 컨테이너 */
+main {
+    padding: 40px;
+    max-width: 800px;
+    height: auto;
+    min-height: 600px;
+    margin: 60px auto;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+main:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+/* 제목 스타일 */
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #2c3e50;
+    position: relative;
+    padding-bottom: 15px;
+}
+hr {
+    margin: 1.5rem 0;
+    border: none;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+}
+/* 폼 스타일 */
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+label, .form-label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #555;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+.form-group:focus-within label,
+.form-group:focus-within .form-label {
+    color: #3498db;
+}
+/* 입력 필드 */
+input, textarea, select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+    background-color: #f9fafc;
+}
+input:focus, textarea:focus, select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    outline: none;
+    background-color: #fff;
+}
+input::placeholder, textarea::placeholder {
+    color: #aaa;
+    opacity: 0.7;
+}
+textarea {
+    height: 220px;
+    resize: none;
+    line-height: 1.6;
+}
+/* 셀렉트 스타일 */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+}
+/* 버튼 스타일 */
+button, .btn {
+    padding: 0.9rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+button i, .btn i {
+    margin-right: 8px;
+}
+/* 버튼 그룹 컨테이너 */
+.button-group {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1.2rem;
+    margin-top: 30px;
+}
+/* 등록 버튼 */
+button[type="submit"], .btn-register {
+    width: 130px;
+    background-color: #3498db;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+button[type="submit"]:hover, .btn-register:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(52, 152, 219, 0.3);
+}
+button[type="submit"]:active, .btn-register:active {
+    transform: translateY(0);
+}
+/* 취소 버튼 */
+button[type="button"], .btn-cancel {
+    width: 130px;
+    background-color: #f5f5f5;
+    color: #555;
+    border: 1px solid #e0e0e0;
+}
+button[type="button"]:hover, .btn-cancel:hover {
+    background-color: #eee;
+    color: #333;
+}
+/* 에디터 스타일 */
+.ck-editor__editable {
+    min-height: 220px;
+    max-height: 400px;
+}
+/* 작은 화면에 대한 반응형 디자인 */
+@media (max-width: 768px) {
+    main {
+        padding: 30px 20px;
+        margin: 30px 15px;
+        border-radius: 12px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    .button-group {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    button, .btn {
+        width: 100% !important;
+    }
+}

@@ -1,0 +1,351 @@
+:root {
+  --primary: #3c79f5;
+  --primary-hover: #2a68e0;
+  --secondary: #f6f8fc;
+  --border: #e1e7ef;
+  --text: #333;
+  --text-light: #666;
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+}
+
+/* 기본 스타일 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 1rem auto;
+  padding: 1rem;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 60px;
+  background-color: var(--primary);
+  border-radius: 3px;
+}
+
+/* 검색 폼 */
+.search-form {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.search-form input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-form button {
+  padding: 0.8rem 1.2rem;
+  background-color: var(--primary);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.search-form button:hover {
+  background-color: var(--primary-hover);
+}
+
+/* 테이블 스타일 */
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.logs-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.logs-table thead {
+  background: var(--secondary);
+}
+
+.logs-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 2px solid var(--border);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.logs-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-light);
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.logs-table tbody tr {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.logs-table tbody tr:hover {
+  background: rgba(60, 121, 245, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 모바일 카드 뷰 (기본적으로 숨겨져 있음) */
+.mobile-logs {
+  display: none;
+}
+
+.log-card {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.log-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.log-card-header {
+  background: var(--secondary);
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.log-card-body {
+  padding: 1rem;
+}
+
+.log-card-row {
+  margin-bottom: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.log-card-label {
+  font-weight: 600;
+  color: var(--text);
+  min-width: 70px;
+}
+
+/* 공통 스타일 */
+.log-output {
+  max-height: 100px;
+  overflow-y: auto;
+  background: #f8fafc;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.85rem;
+  white-space: pre;
+  color: #333;
+  width: 100%;
+  word-break: break-word;
+}
+
+.log-id {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.language-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: var(--secondary);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.result-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+}
+
+.result-success {
+  background-color: var(--success);
+}
+
+.result-error {
+  background-color: var(--error);
+}
+
+.result-warning {
+  background-color: var(--warning);
+}
+
+.timestamp {
+  white-space: nowrap;
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.username {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.empty-state {
+  padding: 3rem;
+  text-align: center;
+  color: var(--text-light);
+  background: var(--secondary);
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin: 1rem 0;
+}
+
+.pagination {
+  margin-top: 1rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pagination a {
+  padding: 0.7rem 1rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  min-width: 44px;
+  text-align: center;
+}
+
+.pagination span {
+  margin: 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0.8rem;
+    margin: 0.8rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  .logs-table th, .logs-table td {
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .logs-table {
+    font-size: 0.85rem;
+  }
+  
+  .pagination {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  /* 모바일에서는 테이블 대신 카드 뷰 사용 */
+  .table-responsive {
+    display: none;
+  }
+  
+  .mobile-logs {
+    display: block;
+  }
+  
+  .container {
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: 8px;
+  }
+  
+  h1 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .search-form {
+    flex-direction: column;
+  }
+  
+  .search-form input, 
+  .search-form button {
+    width: 100%;
+  }
+  
+  .log-output {
+    max-height: 80px;
+  }
+  
+  .pagination a {
+    padding: 0.8rem 1rem;
+  }
+}

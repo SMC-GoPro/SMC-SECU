@@ -1,0 +1,225 @@
+:root {
+  --primary: #3c79f5;
+  --primary-hover: #2a68e0;
+  --secondary: #f6f8fc;
+  --border: #e1e7ef;
+  --text: #333;
+  --text-light: #666;
+  --success: #10b981;
+  --error: #ef4444;
+  --background: #fff;
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+body {
+  background-color: #f9fafb;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+.container {
+  max-width: 850px;
+  margin: 2.5rem auto;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.header-section {
+  background-color: var(--background);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.header-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: var(--primary);
+}
+.detail-card {
+  background-color: var(--background);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin: 0 0 1.5rem 0;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.problem-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+
+.result-badge {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  margin-left: 0.5rem;
+}
+
+.result-success {
+  background-color: var(--success);
+}
+
+.result-error {
+  background-color: var(--error);
+}
+
+.info-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.info-item {
+  flex: 1;
+  min-width: 200px;
+}
+
+.info-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.language-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--secondary);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.code-section, .output-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.section-title svg {
+  margin-right: 0.5rem;
+}
+
+.code-container, .output-container {
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+pre {
+  margin: 0;
+  padding: 1.5rem;
+  white-space: pre-wrap;
+  overflow: auto;
+  max-height: 400px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #334155;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-top: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.back-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.back-button svg {
+  margin-right: 0.5rem;
+}
+
+.meta-info {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 1rem;
+    padding: 0;
+  }
+  
+  .header-section, .detail-card {
+    padding: 1.5rem;
+  }
+  
+  .info-group {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .info-item {
+    min-width: 100%;
+  }
+}

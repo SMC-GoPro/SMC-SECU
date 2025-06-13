@@ -1,0 +1,121 @@
+/* 전역 스타일 - 모든 페이지에 적용 */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+/* Noto Sans KR 폰트도 미리 로드 */
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/notosanskr/v13/PbykFmXiEBPT4ITbgNA5Cgm203Tq4JJWq209pU0DPdWuqxJFA4GNDCBYtw.0.woff2') format('woff2');
+  unicode-range: U+f9ca-fa0b, U+ff03-ff05, U+ff07, U+ff0a-ff0b, U+ff0d-ff19, U+ff1b, U+ff1d, U+ff20-ff5b, U+ff5d, U+ffe0-ffe3, U+ffe5-ffe6;
+}
+
+:root {
+  font-size: 16px;
+  --main-font: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--main-font) !important;
+  line-height: 1.5;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+/* 페이지 전환 스타일 */
+body.page-transition {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+body.page-ready {
+  opacity: 1;
+}
+
+/* 레이아웃 안정성 보장 */
+.navbar, .navbar-menu, .navbar-item, .auth-buttons, .auth-btn {
+  will-change: auto;
+}
+
+/* 네비게이션 폰트 강제 적용 */
+.navbar * {
+  font-family: var(--main-font) !important;
+}
+
+.auth-buttons * {
+  font-family: var(--main-font) !important;
+}
+
+.navbar-menu * {
+  font-family: var(--main-font) !important;
+}
+
+/* 폰트 로딩 플래시 방지 */
+.fonts-loading * {
+  opacity: 0;
+}
+
+.fonts-loaded * {
+  opacity: 1;
+  transition: opacity 0.2s ease-in;
+}
+
+/* 링크 스타일 통일 */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 전역 애니메이션 정의 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* 공통 트랜지션 */
+.transition-fade {
+  transition: all 0.3s ease;
+}
+
+/* FOUC(Flash Of Unstyled Content) 방지 */
+.content-ready {
+  visibility: visible;
+}
+
+.content-loading {
+  visibility: hidden;
+} 

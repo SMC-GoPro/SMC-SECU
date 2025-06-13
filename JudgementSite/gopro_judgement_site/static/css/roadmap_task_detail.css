@@ -1,0 +1,343 @@
+/* 폰트 및 기본 설정 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+main.container {
+    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 태스크 헤더 스타일 */
+.task-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.task-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #2c3e50;
+}
+
+.task-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.subject-badge, .time-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.subject-badge {
+    background-color: #3498db;
+    color: white;
+}
+
+.time-badge {
+    background-color: #f1f1f1;
+    color: #555;
+}
+
+/* 태스크 내용 스타일 */
+.task-content {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+/* 이미지 크기 조정: CKEditor로 올린 이미지가 컨테이너 너비를 넘지 않도록 함 */
+.task-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* 강의 목록 섹션 스타일 */
+.lectures-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.lectures-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+}
+
+.lectures-section h2::before {
+    content: '\f02d';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    margin-right: 10px;
+    color: #3498db;
+}
+
+.lecture-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: lecture-counter;
+}
+
+.lecture-item {
+    margin-bottom: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: relative;
+    counter-increment: lecture-counter;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lecture-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.lecture-item::before {
+    content: counter(lecture-counter);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 100%;
+    background-color: #ebf5ff;
+    color: #3498db;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-right: 2px solid #e0e0e0;
+}
+
+.lecture-title {
+    display: block;
+    padding: 16px 16px 16px 70px;
+    color: #333;
+    font-weight: 500;
+    text-decoration: none;
+    flex-grow: 1;
+    transition: color 0.2s ease;
+}
+
+.lecture-title:hover {
+    color: #3498db;
+}
+
+.lecture-actions {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    gap: 10px;
+}
+
+.lecture-actions .inline-form {
+    margin: 0;
+}
+
+/* 버튼 공통 스타일 - 통일된 크기와 스타일 적용 */
+.btn-success, .btn-warning, .btn-edit, .btn-delete {
+    min-width: 90px;
+    height: 36px;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.btn-success {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-warning {
+    background-color: #f1c40f;
+    color: #333;
+}
+
+.btn-edit {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-success:hover, .btn-warning:hover, .btn-edit:hover, .btn-delete:hover {
+    transform: scale(1.05);
+}
+
+/* 완료된 강의 스타일 */
+.lecture-item.completed {
+    background-color: #f0fff0;
+}
+
+.lecture-item.completed .lecture-title {
+    text-decoration: line-through;
+    color: #7f8c8d;
+}
+
+.lecture-item.completed::before {
+    background-color: #e0ffe0;
+    color: #27ae60;
+}
+
+/* 완료 표시 아이콘 */
+.lecture-status {
+    margin-right: 10px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 관리자 액션 버튼 스타일 */
+.admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* 버튼 스타일 */
+.task-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-back {
+    background-color: #f1f1f1;
+    color: #555;
+}
+
+.btn-back:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-next {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-next:hover {
+    background-color: #2980b9;
+}
+
+.btn i {
+    margin: 0 6px;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-add {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-add:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-add i {
+    font-size: 1.1rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .task-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .task-content {
+        padding: 20px;
+    }
+    
+    .task-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .subject-badge, .time-badge {
+        display: inline-block;
+    }
+    
+    .lecture-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .lecture-title {
+        width: 100%;
+        padding: 16px 16px 10px 70px;
+    }
+    
+    .lecture-actions {
+        margin: 0 0 12px 70px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        width: calc(100% - 85px);
+    }
+    
+    .admin-actions {
+        margin-top: 10px;
+        width: 100%;
+    }
+    
+    .btn-success, .btn-warning, .btn-edit, .btn-delete {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}
